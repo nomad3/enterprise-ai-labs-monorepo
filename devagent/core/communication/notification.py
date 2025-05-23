@@ -10,7 +10,7 @@ class NotificationService:
     def send_to_slack(self, message: str) -> str:
         if not self.slack_webhook_url:
             logging.warning("Slack webhook URL not configured.")
-            return "Slack notification not sent: webhook URL missing."
+            return "Slack notification skipped: webhook URL missing."
         try:
             response = requests.post(self.slack_webhook_url, json={"text": message})
             if response.status_code == 200:
@@ -18,15 +18,15 @@ class NotificationService:
                 return "Slack notification sent successfully."
             else:
                 logging.error(f"Failed to send Slack notification: {response.text}")
-                return f"Failed to send Slack notification: {response.text}"
+                return f"Slack notification failed: {response.text}"
         except Exception as e:
             logging.error(f"Exception sending Slack notification: {str(e)}")
-            return f"Exception sending Slack notification: {str(e)}"
+            return f"Slack notification error: {str(e)}"
 
     def send_to_teams(self, message: str) -> str:
         if not self.teams_webhook_url:
             logging.warning("Teams webhook URL not configured.")
-            return "Teams notification not sent: webhook URL missing."
+            return "Teams notification skipped: webhook URL missing."
         try:
             response = requests.post(self.teams_webhook_url, json={"text": message})
             if response.status_code == 200:
@@ -34,7 +34,7 @@ class NotificationService:
                 return "Teams notification sent successfully."
             else:
                 logging.error(f"Failed to send Teams notification: {response.text}")
-                return f"Failed to send Teams notification: {response.text}"
+                return f"Teams notification failed: {response.text}"
         except Exception as e:
             logging.error(f"Exception sending Teams notification: {str(e)}")
-            return f"Exception sending Teams notification: {str(e)}" 
+            return f"Teams notification error: {str(e)}" 
