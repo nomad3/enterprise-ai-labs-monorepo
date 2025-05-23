@@ -1,15 +1,29 @@
 version: '3.8'
 
 services:
+  frontend:
+    build:
+      context: ./devagent-ui
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./devagent-ui:/app
+      - /app/node_modules
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8000
+    depends_on:
+      - devagent
+
   devagent:
     build:
       context: .
       dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
     volumes:
       - .:/app
       - ./data:/app/data
-    ports:
-      - "8000:8000"
     environment:
       - DEBUG=True
       - LOG_LEVEL=INFO
@@ -110,19 +124,6 @@ services:
       - .:/app
     command: >
       sh -c "black . && isort . && flake8 . && mypy ."
-
-  devagent-ui:
-    image: node:18
-    working_dir: /app
-    volumes:
-      - ./devagent-ui:/app
-    ports:
-      - "3002:3000"
-    command: sh -c "npm install --legacy-peer-deps && npm run dev"
-    environment:
-      - NODE_ENV=development
-    depends_on:
-      - devagent
 
 volumes:
   postgres_data:

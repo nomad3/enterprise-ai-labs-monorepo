@@ -1,134 +1,130 @@
-# DevAgent - AI-Powered Development Assistant
+# DevAgent - Full-Stack Developer & DevOps AI Agent
 
-DevAgent is an intelligent development assistant that helps streamline the software development process by automating common tasks and providing AI-powered insights.
+A comprehensive development platform that combines AI-powered code generation, testing, version control, and CI/CD capabilities.
 
-## Core Functionalities
+## Features
 
-### 1. Ticket Management
-- Process and interpret tickets from various sources
-- Extract requirements and dependencies
-- Track ticket status and progress
-- Manage ticket comments and updates
-
-### 2. Solution Planning
-- Generate detailed solution plans for tickets
-- Break down tasks with estimated effort
-- Identify dependencies and priorities
-- Track implementation progress
-
-### 3. Code Generation & Testing
-- Generate code based on requirements
-- Create comprehensive test suites
-- Troubleshoot and debug code
-- Ensure code quality and coverage
-
-### 4. Infrastructure Management
-- Set up and configure infrastructure resources
-- Monitor resource status and health
-- Manage deployments and scaling
-- Track infrastructure changes
-
-### 5. CI/CD Pipeline
-- Automate build and test processes
-- Manage deployment workflows
-- Monitor pipeline status
-- Handle deployment rollbacks
-
-### 6. Version Control
-- Create and manage branches
-- Handle commits and merges
-- Track changes and history
-- Manage code reviews
-
-### 7. Communication
-- Send notifications to Slack and Teams
-- Track communication history
-- Manage alerts and updates
-- Coordinate team activities
-
-## UI Components
+### Authentication & User Management
+- Secure user authentication
+- Role-based access control
+- User profile management
 
 ### Ticket Management
-- Ticket ingestion form
-- Ticket details view
-- Requirements list
-- Status tracking
+- Create and track development tickets
+- Assign tickets to team members
+- Track ticket status and progress
+- Filter and search tickets
 
-### Solution Planning
-- Solution plan view
-- Task breakdown
-- Effort estimation
-- Dependency visualization
+### Code Generation
+- AI-powered code generation
+- Multiple language support
+- Code completion and suggestions
+- Code review and optimization
 
-### Code & Testing
-- Code generation interface
-- Test plan view
-- Coverage visualization
-- Debug console
-
-### Infrastructure
-- Resource configuration
-- Status monitoring
-- Deployment management
-- Health checks
-
-### Pipeline
-- Build status
-- Test results
-- Deployment progress
-- Pipeline history
+### Test Generation
+- Automated test case generation
+- Unit test creation
+- Integration test support
+- Test coverage analysis
 
 ### Version Control
+- Git integration
 - Branch management
 - Commit history
 - Change tracking
-- Review interface
+- Push/Pull operations
 
-### Communication
-- Notification center
-- Message history
-- Alert management
-- Team coordination
+### CI/CD Pipeline Management
+- Pipeline creation and configuration
+- Stage management
+- Build and deployment tracking
+- Pipeline status monitoring
+- Log viewing and analysis
+
+## Tech Stack
+
+### Frontend
+- Next.js 14
+- React
+- TypeScript
+- Tailwind CSS
+- CSS Modules
+
+### Backend
+- FastAPI
+- Python
+- SQLAlchemy
+- PostgreSQL
 
 ## Getting Started
 
-1. Clone the repository
-2. Install dependencies:
-   ```bash
-   # Backend
-   cd devagent
-   pip install -r requirements.txt
+1. Clone the repository:
+```bash
+git clone https://github.com/yourusername/devagent.git
+cd devagent
+```
 
-   # Frontend
-   cd devagent-ui
-   npm install
-   ```
+2. Install dependencies:
+```bash
+# Frontend
+cd devagent-ui
+npm install
+
+# Backend
+cd ../backend
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+pip install -r requirements.txt
+```
 
 3. Set up environment variables:
-   ```bash
-   # Backend
-   cp .env.example .env
-   # Edit .env with your configuration
+```bash
+# Frontend (.env.local)
+NEXT_PUBLIC_API_URL=http://localhost:8000
 
-   # Frontend
-   cp .env.example .env.local
-   # Edit .env.local with your configuration
-   ```
+# Backend (.env)
+DATABASE_URL=postgresql://user:password@localhost:5432/devagent
+SECRET_KEY=your-secret-key
+```
 
 4. Start the development servers:
-   ```bash
-   # Backend
-   cd devagent
-   uvicorn devagent.api.main:app --reload
+```bash
+# Frontend
+cd devagent-ui
+npm run dev
 
-   # Frontend
-   cd devagent-ui
-   npm run dev
-   ```
+# Backend
+cd ../backend
+uvicorn main:app --reload
+```
 
 5. Access the application:
-   - Backend API: http://localhost:8000
-   - Frontend UI: http://localhost:3000
+- Frontend: http://localhost:3000
+- Backend API: http://localhost:8000
+- API Documentation: http://localhost:8000/docs
+
+## Project Structure
+
+```
+devagent/
+├── devagent-ui/           # Frontend application
+│   ├── src/
+│   │   ├── app/          # Next.js app directory
+│   │   │   ├── components/  # React components
+│   │   │   ├── contexts/    # React contexts
+│   │   │   ├── services/    # API services
+│   │   │   └── styles/      # Global styles
+│   │   └── public/       # Static assets
+│   └── package.json
+│
+└── backend/              # Backend application
+    ├── app/
+    │   ├── api/         # API endpoints
+    │   ├── core/        # Core functionality
+    │   ├── models/      # Database models
+    │   └── services/    # Business logic
+    └── requirements.txt
+```
 
 ## Contributing
 
@@ -140,7 +136,7 @@ DevAgent is an intelligent development assistant that helps streamline the softw
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## Overview
 DevAgent is an autonomous AI assistant designed to help developers by automating various aspects of the software development lifecycle. It can understand tasks from Jira tickets, design solutions, write code, implement tests, handle version control, create pull requests, and assist with deployment.

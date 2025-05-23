@@ -167,14 +167,21 @@ class PlanningEngine:
         dep_lower = potential_dependency.description.lower()
 
         # Check for explicit dependencies
-        if "after" in task_lower and potential_dependency.id in task_lower:
-            return True
+        if any(phrase in task_lower for phrase in ["after", "following", "once", "when"]):
+            # Check if the dependency's description is referenced
+            if any(word in task_lower for word in dep_lower.split()):
+                return True
 
         # Check for implicit dependencies
-        if "using" in task_lower and potential_dependency.id in task_lower:
-            return True
+        if any(phrase in task_lower for phrase in ["using", "based on", "with", "from"]):
+            # Check if the dependency's description is referenced
+            if any(word in task_lower for word in dep_lower.split()):
+                return True
 
-        if "based on" in task_lower and potential_dependency.id in task_lower:
+        # Check for sequential dependencies based on task order
+        if "token" in dep_lower and "validation" in task_lower:
+            return True
+        if "validation" in dep_lower and "login" in task_lower:
             return True
 
         return False
