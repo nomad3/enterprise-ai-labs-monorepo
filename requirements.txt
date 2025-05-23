@@ -47,8 +47,4 @@ opentelemetry-instrumentation-fastapi>=0.27b0,<0.28b0
 
 # Task Queue
 celery>=5.2.0,<6.0.0
-flower>=1.0.0,<2.0.0
-
-# API Documentation
-fastapi-pydantic>=0.1.0,<0.2.0
-fastapi-utils>=0.2.1,<0.3.0 
+flower>=1.0.0,<2.0.0 

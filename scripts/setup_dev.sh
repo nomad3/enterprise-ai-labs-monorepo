@@ -40,7 +40,7 @@ sleep 10
 
 # Run tests
 echo "Running tests..."
-docker-compose run --rm app pytest
+docker-compose run --rm test
 
 echo "Setup complete! You can now access:"
 echo "- API documentation: http://localhost:8000/docs"
