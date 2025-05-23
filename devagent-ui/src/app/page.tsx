@@ -5,6 +5,8 @@ import { useAuth } from './contexts/AuthContext';
 import styles from './page.module.css';
 import Tickets from './components/Tickets';
 import CodeGeneration from './components/CodeGeneration';
+import Plans from './components/Plans';
+import TestGeneration from './components/TestGeneration';
 import Login from './components/Login';
 import Register from './components/Register';
 
@@ -83,19 +85,9 @@ export default function Home() {
 
       <main className={styles.main}>
         {selectedTab === 'tickets' && <Tickets />}
-        {selectedTab === 'plans' && (
-          <div className={styles.content}>
-            <h2>Development Plans</h2>
-            <p>View and manage development plans</p>
-          </div>
-        )}
+        {selectedTab === 'plans' && <Plans />}
         {selectedTab === 'code' && <CodeGeneration />}
-        {selectedTab === 'tests' && (
-          <div className={styles.content}>
-            <h2>Test Generation</h2>
-            <p>Generate tests for your code</p>
-          </div>
-        )}
+        {selectedTab === 'tests' && <TestGeneration />}
         {selectedTab === 'version' && (
           <div className={styles.content}>
             <h2>Version Control</h2>
