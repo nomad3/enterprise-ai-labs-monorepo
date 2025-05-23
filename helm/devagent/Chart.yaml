@@ -1,0 +1,17 @@
+apiVersion: v2
+name: devagent
+description: A Helm chart for deploying the DevAgent application on Kubernetes
+version: 0.1.0
+appVersion: "1.0.0"
+keywords:
+  - devops
+  - ai
+  - agent
+  - iac
+  - terraform
+  - helm
+  - gcp
+home: https://github.com/nomade/thefullstackagent
+maintainers:
+  - name: nomade
+    email: your@email.com 

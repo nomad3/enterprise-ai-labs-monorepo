@@ -1,0 +1,54 @@
+# Application configuration
+replicaCount: 3
+image:
+  repository: devagent
+  tag: latest
+  pullPolicy: IfNotPresent
+
+# Resource configuration
+resources:
+  requests:
+    cpu: 100m
+    memory: 256Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi
+
+# Database configuration
+databaseUrl: "postgresql://postgres:password@devagent-db:5432/devagent"
+redisUrl: "redis://devagent-redis:6379/0"
+
+# Security configuration
+jwtSecret: "your-secret-key"
+jwtAlgorithm: "HS256"
+accessTokenExpireMinutes: 30
+
+# Monitoring configuration
+prometheusUrl: "http://prometheus:9090"
+grafanaUrl: "http://grafana:3000"
+
+# Alerting configuration
+alertWebhookUrl: "http://alertmanager:9093/api/v1/alerts"
+smtpHost: "smtp.gmail.com"
+smtpPort: "587"
+smtpUser: "your-email@gmail.com"
+smtpPassword: "your-app-password"
+slackWebhookUrl: "https://hooks.slack.com/services/your-webhook-url"
+teamsWebhookUrl: "https://outlook.office.com/webhook/your-webhook-url"
+
+# Ingress configuration
+ingress:
+  enabled: true
+  className: "nginx"
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+  hosts:
+    - host: devagent.example.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: devagent-tls
+      hosts:
+        - devagent.example.com 

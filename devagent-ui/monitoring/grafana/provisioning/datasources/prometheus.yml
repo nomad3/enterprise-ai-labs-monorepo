@@ -13,4 +13,4 @@ datasources:
       queryTimeout: 30s
       httpMethod: POST
     secureJsonData:
-      basicAuthPassword: "" 
+      basicAuthPassword: ""

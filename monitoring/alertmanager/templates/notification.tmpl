@@ -1,0 +1,89 @@
+{{ define "slack.message" }}
+{{ if gt (len .Alerts.Firing) 0 }}
+🚨 *Alerting*: {{ len .Alerts.Firing }} alert(s) firing
+{{ range .Alerts.Firing }}
+• *{{ .Labels.alertname }}* ({{ .Labels.severity }})
+  {{ .Annotations.description }}
+  {{ if .Labels.instance }}Instance: {{ .Labels.instance }}{{ end }}
+{{ end }}
+{{ end }}
+{{ if gt (len .Alerts.Resolved) 0 }}
+✅ *Resolved*: {{ len .Alerts.Resolved }} alert(s) resolved
+{{ range .Alerts.Resolved }}
+• *{{ .Labels.alertname }}* ({{ .Labels.severity }})
+  {{ .Annotations.description }}
+  {{ if .Labels.instance }}Instance: {{ .Labels.instance }}{{ end }}
+{{ end }}
+{{ end }}
+{{ end }}
+
+{{ define "teams.message" }}
+{
+    "@type": "MessageCard",
+    "@context": "http://schema.org/extensions",
+    "themeColor": "{{ if gt (len .Alerts.Firing) 0 }}FF0000{{ else }}00FF00{{ end }}",
+    "summary": "{{ if gt (len .Alerts.Firing) 0 }}Alerting{{ else }}Resolved{{ end }}",
+    "sections": [
+        {
+            "activityTitle": "{{ if gt (len .Alerts.Firing) 0 }}🚨 Alerting{{ else }}✅ Resolved{{ end }}",
+            "facts": [
+                {{ range .Alerts.Firing }}
+                {
+                    "name": "{{ .Labels.alertname }}",
+                    "value": "{{ .Annotations.description }}"
+                },
+                {{ end }}
+                {{ range .Alerts.Resolved }}
+                {
+                    "name": "{{ .Labels.alertname }}",
+                    "value": "{{ .Annotations.description }}"
+                }
+                {{ end }}
+            ]
+        }
+    ]
+}
+{{ end }}
+
+{{ define "email.subject" }}
+[{{ if gt (len .Alerts.Firing) 0 }}ALERTING{{ else }}RESOLVED{{ end }}] {{ len .Alerts.Firing }} firing, {{ len .Alerts.Resolved }} resolved
+{{ end }}
+
+{{ define "email.html" }}
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .alert { margin: 10px 0; padding: 10px; border-radius: 4px; }
+        .firing { background-color: #ffebee; border: 1px solid #ffcdd2; }
+        .resolved { background-color: #e8f5e9; border: 1px solid #c8e6c9; }
+    </style>
+</head>
+<body>
+    <h2>{{ if gt (len .Alerts.Firing) 0 }}🚨 Alerting{{ else }}✅ Resolved{{ end }}</h2>
+    
+    {{ if gt (len .Alerts.Firing) 0 }}
+    <h3>Firing Alerts ({{ len .Alerts.Firing }})</h3>
+    {{ range .Alerts.Firing }}
+    <div class="alert firing">
+        <h4>{{ .Labels.alertname }} ({{ .Labels.severity }})</h4>
+        <p>{{ .Annotations.description }}</p>
+        {{ if .Labels.instance }}<p>Instance: {{ .Labels.instance }}</p>{{ end }}
+    </div>
+    {{ end }}
+    {{ end }}
+
+    {{ if gt (len .Alerts.Resolved) 0 }}
+    <h3>Resolved Alerts ({{ len .Alerts.Resolved }})</h3>
+    {{ range .Alerts.Resolved }}
+    <div class="alert resolved">
+        <h4>{{ .Labels.alertname }} ({{ .Labels.severity }})</h4>
+        <p>{{ .Annotations.description }}</p>
+        {{ if .Labels.instance }}<p>Instance: {{ .Labels.instance }}</p>{{ end }}
+    </div>
+    {{ end }}
+    {{ end }}
+</body>
+</html>
+{{ end }} 

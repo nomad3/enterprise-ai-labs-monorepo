@@ -18,7 +18,7 @@ services:
   devagent:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: devagent/Dockerfile
     ports:
       - "8000:8000"
     volumes:
@@ -28,22 +28,26 @@ services:
       - DEBUG=True
       - LOG_LEVEL=INFO
       - ENVIRONMENT=development
-      - DATABASE_URL=postgresql://devagent:devagent@postgres:5432/devagent
-      - REDIS_URL=redis://redis:6379
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/devagent
+      - REDIS_URL=redis://redis:6379/0
+      - PROMETHEUS_URL=http://prometheus:9090
+      - GRAFANA_URL=http://grafana:3000
     env_file:
       - .env
     depends_on:
       - postgres
       - redis
+      - prometheus
+      - grafana
     command: uvicorn devagent.api.main:app --host 0.0.0.0 --port 8000 --reload
 
   postgres:
-    image: postgres:13-alpine
+    image: postgres:15
     volumes:
       - postgres_data:/var/lib/postgresql/data
     environment:
-      - POSTGRES_USER=devagent
-      - POSTGRES_PASSWORD=devagent
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=devagent
     ports:
       - "5432:5432"
@@ -54,7 +58,7 @@ services:
       retries: 5
 
   redis:
-    image: redis:alpine
+    image: redis:7
     ports:
       - "6379:6379"
     volumes:
@@ -77,7 +81,9 @@ services:
       - postgres
 
   prometheus:
-    image: prom/prometheus
+    image: prom/prometheus:v2.45.0
+    ports:
+      - "9090:9090"
     volumes:
       - ./monitoring/prometheus:/etc/prometheus
       - prometheus_data:/prometheus
@@ -86,20 +92,18 @@ services:
       - '--storage.tsdb.path=/prometheus'
       - '--web.console.libraries=/usr/share/prometheus/console_libraries'
       - '--web.console.templates=/usr/share/prometheus/consoles'
-    ports:
-      - "9090:9090"
 
   grafana:
-    image: grafana/grafana
-    volumes:
-      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning
-      - grafana_data:/var/lib/grafana
+    image: grafana/grafana:10.0.0
+    ports:
+      - "3000:3000"
     environment:
       - GF_SECURITY_ADMIN_USER=admin
       - GF_SECURITY_ADMIN_PASSWORD=admin
       - GF_USERS_ALLOW_SIGN_UP=false
-    ports:
-      - "3001:3000"
+    volumes:
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning
+      - grafana_data:/var/lib/grafana
     depends_on:
       - prometheus
 
@@ -124,6 +128,40 @@ services:
       - .:/app
     command: >
       sh -c "black . && isort . && flake8 . && mypy ."
+
+  node-exporter:
+    image: prom/node-exporter:v1.6.1
+    ports:
+      - "9100:9100"
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
+
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:v0.47.0
+    ports:
+      - "8080:8080"
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /dev/disk/:/dev/disk:ro
+
+  alertmanager:
+    image: prom/alertmanager:v0.25.0
+    ports:
+      - "9093:9093"
+    volumes:
+      - ./monitoring/alertmanager:/etc/alertmanager
+    command:
+      - '--config.file=/etc/alertmanager/alertmanager.yml'
+      - '--storage.path=/alertmanager'
 
 volumes:
   postgres_data:

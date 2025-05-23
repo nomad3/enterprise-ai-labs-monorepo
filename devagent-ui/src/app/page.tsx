@@ -11,10 +11,12 @@ import VersionControl from './components/VersionControl';
 import CICD from './components/CICD';
 import Login from './components/Login';
 import Register from './components/Register';
+import DevOps from './components/DevOps';
+import { Toaster } from '@/components/ui/toaster';
 
 export default function Home() {
   const { user, loading } = useAuth();
-  const [selectedTab, setSelectedTab] = useState('tickets');
+  const [selectedTab, setSelectedTab] = useState('devops');
   const [authMode, setAuthMode] = useState<'login' | 'register'>('login');
 
   if (loading) {
@@ -34,69 +36,29 @@ export default function Home() {
   }
 
   return (
-    <div className={styles.container}>
-      <header className={styles.header}>
-        <div className={styles.headerContent}>
-          <h1 className={styles.title}>DevAgent</h1>
-          <p className={styles.subtitle}>Full-Stack Developer & DevOps AI Agent</p>
+    <main className="min-h-screen bg-background">
+      <nav className="border-b">
+        <div className="flex h-16 items-center px-4">
+          <div className="flex items-center space-x-4">
+            <button
+              onClick={() => setSelectedTab('devops')}
+              className={`px-3 py-2 rounded-md text-sm font-medium ${
+                selectedTab === 'devops'
+                  ? 'bg-primary text-primary-foreground'
+                  : 'text-muted-foreground hover:text-foreground'
+              }`}
+            >
+              DevOps
+            </button>
+          </div>
         </div>
-        <div className={styles.userInfo}>
-          <span className={styles.userName}>{user.name}</span>
-          <span className={styles.userRole}>{user.role}</span>
-        </div>
-      </header>
-
-      <nav className={styles.nav}>
-        <button 
-          className={`${styles.navButton} ${selectedTab === 'tickets' ? styles.active : ''}`}
-          onClick={() => setSelectedTab('tickets')}
-        >
-          Tickets
-        </button>
-        <button 
-          className={`${styles.navButton} ${selectedTab === 'plans' ? styles.active : ''}`}
-          onClick={() => setSelectedTab('plans')}
-        >
-          Plans
-        </button>
-        <button 
-          className={`${styles.navButton} ${selectedTab === 'code' ? styles.active : ''}`}
-          onClick={() => setSelectedTab('code')}
-        >
-          Code Generation
-        </button>
-        <button 
-          className={`${styles.navButton} ${selectedTab === 'tests' ? styles.active : ''}`}
-          onClick={() => setSelectedTab('tests')}
-        >
-          Test Generation
-        </button>
-        <button 
-          className={`${styles.navButton} ${selectedTab === 'version' ? styles.active : ''}`}
-          onClick={() => setSelectedTab('version')}
-        >
-          Version Control
-        </button>
-        <button 
-          className={`${styles.navButton} ${selectedTab === 'cicd' ? styles.active : ''}`}
-          onClick={() => setSelectedTab('cicd')}
-        >
-          CI/CD
-        </button>
       </nav>
 
-      <main className={styles.main}>
-        {selectedTab === 'tickets' && <Tickets />}
-        {selectedTab === 'plans' && <Plans />}
-        {selectedTab === 'code' && <CodeGeneration />}
-        {selectedTab === 'tests' && <TestGeneration />}
-        {selectedTab === 'version' && <VersionControl />}
-        {selectedTab === 'cicd' && <CICD />}
-      </main>
+      <div className="container mx-auto py-6">
+        {selectedTab === 'devops' && <DevOps />}
+      </div>
 
-      <footer className={styles.footer}>
-        <p>DevAgent v0.1.0</p>
-      </footer>
-    </div>
+      <Toaster />
+    </main>
   );
 }

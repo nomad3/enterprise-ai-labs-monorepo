@@ -1,31 +1,35 @@
 # DevAgent - Full-Stack Developer & DevOps AI Agent
 
-A comprehensive development platform that combines AI-powered code generation, testing, version control, and CI/CD capabilities.
+A comprehensive development platform that combines AI-powered code generation, testing, version control, and CI/CD capabilities with advanced DevOps and cloud architecture features.
 
 ## Features
 
 ### Authentication & User Management
-- Secure user authentication
+- Secure user authentication with JWT
 - Role-based access control
 - User profile management
+- Session management
 
 ### Ticket Management
 - Create and track development tickets
 - Assign tickets to team members
 - Track ticket status and progress
 - Filter and search tickets
+- Automated ticket analysis and requirement extraction
 
 ### Code Generation
-- AI-powered code generation
+- AI-powered code generation using Gemini 2.5
 - Multiple language support
 - Code completion and suggestions
 - Code review and optimization
+- Architecture pattern recommendations
 
 ### Test Generation
 - Automated test case generation
 - Unit test creation
 - Integration test support
 - Test coverage analysis
+- Performance test generation
 
 ### Version Control
 - Git integration
@@ -33,6 +37,7 @@ A comprehensive development platform that combines AI-powered code generation, t
 - Commit history
 - Change tracking
 - Push/Pull operations
+- Automated conflict resolution
 
 ### CI/CD Pipeline Management
 - Pipeline creation and configuration
@@ -40,6 +45,31 @@ A comprehensive development platform that combines AI-powered code generation, t
 - Build and deployment tracking
 - Pipeline status monitoring
 - Log viewing and analysis
+- Automated rollback capabilities
+
+### DevOps & Cloud Architecture
+- Infrastructure as Code (Terraform)
+- Kubernetes orchestration
+- Helm charts for deployment
+- Cloud-native architecture design
+- Multi-cloud support
+- Automated scaling and load balancing
+
+### Monitoring & Observability
+- Real-time metrics collection with Prometheus
+- Customizable dashboards with Grafana
+- Distributed tracing
+- Log aggregation and analysis
+- Performance monitoring
+- Resource utilization tracking
+
+### Alerting & Incident Management
+- Custom alert rules
+- Multi-channel notifications
+- Incident tracking
+- Root cause analysis
+- Post-mortem documentation
+- Automated incident response
 
 ## Tech Stack
 
@@ -55,6 +85,18 @@ A comprehensive development platform that combines AI-powered code generation, t
 - Python
 - SQLAlchemy
 - PostgreSQL
+- Redis
+
+### DevOps & Cloud
+- Docker & Docker Compose
+- Kubernetes
+- Terraform
+- Helm
+- Prometheus
+- Grafana
+- Node Exporter
+- cAdvisor
+- AlertManager
 
 ## Getting Started
 
@@ -64,44 +106,18 @@ git clone https://github.com/yourusername/devagent.git
 cd devagent
 ```
 
-2. Install dependencies:
+2. Start the development environment:
 ```bash
-# Frontend
-cd devagent-ui
-npm install
-
-# Backend
-cd ../backend
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-pip install -r requirements.txt
+docker-compose up -d
 ```
 
-3. Set up environment variables:
-```bash
-# Frontend (.env.local)
-NEXT_PUBLIC_API_URL=http://localhost:8000
-
-# Backend (.env)
-DATABASE_URL=postgresql://user:password@localhost:5432/devagent
-SECRET_KEY=your-secret-key
-```
-
-4. Start the development servers:
-```bash
-# Frontend
-cd devagent-ui
-npm run dev
-
-# Backend
-cd ../backend
-uvicorn main:app --reload
-```
-
-5. Access the application:
+3. Access the services:
 - Frontend: http://localhost:3000
 - Backend API: http://localhost:8000
 - API Documentation: http://localhost:8000/docs
+- Grafana: http://localhost:3001 (admin/admin)
+- Prometheus: http://localhost:9090
+- PgAdmin: http://localhost:5050 (admin@devagent.com/admin)
 
 ## Project Structure
 
@@ -117,13 +133,25 @@ devagent/
 │   │   └── public/       # Static assets
 │   └── package.json
 │
-└── backend/              # Backend application
-    ├── app/
-    │   ├── api/         # API endpoints
-    │   ├── core/        # Core functionality
-    │   ├── models/      # Database models
-    │   └── services/    # Business logic
-    └── requirements.txt
+├── devagent/             # Backend application
+│   ├── api/             # API endpoints
+│   ├── core/            # Core functionality
+│   │   ├── code_gen/    # Code generation
+│   │   ├── planning/    # Solution planning
+│   │   └── ticket_engine/ # Ticket processing
+│   └── tests/           # Test suite
+│
+├── monitoring/          # Monitoring configuration
+│   ├── prometheus/     # Prometheus configs
+│   │   ├── rules/      # Alert rules
+│   │   └── prometheus.yml
+│   └── grafana/        # Grafana configs
+│       └── provisioning/
+│           └── dashboards/
+│
+└── terraform/          # Infrastructure as Code
+    ├── modules/        # Reusable modules
+    └── environments/   # Environment configs
 ```
 
 ## Contributing

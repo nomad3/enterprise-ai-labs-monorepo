@@ -1,0 +1,85 @@
+name: CI/CD Pipeline (GCP)
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+  GAR_LOCATION: southamerica-west1
+  REPOSITORY: devagent
+  CLUSTER_NAME: devagent-gke
+  CLUSTER_LOCATION: southamerica-west1
+  IMAGE: southamerica-west1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/devagent/devagent:${{ github.sha }}
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+        
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install pytest pytest-cov
+        
+    - name: Run tests
+      run: |
+        pytest --cov=app tests/
+        
+    - name: Upload coverage
+      uses: codecov/codecov-action@v3
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Authenticate to Google Cloud
+      uses: google-github-actions/auth@v2
+      with:
+        credentials_json: ${{ secrets.GCP_SA_KEY }}
+    - name: Set up Cloud SDK
+      uses: google-github-actions/setup-gcloud@v2
+    - name: Configure Docker for Artifact Registry
+      run: |
+        gcloud auth configure-docker southamerica-west1-docker.pkg.dev
+    - name: Build and push Docker image
+      run: |
+        docker build -t $IMAGE .
+        docker push $IMAGE
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Authenticate to Google Cloud
+      uses: google-github-actions/auth@v2
+      with:
+        credentials_json: ${{ secrets.GCP_SA_KEY }}
+    - name: Set up Cloud SDK
+      uses: google-github-actions/setup-gcloud@v2
+    - name: Get GKE credentials
+      run: |
+        gcloud container clusters get-credentials $CLUSTER_NAME --region $CLUSTER_LOCATION --project $PROJECT_ID
+    - name: Set image in deployment
+      run: |
+        kubectl set image deployment/devagent devagent=$IMAGE -n devagent
+    - name: Verify deployment
+      run: |
+        kubectl rollout status deployment/devagent -n devagent
+        kubectl get pods -n devagent 
