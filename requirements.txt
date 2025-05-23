@@ -47,4 +47,7 @@ opentelemetry-instrumentation-fastapi>=0.27b0,<0.28b0
 
 # Task Queue
 celery>=5.2.0,<6.0.0
-flower>=1.0.0,<2.0.0 
+flower>=1.0.0,<2.0.0
+
+# Additional
+python-dateutil>=2.8.0,<3.0.0 
