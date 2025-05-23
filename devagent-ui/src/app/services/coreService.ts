@@ -98,6 +98,17 @@ export interface InfrastructureSetup {
   configuration: string;
 }
 
+export interface FileOperation {
+    source_path: string;
+    destination_path: string;
+}
+
+export interface SearchResult {
+    path: string;
+    name: string;
+    type: string;
+}
+
 export const coreService = {
   async getTicket(ticketId: string): Promise<{ ticket: Ticket; requirements: Requirement[] }> {
     try {
@@ -212,6 +223,70 @@ export const coreService = {
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
         throw new Error(error.response?.data?.detail || 'Failed to create directory');
+      }
+      throw error;
+    }
+  },
+
+  async copyFile(sourcePath: string, destinationPath: string): Promise<void> {
+    try {
+      await axios.post(`${API_BASE_URL}/files/copy`, {
+        source_path: sourcePath,
+        destination_path: destinationPath
+      });
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        throw new Error(error.response?.data?.detail || 'Failed to copy file');
+      }
+      throw error;
+    }
+  },
+
+  async moveFile(sourcePath: string, destinationPath: string): Promise<void> {
+    try {
+      await axios.post(`${API_BASE_URL}/files/move`, {
+        source_path: sourcePath,
+        destination_path: destinationPath
+      });
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        throw new Error(error.response?.data?.detail || 'Failed to move file');
+      }
+      throw error;
+    }
+  },
+
+  async searchFiles(query: string, path: string = "", caseSensitive: boolean = false): Promise<SearchResult[]> {
+    try {
+      const response = await axios.get<SearchResult[]>(`${API_BASE_URL}/files/search`, {
+        params: {
+          query,
+          path,
+          case_sensitive: caseSensitive
+        }
+      });
+      return response.data;
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        throw new Error(error.response?.data?.detail || 'Failed to search files');
+      }
+      throw error;
+    }
+  },
+
+  async searchByName(pattern: string, path: string = "", caseSensitive: boolean = false): Promise<SearchResult[]> {
+    try {
+      const response = await axios.get<SearchResult[]>(`${API_BASE_URL}/files/search/name`, {
+        params: {
+          pattern,
+          path,
+          case_sensitive: caseSensitive
+        }
+      });
+      return response.data;
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        throw new Error(error.response?.data?.detail || 'Failed to search files by name');
       }
       throw error;
     }
