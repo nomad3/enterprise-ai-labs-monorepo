@@ -2,51 +2,87 @@
 Tests for the Ticket Ingestion & Interpretation Engine.
 """
 import pytest
+from datetime import datetime
+from typing import Dict, Any
+
+from devagent.core.ticket_engine.models import Ticket, TicketStatus, TicketType
 from devagent.core.ticket_engine.engine import TicketEngine
 
-def test_ticket_engine_initialization():
-    """Test that the TicketEngine can be initialized properly."""
-    engine = TicketEngine()
-    assert engine is not None
-
-def test_ticket_parsing():
-    """Test that the engine can parse a basic Jira ticket."""
-    engine = TicketEngine()
-    sample_ticket = {
+@pytest.fixture
+def sample_jira_ticket() -> Dict[str, Any]:
+    """Sample Jira ticket data for testing."""
+    return {
         "key": "PROJ-123",
         "fields": {
             "summary": "Implement user authentication",
-            "description": "Add JWT-based authentication to the API",
-            "issuetype": {"name": "Task"}
-        }
-    }
-    
-    parsed_ticket = engine.parse_ticket(sample_ticket)
-    assert parsed_ticket["key"] == "PROJ-123"
-    assert "authentication" in parsed_ticket["summary"].lower()
-    assert parsed_ticket["type"] == "Task"
-
-def test_requirement_extraction():
-    """Test that the engine can extract requirements from a ticket."""
-    engine = TicketEngine()
-    sample_ticket = {
-        "key": "PROJ-124",
-        "fields": {
-            "summary": "Add user profile page",
             "description": """
-            As a user, I want to view and edit my profile information.
+            As a user, I want to authenticate using JWT tokens.
             
             Requirements:
-            - Display user's name, email, and avatar
-            - Allow editing of profile information
-            - Add form validation
+            - Implement JWT token generation
+            - Add token validation middleware
+            - Create login endpoint
+            - Add refresh token functionality
             """,
-            "issuetype": {"name": "Story"}
+            "issuetype": {"name": "Task"},
+            "status": {"name": "To Do"},
+            "created": "2024-03-20T10:00:00.000+0000",
+            "updated": "2024-03-20T10:00:00.000+0000"
+        }
+    }
+
+@pytest.fixture
+def ticket_engine():
+    """Create a TicketEngine instance for testing."""
+    return TicketEngine()
+
+def test_ticket_engine_initialization(ticket_engine):
+    """Test that the TicketEngine can be initialized properly."""
+    assert ticket_engine is not None
+
+def test_parse_jira_ticket(ticket_engine, sample_jira_ticket):
+    """Test parsing a Jira ticket into our internal Ticket model."""
+    ticket = ticket_engine.parse_ticket(sample_jira_ticket)
+    
+    assert isinstance(ticket, Ticket)
+    assert ticket.key == "PROJ-123"
+    assert ticket.summary == "Implement user authentication"
+    assert ticket.type == TicketType.TASK
+    assert ticket.status == TicketStatus.TODO
+    assert isinstance(ticket.created_at, datetime)
+    assert isinstance(ticket.updated_at, datetime)
+
+def test_extract_requirements(ticket_engine, sample_jira_ticket):
+    """Test extracting requirements from a ticket description."""
+    requirements = ticket_engine.extract_requirements(sample_jira_ticket)
+    
+    assert len(requirements) == 4
+    assert any("JWT token generation" in req for req in requirements)
+    assert any("token validation" in req for req in requirements)
+    assert any("login endpoint" in req for req in requirements)
+    assert any("refresh token" in req for req in requirements)
+
+def test_validate_ticket(ticket_engine, sample_jira_ticket):
+    """Test ticket validation."""
+    is_valid, errors = ticket_engine.validate_ticket(sample_jira_ticket)
+    assert is_valid
+    assert len(errors) == 0
+
+def test_invalid_ticket(ticket_engine):
+    """Test handling of invalid ticket data."""
+    invalid_ticket = {
+        "key": "PROJ-123",
+        "fields": {
+            "summary": "",  # Empty summary
+            "description": "Test description",
+            "issuetype": {"name": "Invalid Type"},
+            "status": {"name": "Invalid Status"}
         }
     }
     
-    requirements = engine.extract_requirements(sample_ticket)
-    assert len(requirements) >= 3
-    assert any("display" in req.lower() for req in requirements)
-    assert any("edit" in req.lower() for req in requirements)
-    assert any("validation" in req.lower() for req in requirements) 
+    is_valid, errors = ticket_engine.validate_ticket(invalid_ticket)
+    assert not is_valid
+    assert len(errors) > 0
+    assert any("summary" in error.lower() for error in errors)
+    assert any("type" in error.lower() for error in errors)
+    assert any("status" in error.lower() for error in errors) 
