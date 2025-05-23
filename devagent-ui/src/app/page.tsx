@@ -7,6 +7,8 @@ import Tickets from './components/Tickets';
 import CodeGeneration from './components/CodeGeneration';
 import Plans from './components/Plans';
 import TestGeneration from './components/TestGeneration';
+import VersionControl from './components/VersionControl';
+import CICD from './components/CICD';
 import Login from './components/Login';
 import Register from './components/Register';
 
@@ -88,18 +90,8 @@ export default function Home() {
         {selectedTab === 'plans' && <Plans />}
         {selectedTab === 'code' && <CodeGeneration />}
         {selectedTab === 'tests' && <TestGeneration />}
-        {selectedTab === 'version' && (
-          <div className={styles.content}>
-            <h2>Version Control</h2>
-            <p>Manage version control operations</p>
-          </div>
-        )}
-        {selectedTab === 'cicd' && (
-          <div className={styles.content}>
-            <h2>CI/CD</h2>
-            <p>Manage continuous integration and deployment</p>
-          </div>
-        )}
+        {selectedTab === 'version' && <VersionControl />}
+        {selectedTab === 'cicd' && <CICD />}
       </main>
 
       <footer className={styles.footer}>
