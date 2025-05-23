@@ -5,14 +5,16 @@ from typing import Any, Dict, List
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
+from pydantic import BaseModel
 
 from devagent.core.database import get_session
-from devagent.core.planning.engine import PlanningEngine
+from devagent.core.planning.engine import PlanningEngine, SolutionPlanner
 from devagent.core.planning.models import SolutionPlan, Task
 from devagent.core.ticket_engine.models import Requirement, Ticket
 
 router = APIRouter(prefix="/plans", tags=["plans"])
 planning_engine = PlanningEngine()
+planner = SolutionPlanner()
 
 
 @router.post("/tickets/{ticket_id}", response_model=Dict[str, Any])
@@ -136,3 +138,20 @@ async def list_solution_plans(
         result.append({"plan": plan, "tasks": tasks})
 
     return result
+
+
+class PlanRequest(BaseModel):
+    task_description: str
+
+
+class PlanResponse(BaseModel):
+    plan: str
+
+
+@router.post("/generate", response_model=PlanResponse)
+def generate_plan(request: PlanRequest):
+    try:
+        plan = planner.generate_plan(request.task_description)
+        return PlanResponse(plan=plan)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Plan generation failed: {str(e)}")

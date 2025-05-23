@@ -9,6 +9,7 @@ from typing import Any, Dict, List, Optional, Tuple
 from devagent.core.planning.models import (SolutionPlan, Task, TaskPriority,
                                            TaskStatus)
 from devagent.core.ticket_engine.models import Requirement, Ticket
+from devagent.core.gemini_client import GeminiClient
 
 
 class PlanningEngine:
@@ -227,3 +228,16 @@ class PlanningEngine:
                         errors.append(f"Task {task.id} has invalid dependency {dep_id}")
 
         return len(errors) == 0, errors
+
+
+class SolutionPlanner:
+    def __init__(self):
+        self.gemini_client = GeminiClient()
+
+    def generate_plan(self, task_description: str) -> str:
+        prompt = f"Break down the following task into actionable steps:\n\n{task_description}\n\nProvide a detailed plan."
+        return self.gemini_client.generate_code(prompt)
+
+    def execute_plan(self, plan: str) -> str:
+        # Placeholder for executing the plan
+        return f"Executed plan: {plan}"
