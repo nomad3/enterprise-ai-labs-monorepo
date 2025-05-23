@@ -5,11 +5,12 @@ import re
 import uuid
 from datetime import datetime
 from typing import Any, Dict, List, Optional, Tuple
+import logging
 
 from devagent.core.planning.models import (SolutionPlan, Task, TaskPriority,
                                            TaskStatus)
 from devagent.core.ticket_engine.models import Requirement, Ticket
-from devagent.core.gemini_client import GeminiClient
+from devagent.core.code_gen.gemini import GeminiClient
 
 
 class PlanningEngine:
@@ -235,8 +236,11 @@ class SolutionPlanner:
         self.gemini_client = GeminiClient()
 
     def generate_plan(self, task_description: str) -> str:
+        logging.info(f"Generating plan for: {task_description}")
         prompt = f"Break down the following task into actionable steps:\n\n{task_description}\n\nProvide a detailed plan."
-        return self.gemini_client.generate_code(prompt)
+        plan = self.gemini_client.generate_code(prompt)
+        logging.info(f"Generated plan: {plan}")
+        return plan
 
     def execute_plan(self, plan: str) -> str:
         # Placeholder for executing the plan

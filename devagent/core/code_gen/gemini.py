@@ -1,5 +1,6 @@
 import os
 from typing import Optional
+import logging
 
 try:
     import google.generativeai as genai
@@ -18,9 +19,10 @@ class GeminiClient:
 
     def generate_code(self, prompt: str) -> str:
         if self.model:
+            logging.info("GeminiClient: Using real Gemini model for code generation.")
             response = self.model.generate_content(prompt)
             return response.text
-        # Mock response if Gemini is not configured
+        logging.info("GeminiClient: Returning mock response for code generation.")
         return f"# Gemini mock: This would be generated code for prompt: {prompt}"
 
     def generate_tests(self, code: str) -> str:
