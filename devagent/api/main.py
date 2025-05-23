@@ -17,6 +17,7 @@ from devagent.api.code_gen import router as code_gen_router
 from devagent.api.test_gen import router as test_gen_router
 from devagent.api.version_control import router as version_control_router
 from devagent.api.ci_cd import router as ci_cd_router
+from devagent.api.communication import router as communication_router
 from devagent.core.database import get_session, init_db
 
 # Initialize OpenTelemetry
@@ -53,6 +54,7 @@ app.include_router(code_gen_router)
 app.include_router(test_gen_router)
 app.include_router(version_control_router)
 app.include_router(ci_cd_router)
+app.include_router(communication_router)
 
 
 @app.on_event("startup")
