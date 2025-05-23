@@ -61,7 +61,7 @@ def test_parse_jira_ticket(ticket_engine, sample_jira_ticket):
 def test_extract_requirements(ticket_engine, sample_jira_ticket):
     """Test extracting requirements from a ticket description."""
     requirements = ticket_engine.extract_requirements(sample_jira_ticket)
-    
+
     assert len(requirements) == 4
     assert any("JWT token generation" in req.description for req in requirements)
     assert any("token validation" in req.description for req in requirements)

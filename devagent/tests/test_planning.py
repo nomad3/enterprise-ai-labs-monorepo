@@ -89,7 +89,10 @@ def test_task_dependencies(planning_engine, sample_ticket, sample_requirements):
     plan = planning_engine.create_solution_plan(sample_ticket, sample_requirements)
 
     # Check that tasks have dependencies (if any dependencies exist)
-    assert any(task.dependencies is not None and len(task.dependencies) > 0 for task in plan.tasks)
+    assert any(
+        task.dependencies is not None and len(task.dependencies) > 0
+        for task in plan.tasks
+    )
 
     # Check for circular dependencies
     for task in plan.tasks:

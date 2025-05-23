@@ -4,28 +4,37 @@ Models for the Solution Planning & Strategy Module.
 from datetime import datetime
 from enum import Enum
 from typing import List, Optional
-from sqlalchemy import Column, String, DateTime, Enum as SQLEnum, Text, Integer, ForeignKey
+
+from sqlalchemy import Column, DateTime
+from sqlalchemy import Enum as SQLEnum
+from sqlalchemy import ForeignKey, Integer, String, Text
 from sqlalchemy.orm import relationship
 
 from devagent.core.database import Base
 
+
 class TaskPriority(str, Enum):
     """Priority levels for tasks."""
+
     LOW = "low"
     MEDIUM = "medium"
     HIGH = "high"
     CRITICAL = "critical"
 
+
 class TaskStatus(str, Enum):
     """Possible statuses for a task."""
+
     TODO = "todo"
     IN_PROGRESS = "in_progress"
     REVIEW = "review"
     DONE = "done"
     BLOCKED = "blocked"
 
+
 class Task(Base):
     """Model representing a task in a solution plan."""
+
     __tablename__ = "tasks"
 
     id = Column(String(50), primary_key=True)
@@ -42,8 +51,10 @@ class Task(Base):
     # Relationships
     plan = relationship("SolutionPlan", back_populates="tasks")
 
+
 class SolutionPlan(Base):
     """Model representing a solution plan for a ticket."""
+
     __tablename__ = "solution_plans"
 
     id = Column(String(50), primary_key=True)
@@ -54,4 +65,4 @@ class SolutionPlan(Base):
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     # Relationships
-    tasks = relationship("Task", back_populates="plan", cascade="all, delete-orphan") 
+    tasks = relationship("Task", back_populates="plan", cascade="all, delete-orphan")

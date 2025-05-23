@@ -1,29 +1,33 @@
 """
 Main FastAPI application entry point for DevAgent.
 """
-from fastapi import FastAPI, Depends
+from fastapi import Depends, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from prometheus_client import make_asgi_app
 from opentelemetry import trace
+from opentelemetry.exporter.prometheus import PrometheusMetricReader
+from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
 from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import BatchSpanProcessor
-from opentelemetry.exporter.prometheus import PrometheusSpanExporter
-from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
-
-from devagent.core.database import init_db, get_session
-from devagent.api.tickets import router as tickets_router
-from devagent.api.plans import router as plans_router
+from prometheus_client import start_http_server
 from sqlalchemy.ext.asyncio import AsyncSession
 
-# Initialize tracer
+from devagent.api.plans import router as plans_router
+from devagent.api.tickets import router as tickets_router
+from devagent.core.database import get_session, init_db
+
+# Initialize OpenTelemetry
 trace.set_tracer_provider(TracerProvider())
 tracer = trace.get_tracer(__name__)
+
+# Initialize Prometheus metrics
+metric_reader = PrometheusMetricReader()
+start_http_server(port=8001, addr="0.0.0.0")
 
 # Create FastAPI app
 app = FastAPI(
     title="DevAgent",
     description="Full-Stack Developer & DevOps AI Agent",
-    version="0.1.0"
+    version="0.1.0",
 )
 
 # Configure CORS
@@ -35,30 +39,25 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Add Prometheus metrics endpoint
-metrics_app = make_asgi_app()
-app.mount("/metrics", metrics_app)
-
-# Instrument FastAPI with OpenTelemetry
+# Instrument FastAPI
 FastAPIInstrumentor.instrument_app(app)
 
 # Include routers
 app.include_router(tickets_router)
 app.include_router(plans_router)
 
+
 @app.on_event("startup")
 async def startup_event():
     """Initialize services on startup."""
     await init_db()
 
+
 @app.get("/")
 async def root():
     """Root endpoint returning basic API information."""
-    return {
-        "name": "DevAgent",
-        "version": "0.1.0",
-        "status": "operational"
-    }
+    return {"name": "DevAgent", "version": "0.1.0", "status": "operational"}
+
 
 @app.get("/health")
 async def health_check(db: AsyncSession = Depends(get_session)):
@@ -70,8 +69,4 @@ async def health_check(db: AsyncSession = Depends(get_session)):
     except Exception as e:
         db_status = f"unhealthy: {str(e)}"
 
-    return {
-        "status": "healthy",
-        "database": db_status,
-        "version": "0.1.0"
-    } 
+    return {"status": "healthy", "database": db_status, "version": "0.1.0"}

@@ -7,7 +7,7 @@ from typing import List, Optional
 
 from sqlalchemy import Column, DateTime
 from sqlalchemy import Enum as SQLEnum
-from sqlalchemy import String, Text, ForeignKey
+from sqlalchemy import ForeignKey, String, Text
 from sqlalchemy.orm import relationship
 
 from devagent.core.database import Base
