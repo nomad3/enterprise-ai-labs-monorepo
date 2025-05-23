@@ -9,7 +9,15 @@ git_service = GitService()
 class BranchRequest(BaseModel):
     branch_name: str
 
+class CreateBranchWithTicketRequest(BaseModel):
+    ticket_number: str
+    description: str
+
 class CommitRequest(BaseModel):
+    message: str
+
+class CommitWithTicketRequest(BaseModel):
+    ticket_number: str
     message: str
 
 class PushRequest(BaseModel):
@@ -30,9 +38,23 @@ def git_branch(request: BranchRequest):
         raise HTTPException(status_code=500, detail=result)
     return {"result": result}
 
+@router.post("/branch-with-ticket")
+def git_branch_with_ticket(request: CreateBranchWithTicketRequest):
+    result = git_service.create_branch_with_ticket(request.ticket_number, request.description)
+    if result.startswith("Error") or result.startswith("Exception"):
+        raise HTTPException(status_code=500, detail=result)
+    return {"result": result}
+
 @router.post("/commit")
 def git_commit(request: CommitRequest):
     result = git_service.commit(request.message)
+    if result.startswith("Error") or result.startswith("Exception"):
+        raise HTTPException(status_code=500, detail=result)
+    return {"result": result}
+
+@router.post("/commit-with-ticket")
+def git_commit_with_ticket(request: CommitWithTicketRequest):
+    result = git_service.commit_with_ticket(request.ticket_number, request.message)
     if result.startswith("Error") or result.startswith("Exception"):
         raise HTTPException(status_code=500, detail=result)
     return {"result": result}

@@ -180,4 +180,27 @@ MIT License - See LICENSE file for details
 - **Future Enhancements**:
   - Display commit history and repository progress.
   - Add interactive feedback and real-time updates.
-  - Integrate with version control and CI/CD pipelines. 
+  - Integrate with version control and CI/CD pipelines.
+
+## Version Control Integration
+
+DevAgent now supports basic git operations with ticket number integration:
+
+- **POST /git/init**: Initialize a git repository.
+- **POST /git/branch**: Create a new branch with a custom name.
+- **POST /git/branch-with-ticket**: Create a new branch with a ticket number and description (e.g., `ticket-123-feature-name`).
+- **POST /git/commit**: Commit changes with a custom message.
+- **POST /git/commit-with-ticket**: Commit changes with a ticket number in the message (e.g., `[Ticket #123] Your commit message`).
+- **POST /git/push**: Push changes to a remote repository.
+
+### Example Usage
+
+- **Creating a branch with a ticket number:**
+  ```bash
+  curl -X POST "http://localhost:8000/git/branch-with-ticket" -H "Content-Type: application/json" -d '{"ticket_number": "123", "description": "feature-name"}'
+  ```
+
+- **Committing with a ticket number:**
+  ```bash
+  curl -X POST "http://localhost:8000/git/commit-with-ticket" -H "Content-Type: application/json" -d '{"ticket_number": "123", "message": "Implement feature X"}'
+  ``` 

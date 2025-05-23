@@ -23,9 +23,17 @@ class GitService:
     def branch(self, branch_name: str) -> str:
         return self.run_git("checkout", "-b", branch_name)
 
+    def create_branch_with_ticket(self, ticket_number: str, description: str) -> str:
+        branch_name = f"ticket-{ticket_number}-{description}"
+        return self.branch(branch_name)
+
     def commit(self, message: str) -> str:
         self.run_git("add", ".")
         return self.run_git("commit", "-m", message)
+
+    def commit_with_ticket(self, ticket_number: str, message: str) -> str:
+        commit_message = f"[Ticket #{ticket_number}] {message}"
+        return self.commit(commit_message)
 
     def push(self, remote: str = "origin", branch: Optional[str] = None) -> str:
         if branch is None:
