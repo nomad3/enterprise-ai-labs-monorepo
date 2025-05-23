@@ -10,13 +10,17 @@
   },
   "dependencies": {
     "@types/axios": "^0.9.36",
+    "@types/prismjs": "^1.26.5",
     "axios": "^1.9.0",
     "next": "15.1.8",
+    "prismjs": "^1.30.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@testing-library/react-hooks": "^8.0.1",
+    "@testing-library/user-event": "^14.6.1",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",

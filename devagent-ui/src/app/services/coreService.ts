@@ -55,84 +55,114 @@ interface Context {
   [key: string]: any;
 }
 
-export const coreService = {
+interface TestPlan {
+  testCases: string[];
+  coverage: number;
+}
+
+interface InfrastructureSetup {
+  services: string[];
+  configuration: Record<string, any>;
+}
+
+interface FileNode {
+  name: string;
+  type: 'file' | 'directory';
+  path: string;
+  children?: FileNode[];
+}
+
+class CoreService {
+  private baseUrl: string;
+
+  constructor() {
+    this.baseUrl = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+  }
+
   // Ticket Management
   async processTicket(ticketData: any): Promise<{ ticket: Ticket; requirements: Requirement[] }> {
     try {
-      const response = await axios.post(`${API_BASE_URL}/tickets/process`, ticketData);
-      return response.data as { ticket: Ticket; requirements: Requirement[] };
+      const response = await axios.post(`${this.baseUrl}/api/tickets`, ticketData);
+      return response.data;
     } catch (error) {
       throw this.handleError(error, 'Failed to process ticket');
     }
-  },
+  }
 
   // Solution Planning
   async generateSolutionPlan(ticketId: string): Promise<SolutionPlan> {
     try {
-      const response = await axios.post(`${API_BASE_URL}/plans/generate`, { ticket_id: ticketId });
-      return response.data as SolutionPlan;
+      const response = await axios.get(`${this.baseUrl}/api/tickets/${ticketId}/solution`);
+      return response.data;
     } catch (error) {
       throw this.handleError(error, 'Failed to generate solution plan');
     }
-  },
-
-  // Code Generation
-  async generateCode(prompt: string, context?: Context): Promise<string> {
-    try {
-      const response = await axios.post(`${API_BASE_URL}/code/generate`, {
-        prompt,
-        context
-      });
-      return response.data.code;
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        throw new Error(error.response?.data?.detail || 'Failed to generate code');
-      }
-      throw error;
-    }
-  },
+  }
 
   // Test Generation
-  async generateTests(code: string, context?: Context): Promise<string> {
+  async generateTests(ticketId: string): Promise<TestPlan> {
     try {
-      const response = await axios.post(`${API_BASE_URL}/tests/generate`, {
-        code,
-        context
-      });
-      return response.data.tests;
+      const response = await axios.get(`${this.baseUrl}/api/tickets/${ticketId}/tests`);
+      return response.data;
     } catch (error) {
-      if (axios.isAxiosError(error)) {
-        throw new Error(error.response?.data?.detail || 'Failed to generate tests');
-      }
-      throw error;
+      throw this.handleError(error, 'Failed to generate tests');
     }
-  },
+  }
 
   // CI/CD Pipeline
   async runPipeline(): Promise<PipelineStatus> {
     try {
-      const response = await axios.post(`${API_BASE_URL}/pipeline/run`);
+      const response = await axios.post(`${this.baseUrl}/api/pipeline/run`);
       return response.data as PipelineStatus;
     } catch (error) {
       throw this.handleError(error, 'Failed to run pipeline');
     }
-  },
+  }
 
   // Version Control
-  async gitOperation(operation: string, params: any = {}): Promise<GitOperation> {
+  async gitOperation(operation: string, params: any): Promise<GitOperation> {
     try {
-      const response = await axios.post(`${API_BASE_URL}/git/${operation}`, params);
-      return response.data as GitOperation;
+      const response = await axios.post(`${this.baseUrl}/api/git/${operation}`, params);
+      return response.data;
     } catch (error) {
-      throw this.handleError(error, `Failed to perform git operation: ${operation}`);
+      throw this.handleError(error, 'Failed to perform git operation');
     }
-  },
+  }
+
+  async setupInfrastructure(ticketId: string): Promise<InfrastructureSetup> {
+    try {
+      const response = await axios.get(`${this.baseUrl}/api/tickets/${ticketId}/infrastructure`);
+      return response.data;
+    } catch (error) {
+      throw this.handleError(error, 'Failed to setup infrastructure');
+    }
+  }
+
+  async listFiles(): Promise<FileNode[]> {
+    try {
+      const response = await axios.get(`${this.baseUrl}/api/files`);
+      return response.data;
+    } catch (error) {
+      throw this.handleError(error, 'Failed to list files');
+    }
+  }
+
+  async readFile(path: string): Promise<string> {
+    try {
+      const response = await axios.get(`${this.baseUrl}/api/files/${encodeURIComponent(path)}`);
+      return response.data;
+    } catch (error) {
+      throw this.handleError(error, 'Failed to read file');
+    }
+  }
 
   // Error handling
   handleError(error: unknown, defaultMessage: string): Error {
-    if (error instanceof AxiosError) {
-      return new Error(error.response?.data?.detail || defaultMessage);
+    if (axios.isAxiosError(error)) {
+      return new Error(error.response?.data?.message || defaultMessage);
     }
     return new Error(defaultMessage);
   }
-}; 
+}
+
+export const coreService = new CoreService(); 
