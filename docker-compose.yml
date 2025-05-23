@@ -100,7 +100,7 @@ services:
       - DATABASE_URL=postgresql://devagent:devagent@postgres:5432/devagent_test
     depends_on:
       - postgres
-    command: pytest -v --cov=devagent tests/
+    command: pytest -v --cov=devagent devagent/tests/
 
   lint:
     build:
