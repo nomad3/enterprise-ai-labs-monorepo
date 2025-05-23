@@ -35,7 +35,8 @@
 }
 
 .generate-button,
-.test-button {
+.test-button,
+.write-button {
   background-color: #3498db;
   color: white;
   border: none;
@@ -47,12 +48,14 @@
 }
 
 .generate-button:hover,
-.test-button:hover {
+.test-button:hover,
+.write-button:hover {
   background-color: #2980b9;
 }
 
 .generate-button:disabled,
-.test-button:disabled {
+.test-button:disabled,
+.write-button:disabled {
   background-color: #bdc3c7;
   cursor: not-allowed;
 }
@@ -60,6 +63,14 @@
 .error-message {
   background-color: #f8d7da;
   color: #721c24;
+  padding: 12px;
+  border-radius: 4px;
+  margin-bottom: 16px;
+}
+
+.success-message {
+  background-color: #d4edda;
+  color: #155724;
   padding: 12px;
   border-radius: 4px;
   margin-bottom: 16px;
@@ -83,6 +94,11 @@
   font-size: 1.2rem;
 }
 
+.button-group {
+  display: flex;
+  gap: 8px;
+}
+
 .code-block {
   background-color: #f8f9fa;
   border-radius: 4px;
@@ -100,4 +116,12 @@
 
 .test-button:hover {
   background-color: #27ae60;
+}
+
+.write-button {
+  background-color: #9b59b6;
+}
+
+.write-button:hover {
+  background-color: #8e44ad;
 } 

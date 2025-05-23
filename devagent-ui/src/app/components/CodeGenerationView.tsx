@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { coreService } from '../services/coreService';
+import { fileService } from '../services/fileService';
 import './CodeGenerationView.css';
 
 interface CodeGenerationViewProps {
@@ -12,6 +13,8 @@ const CodeGenerationView: React.FC<CodeGenerationViewProps> = ({ ticketId }) => 
   const [generatedTests, setGeneratedTests] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [fileName, setFileName] = useState('');
+  const [fileStatus, setFileStatus] = useState<{ code?: string; tests?: string }>({});
 
   const handleGenerateCode = async () => {
     try {
@@ -19,6 +22,7 @@ const CodeGenerationView: React.FC<CodeGenerationViewProps> = ({ ticketId }) => 
       setError(null);
       const code = await coreService.generateCode(prompt);
       setGeneratedCode(code);
+      setFileName(prompt.toLowerCase().replace(/[^a-z0-9]/g, '_'));
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to generate code');
     } finally {
@@ -39,6 +43,42 @@ const CodeGenerationView: React.FC<CodeGenerationViewProps> = ({ ticketId }) => 
       setGeneratedTests(tests);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to generate tests');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleWriteCodeToFile = async () => {
+    if (!generatedCode || !fileName) {
+      setError('Please generate code and provide a file name');
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      setError(null);
+      const response = await fileService.writeCodeToFile(generatedCode, `${fileName}.py`);
+      setFileStatus(prev => ({ ...prev, code: response.message }));
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to write code to file');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleWriteTestsToFile = async () => {
+    if (!generatedTests || !fileName) {
+      setError('Please generate tests and provide a file name');
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      setError(null);
+      const response = await fileService.writeTestsToFile(generatedTests, `${fileName}_test.py`);
+      setFileStatus(prev => ({ ...prev, tests: response.message }));
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to write tests to file');
     } finally {
       setIsLoading(false);
     }
@@ -74,14 +114,28 @@ const CodeGenerationView: React.FC<CodeGenerationViewProps> = ({ ticketId }) => 
         <div className="code-section">
           <div className="section-header">
             <h4>Generated Code</h4>
-            <button 
-              onClick={handleGenerateTests}
-              disabled={isLoading}
-              className="test-button"
-            >
-              {isLoading ? 'Generating...' : 'Generate Tests'}
-            </button>
+            <div className="button-group">
+              <button 
+                onClick={handleWriteCodeToFile}
+                disabled={isLoading}
+                className="write-button"
+              >
+                Write to File
+              </button>
+              <button 
+                onClick={handleGenerateTests}
+                disabled={isLoading}
+                className="test-button"
+              >
+                {isLoading ? 'Generating...' : 'Generate Tests'}
+              </button>
+            </div>
           </div>
+          {fileStatus.code && (
+            <div className="success-message">
+              {fileStatus.code}
+            </div>
+          )}
           <pre className="code-block">
             <code>{generatedCode}</code>
           </pre>
@@ -90,7 +144,21 @@ const CodeGenerationView: React.FC<CodeGenerationViewProps> = ({ ticketId }) => 
 
       {generatedTests && (
         <div className="test-section">
-          <h4>Generated Tests</h4>
+          <div className="section-header">
+            <h4>Generated Tests</h4>
+            <button 
+              onClick={handleWriteTestsToFile}
+              disabled={isLoading}
+              className="write-button"
+            >
+              Write to File
+            </button>
+          </div>
+          {fileStatus.tests && (
+            <div className="success-message">
+              {fileStatus.tests}
+            </div>
+          )}
           <pre className="code-block">
             <code>{generatedTests}</code>
           </pre>
