@@ -167,4 +167,17 @@ MIT License - See LICENSE file for details
 - **POST /code/troubleshoot**
     - Request body: `{ "code": "<code to troubleshoot>", "error": "<error message>" }`
     - Response: `{ "solution": "<troubleshooting solution>" }`
-    - Description: Troubleshoots the provided code based on the given error message using Gemini 2.5 API. 
+    - Description: Troubleshoots the provided code based on the given error message using Gemini 2.5 API.
+
+## UI Development
+
+- **Next.js Frontend**: A new Next.js project (`devagent-ui`) has been scaffolded and integrated into the Docker Compose setup. It will run on port 3000 and interact with the FastAPI backend.
+- **UI Workflow**: The UI will guide developers through the full TDD loop:
+  - Code Generation: Submit a prompt to generate code.
+  - Test Generation: Submit code to generate tests.
+  - Test Execution: Run the generated tests and view results.
+  - Troubleshooting: If tests fail, submit code and error details for troubleshooting.
+- **Future Enhancements**:
+  - Display commit history and repository progress.
+  - Add interactive feedback and real-time updates.
+  - Integrate with version control and CI/CD pipelines. 
