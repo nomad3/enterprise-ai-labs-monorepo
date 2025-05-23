@@ -1,0 +1,67 @@
+.ticket-ingestion-flow {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.loading-indicator {
+  margin: 1rem 0;
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border-radius: 4px;
+  text-align: center;
+  color: #666;
+}
+
+.error-message {
+  margin: 1rem 0;
+  padding: 1rem;
+  background-color: #fff3f3;
+  border: 1px solid #ffcdd2;
+  border-radius: 4px;
+  color: #d32f2f;
+}
+
+.error-message h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.1rem;
+}
+
+.error-details {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.ticket-result {
+  margin: 1rem 0;
+  padding: 1.5rem;
+  background-color: #f8f9fa;
+  border-radius: 4px;
+  border: 1px solid #e9ecef;
+}
+
+.ticket-result h3 {
+  margin: 0 0 1rem 0;
+  color: #28a745;
+  font-size: 1.2rem;
+}
+
+.ticket-details {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.ticket-details p {
+  margin: 0;
+  line-height: 1.5;
+}
+
+.ticket-description {
+  margin-top: 0.5rem !important;
+  padding: 0.5rem;
+  background-color: #fff;
+  border: 1px solid #e9ecef;
+  border-radius: 4px;
+  white-space: pre-wrap;
+} 
