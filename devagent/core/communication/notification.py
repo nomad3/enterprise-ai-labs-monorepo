@@ -37,4 +37,12 @@ class NotificationService:
                 return f"Oops, Teams notification failed: {response.text}"
         except Exception as e:
             logging.error(f"Exception sending Teams notification: {str(e)}")
-            return f"Teams notification error: {str(e)}" 
+            return f"Teams notification error: {str(e)}"
+
+    def mock_send_to_slack(self, message: str) -> str:
+        logging.info(f"Mock Slack notification: {message}")
+        return "Mock Slack notification sent successfully."
+
+    def mock_send_to_teams(self, message: str) -> str:
+        logging.info(f"Mock Teams notification: {message}")
+        return "Mock Teams notification sent successfully." 
