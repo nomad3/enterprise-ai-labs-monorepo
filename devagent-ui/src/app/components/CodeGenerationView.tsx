@@ -15,14 +15,23 @@ const CodeGenerationView: React.FC<CodeGenerationViewProps> = ({ ticketId }) => 
   const [error, setError] = useState<string | null>(null);
   const [fileName, setFileName] = useState('');
   const [fileStatus, setFileStatus] = useState<{ code?: string; tests?: string }>({});
+  const [context, setContext] = useState<Record<string, any>>({});
 
   const handleGenerateCode = async () => {
     try {
       setIsLoading(true);
       setError(null);
-      const code = await coreService.generateCode(prompt);
+      const code = await coreService.generateCode(prompt, {
+        ticketId,
+        ...context
+      });
       setGeneratedCode(code);
       setFileName(prompt.toLowerCase().replace(/[^a-z0-9]/g, '_'));
+      // Update context with generated code
+      setContext(prev => ({
+        ...prev,
+        lastGeneratedCode: code
+      }));
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to generate code');
     } finally {
@@ -39,8 +48,16 @@ const CodeGenerationView: React.FC<CodeGenerationViewProps> = ({ ticketId }) => 
     try {
       setIsLoading(true);
       setError(null);
-      const tests = await coreService.generateTests(generatedCode);
+      const tests = await coreService.generateTests(generatedCode, {
+        ticketId,
+        ...context
+      });
       setGeneratedTests(tests);
+      // Update context with generated tests
+      setContext(prev => ({
+        ...prev,
+        lastGeneratedTests: tests
+      }));
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to generate tests');
     } finally {

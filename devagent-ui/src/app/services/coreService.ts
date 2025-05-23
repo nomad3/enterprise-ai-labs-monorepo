@@ -50,6 +50,11 @@ export interface GitOperation {
   result: string;
 }
 
+interface Context {
+  ticketId?: string;
+  [key: string]: any;
+}
+
 export const coreService = {
   // Ticket Management
   async processTicket(ticketData: any): Promise<{ ticket: Ticket; requirements: Requirement[] }> {
@@ -72,22 +77,34 @@ export const coreService = {
   },
 
   // Code Generation
-  async generateCode(prompt: string): Promise<string> {
+  async generateCode(prompt: string, context?: Context): Promise<string> {
     try {
-      const response = await axios.post(`${API_BASE_URL}/code/generate`, { prompt });
-      return response.data as string;
+      const response = await axios.post(`${API_BASE_URL}/code/generate`, {
+        prompt,
+        context
+      });
+      return response.data.code;
     } catch (error) {
-      throw this.handleError(error, 'Failed to generate code');
+      if (axios.isAxiosError(error)) {
+        throw new Error(error.response?.data?.detail || 'Failed to generate code');
+      }
+      throw error;
     }
   },
 
   // Test Generation
-  async generateTests(code: string): Promise<string> {
+  async generateTests(code: string, context?: Context): Promise<string> {
     try {
-      const response = await axios.post(`${API_BASE_URL}/tests/generate`, { code });
-      return response.data as string;
+      const response = await axios.post(`${API_BASE_URL}/tests/generate`, {
+        code,
+        context
+      });
+      return response.data.tests;
     } catch (error) {
-      throw this.handleError(error, 'Failed to generate tests');
+      if (axios.isAxiosError(error)) {
+        throw new Error(error.response?.data?.detail || 'Failed to generate tests');
+      }
+      throw error;
     }
   },
 
