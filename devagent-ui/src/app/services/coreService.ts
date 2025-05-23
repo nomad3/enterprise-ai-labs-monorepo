@@ -1,4 +1,5 @@
-import axios, { AxiosError } from 'axios';
+import axios from 'axios';
+import type { AxiosError as AxiosErrorType } from 'axios';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
@@ -65,104 +66,154 @@ interface InfrastructureSetup {
   configuration: Record<string, any>;
 }
 
-interface FileNode {
+export interface FileNode {
   name: string;
-  type: 'file' | 'directory';
+  type: string;
   path: string;
   children?: FileNode[];
 }
 
-class CoreService {
-  private baseUrl: string;
+export interface FileContent {
+  content: string;
+  language: string;
+}
 
-  constructor() {
-    this.baseUrl = process.env.REACT_APP_API_URL || 'http://localhost:8000';
-  }
+export interface FileWrite {
+  content: string;
+}
 
-  // Ticket Management
-  async processTicket(ticketData: any): Promise<{ ticket: Ticket; requirements: Requirement[] }> {
+export interface TestPlan {
+  testCases: string[];
+  coverage: string;
+}
+
+export interface GitOperation {
+  type: string;
+  status: string;
+  message: string;
+}
+
+export interface InfrastructureSetup {
+  components: string[];
+  configuration: string;
+}
+
+export const coreService = {
+  async getTicket(ticketId: string): Promise<{ ticket: Ticket; requirements: Requirement[] }> {
     try {
-      const response = await axios.post(`${this.baseUrl}/api/tickets`, ticketData);
+      const response = await axios.get<{ ticket: Ticket; requirements: Requirement[] }>(`${API_BASE_URL}/tickets/${ticketId}`);
       return response.data;
-    } catch (error) {
-      throw this.handleError(error, 'Failed to process ticket');
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        throw new Error(error.response?.data?.detail || 'Failed to get ticket');
+      }
+      throw error;
     }
-  }
+  },
 
-  // Solution Planning
   async generateSolutionPlan(ticketId: string): Promise<SolutionPlan> {
     try {
-      const response = await axios.get(`${this.baseUrl}/api/tickets/${ticketId}/solution`);
+      const response = await axios.get<SolutionPlan>(`${API_BASE_URL}/tickets/${ticketId}/solution`);
       return response.data;
-    } catch (error) {
-      throw this.handleError(error, 'Failed to generate solution plan');
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        throw new Error(error.response?.data?.detail || 'Failed to generate solution plan');
+      }
+      throw error;
     }
-  }
+  },
 
-  // Test Generation
   async generateTests(ticketId: string): Promise<TestPlan> {
     try {
-      const response = await axios.get(`${this.baseUrl}/api/tickets/${ticketId}/tests`);
+      const response = await axios.get<TestPlan>(`${API_BASE_URL}/tickets/${ticketId}/tests`);
       return response.data;
-    } catch (error) {
-      throw this.handleError(error, 'Failed to generate tests');
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        throw new Error(error.response?.data?.detail || 'Failed to generate tests');
+      }
+      throw error;
     }
-  }
+  },
 
-  // CI/CD Pipeline
-  async runPipeline(): Promise<PipelineStatus> {
+  async runPipeline(): Promise<GitOperation> {
     try {
-      const response = await axios.post(`${this.baseUrl}/api/pipeline/run`);
-      return response.data as PipelineStatus;
-    } catch (error) {
-      throw this.handleError(error, 'Failed to run pipeline');
-    }
-  }
-
-  // Version Control
-  async gitOperation(operation: string, params: any): Promise<GitOperation> {
-    try {
-      const response = await axios.post(`${this.baseUrl}/api/git/${operation}`, params);
+      const response = await axios.post<GitOperation>(`${API_BASE_URL}/pipeline/run`);
       return response.data;
-    } catch (error) {
-      throw this.handleError(error, 'Failed to perform git operation');
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        throw new Error(error.response?.data?.detail || 'Failed to run pipeline');
+      }
+      throw error;
     }
-  }
+  },
 
   async setupInfrastructure(ticketId: string): Promise<InfrastructureSetup> {
     try {
-      const response = await axios.get(`${this.baseUrl}/api/tickets/${ticketId}/infrastructure`);
+      const response = await axios.post<InfrastructureSetup>(`${API_BASE_URL}/infrastructure/setup/${ticketId}`);
       return response.data;
-    } catch (error) {
-      throw this.handleError(error, 'Failed to setup infrastructure');
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        throw new Error(error.response?.data?.detail || 'Failed to setup infrastructure');
+      }
+      throw error;
     }
-  }
+  },
 
-  async listFiles(): Promise<FileNode[]> {
+  // File operations
+  async listFiles(path: string = ""): Promise<FileNode[]> {
     try {
-      const response = await axios.get(`${this.baseUrl}/api/files`);
+      const response = await axios.get<FileNode[]>(`${API_BASE_URL}/files/list/${path}`);
       return response.data;
-    } catch (error) {
-      throw this.handleError(error, 'Failed to list files');
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        throw new Error(error.response?.data?.detail || 'Failed to list files');
+      }
+      throw error;
     }
-  }
+  },
 
-  async readFile(path: string): Promise<string> {
+  async readFile(path: string): Promise<FileContent> {
     try {
-      const response = await axios.get(`${this.baseUrl}/api/files/${encodeURIComponent(path)}`);
+      const response = await axios.get<FileContent>(`${API_BASE_URL}/files/read/${path}`);
       return response.data;
-    } catch (error) {
-      throw this.handleError(error, 'Failed to read file');
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        throw new Error(error.response?.data?.detail || 'Failed to read file');
+      }
+      throw error;
+    }
+  },
+
+  async writeFile(path: string, content: string): Promise<void> {
+    try {
+      await axios.post(`${API_BASE_URL}/files/write/${path}`, { content });
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        throw new Error(error.response?.data?.detail || 'Failed to write file');
+      }
+      throw error;
+    }
+  },
+
+  async deleteFile(path: string): Promise<void> {
+    try {
+      await axios.delete(`${API_BASE_URL}/files/delete/${path}`);
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        throw new Error(error.response?.data?.detail || 'Failed to delete file');
+      }
+      throw error;
+    }
+  },
+
+  async createDirectory(path: string): Promise<void> {
+    try {
+      await axios.post(`${API_BASE_URL}/files/mkdir/${path}`);
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        throw new Error(error.response?.data?.detail || 'Failed to create directory');
+      }
+      throw error;
     }
   }
-
-  // Error handling
-  handleError(error: unknown, defaultMessage: string): Error {
-    if (axios.isAxiosError(error)) {
-      return new Error(error.response?.data?.message || defaultMessage);
-    }
-    return new Error(defaultMessage);
-  }
-}
-
-export const coreService = new CoreService(); 
+}; 
