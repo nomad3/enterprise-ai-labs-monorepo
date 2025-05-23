@@ -12,6 +12,7 @@ from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
 
 from devagent.core.database import init_db, get_session
 from devagent.api.tickets import router as tickets_router
+from devagent.api.plans import router as plans_router
 from sqlalchemy.ext.asyncio import AsyncSession
 
 # Initialize tracer
@@ -43,6 +44,7 @@ FastAPIInstrumentor.instrument_app(app)
 
 # Include routers
 app.include_router(tickets_router)
+app.include_router(plans_router)
 
 @app.on_event("startup")
 async def startup_event():
