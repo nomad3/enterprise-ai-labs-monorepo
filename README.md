@@ -4,9 +4,13 @@
 DevAgent is an autonomous AI assistant designed to help developers by automating various aspects of the software development lifecycle. It can understand tasks from Jira tickets, design solutions, write code, implement tests, handle version control, create pull requests, and assist with deployment.
 
 ## Features (In Progress)
-- [ ] Task Ingestion & Understanding
+- [x] Task Ingestion & Understanding (API endpoints for ticket management)
+- [x] Monitoring & Observability (Prometheus, Grafana, OpenTelemetry integration)
+- [x] Health Checks (API health endpoint)
+- [x] Dockerized Development Environment
+- [x] Database & Caching (PostgreSQL, Redis, PgAdmin)
 - [ ] Solution Design & Planning
-- [ ] Code & Test Generation
+- [ ] Code & Test Generation (API endpoint for code generation via Gemini 2.5)
 - [ ] Version Control Integration
 - [ ] Pull Request Management
 - [ ] Deployment Assistance
@@ -55,7 +59,14 @@ DevAgent follows a modular architecture with the following key components:
 ## Project Status
 🚧 **Under Development** 🚧
 
-Current Phase: Initial Setup and Core Architecture Implementation
+Current Phase: Core API, Monitoring, and Infrastructure Setup Complete
+
+## What's Next
+- **Code Generation & Refinement Core**: Integrate Gemini 2.5 API for code generation and refinement.
+- **Test Generation & Execution Framework**: Implement TDD practices, generate and run tests automatically.
+- **Troubleshooting Capabilities**: Add automated troubleshooting and debugging tools.
+- **Solution Planning Module**: Finalize and expand the planning/strategy engine.
+- **Version Control & CI/CD**: Integrate Git operations and CI/CD pipeline.
 
 ## Getting Started
 
@@ -120,8 +131,10 @@ Current Phase: Initial Setup and Core Architecture Implementation
 
 ## Development Progress
 - [x] Project initialization
-- [ ] Core architecture setup
-- [ ] Basic task ingestion
+- [x] Core architecture setup (API, Docker, Monitoring, Health Checks)
+- [x] Basic task ingestion (Ticket endpoints)
+- [x] Monitoring & Observability (Prometheus, Grafana, OpenTelemetry)
+- [x] Database & Caching (PostgreSQL, Redis, PgAdmin)
 - [ ] Solution planning module
 - [ ] Code generation integration
 - [ ] Test framework implementation
@@ -134,4 +147,24 @@ Current Phase: Initial Setup and Core Architecture Implementation
 This project is currently in active development. Please refer to our contributing guidelines for more information.
 
 ## License
-MIT License - See LICENSE file for details 
+MIT License - See LICENSE file for details
+
+## API Endpoints
+
+### Code Generation
+- **POST /code/generate**
+    - Request body: `{ "prompt": "Describe the code you want generated" }`
+    - Response: `{ "code": "<generated code>" }`
+    - Description: Generates code using Gemini 2.5 API based on the provided prompt.
+
+### Test Generation
+- **POST /code/generate-tests**
+    - Request body: `{ "code": "<code to generate tests for>" }`
+    - Response: `{ "tests": "<generated tests>" }`
+    - Description: Generates unit tests for the provided code using Gemini 2.5 API.
+
+### Troubleshooting
+- **POST /code/troubleshoot**
+    - Request body: `{ "code": "<code to troubleshoot>", "error": "<error message>" }`
+    - Response: `{ "solution": "<troubleshooting solution>" }`
+    - Description: Troubleshoots the provided code based on the given error message using Gemini 2.5 API. 

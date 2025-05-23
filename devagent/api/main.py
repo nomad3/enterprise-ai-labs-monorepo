@@ -13,6 +13,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from devagent.api.plans import router as plans_router
 from devagent.api.tickets import router as tickets_router
+from devagent.api.code_gen import router as code_gen_router
 from devagent.core.database import get_session, init_db
 
 # Initialize OpenTelemetry
@@ -45,6 +46,7 @@ FastAPIInstrumentor.instrument_app(app)
 # Include routers
 app.include_router(tickets_router)
 app.include_router(plans_router)
+app.include_router(code_gen_router)
 
 
 @app.on_event("startup")
