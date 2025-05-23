@@ -11,6 +11,7 @@ from opentelemetry.exporter.prometheus import PrometheusSpanExporter
 from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
 
 from devagent.core.database import init_db, get_session
+from devagent.api.tickets import router as tickets_router
 from sqlalchemy.ext.asyncio import AsyncSession
 
 # Initialize tracer
@@ -39,6 +40,9 @@ app.mount("/metrics", metrics_app)
 
 # Instrument FastAPI with OpenTelemetry
 FastAPIInstrumentor.instrument_app(app)
+
+# Include routers
+app.include_router(tickets_router)
 
 @app.on_event("startup")
 async def startup_event():
