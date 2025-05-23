@@ -1,16 +1,21 @@
+import logging
 import os
 from typing import Optional
-import logging
 
 try:
     import google.generativeai as genai
 except ImportError:
     genai = None
 
+
 class GeminiClient:
     def __init__(self, api_key: Optional[str] = None):
         # Use the provided API key for testing
-        self.api_key = api_key or os.getenv("GEMINI_API_KEY") or "AIzaSyCOVwsKFiuVicKvSazEYudNhjDIPGMl8AE"
+        self.api_key = (
+            api_key
+            or os.getenv("GEMINI_API_KEY")
+            or "AIzaSyCOVwsKFiuVicKvSazEYudNhjDIPGMl8AE"
+        )
         if genai and self.api_key:
             genai.configure(api_key=self.api_key)
             self.model = genai.GenerativeModel("gemini-1.5-pro")
@@ -37,4 +42,4 @@ class GeminiClient:
         if self.model:
             response = self.model.generate_content(prompt)
             return response.text
-        return f"# Gemini mock: This would be troubleshooting for code:\n{code}\nError:\n{error}" 
+        return f"# Gemini mock: This would be troubleshooting for code:\n{code}\nError:\n{error}"

@@ -1,6 +1,7 @@
 import logging
 import time
 
+
 class PipelineService:
     def __init__(self):
         logging.basicConfig(level=logging.INFO)
@@ -21,4 +22,4 @@ class PipelineService:
         logging.info("Starting deployment process...")
         time.sleep(3)  # Simulate deployment time
         logging.info("Deployment completed successfully.")
-        return "Deployment successful" 
+        return "Deployment successful"

@@ -1,4 +1,146 @@
-# DevAgent - Full-Stack Developer & DevOps AI Agent
+# DevAgent - AI-Powered Development Assistant
+
+DevAgent is an intelligent development assistant that helps streamline the software development process by automating common tasks and providing AI-powered insights.
+
+## Core Functionalities
+
+### 1. Ticket Management
+- Process and interpret tickets from various sources
+- Extract requirements and dependencies
+- Track ticket status and progress
+- Manage ticket comments and updates
+
+### 2. Solution Planning
+- Generate detailed solution plans for tickets
+- Break down tasks with estimated effort
+- Identify dependencies and priorities
+- Track implementation progress
+
+### 3. Code Generation & Testing
+- Generate code based on requirements
+- Create comprehensive test suites
+- Troubleshoot and debug code
+- Ensure code quality and coverage
+
+### 4. Infrastructure Management
+- Set up and configure infrastructure resources
+- Monitor resource status and health
+- Manage deployments and scaling
+- Track infrastructure changes
+
+### 5. CI/CD Pipeline
+- Automate build and test processes
+- Manage deployment workflows
+- Monitor pipeline status
+- Handle deployment rollbacks
+
+### 6. Version Control
+- Create and manage branches
+- Handle commits and merges
+- Track changes and history
+- Manage code reviews
+
+### 7. Communication
+- Send notifications to Slack and Teams
+- Track communication history
+- Manage alerts and updates
+- Coordinate team activities
+
+## UI Components
+
+### Ticket Management
+- Ticket ingestion form
+- Ticket details view
+- Requirements list
+- Status tracking
+
+### Solution Planning
+- Solution plan view
+- Task breakdown
+- Effort estimation
+- Dependency visualization
+
+### Code & Testing
+- Code generation interface
+- Test plan view
+- Coverage visualization
+- Debug console
+
+### Infrastructure
+- Resource configuration
+- Status monitoring
+- Deployment management
+- Health checks
+
+### Pipeline
+- Build status
+- Test results
+- Deployment progress
+- Pipeline history
+
+### Version Control
+- Branch management
+- Commit history
+- Change tracking
+- Review interface
+
+### Communication
+- Notification center
+- Message history
+- Alert management
+- Team coordination
+
+## Getting Started
+
+1. Clone the repository
+2. Install dependencies:
+   ```bash
+   # Backend
+   cd devagent
+   pip install -r requirements.txt
+
+   # Frontend
+   cd devagent-ui
+   npm install
+   ```
+
+3. Set up environment variables:
+   ```bash
+   # Backend
+   cp .env.example .env
+   # Edit .env with your configuration
+
+   # Frontend
+   cp .env.example .env.local
+   # Edit .env.local with your configuration
+   ```
+
+4. Start the development servers:
+   ```bash
+   # Backend
+   cd devagent
+   uvicorn devagent.api.main:app --reload
+
+   # Frontend
+   cd devagent-ui
+   npm run dev
+   ```
+
+5. Access the application:
+   - Backend API: http://localhost:8000
+   - Frontend UI: http://localhost:3000
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Commit your changes
+4. Push to the branch
+5. Create a Pull Request
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
 
 ## Overview
 DevAgent is an autonomous AI assistant designed to help developers by automating various aspects of the software development lifecycle. It can understand tasks from Jira tickets, design solutions, write code, implement tests, handle version control, create pull requests, and assist with deployment.
@@ -68,67 +210,6 @@ Current Phase: Core API, Monitoring, and Infrastructure Setup Complete
 - **Solution Planning Module**: Finalize and expand the planning/strategy engine.
 - **Version Control & CI/CD**: Integrate Git operations and CI/CD pipeline.
 
-## Getting Started
-
-### Prerequisites
-- Python 3.9+
-- Git
-- Docker and Docker Compose
-
-### Installation
-
-#### Using Docker (Recommended)
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/yourusername/devagent.git
-   cd devagent
-   ```
-
-2. Create and configure environment variables:
-   ```bash
-   cp .env.example .env
-   # Edit .env with your configuration
-   ```
-
-3. Build and start the services:
-   ```bash
-   docker-compose up --build
-   ```
-
-4. Run tests:
-   ```bash
-   docker-compose run test
-   ```
-
-5. Run linting:
-   ```bash
-   docker-compose run lint
-   ```
-
-#### Manual Installation (Alternative)
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/yourusername/devagent.git
-   cd devagent
-   ```
-
-2. Create and activate a virtual environment:
-   ```bash
-   python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
-   ```
-
-3. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-4. Set up environment variables:
-   ```bash
-   cp .env.example .env
-   # Edit .env with your configuration
-   ```
-
 ## Development Progress
 - [x] Project initialization
 - [x] Core architecture setup (API, Docker, Monitoring, Health Checks)
@@ -142,12 +223,6 @@ Current Phase: Core API, Monitoring, and Infrastructure Setup Complete
 - [ ] CI/CD pipeline setup
 - [ ] Communication module
 - [ ] Documentation
-
-## Contributing
-This project is currently in active development. Please refer to our contributing guidelines for more information.
-
-## License
-MIT License - See LICENSE file for details
 
 ## API Endpoints
 

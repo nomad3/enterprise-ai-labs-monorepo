@@ -1,94 +1,117 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+'use client';
+
+import { useState } from 'react';
+import { useAuth } from './contexts/AuthContext';
+import styles from './page.module.css';
+import Tickets from './components/Tickets';
+import CodeGeneration from './components/CodeGeneration';
+import Login from './components/Login';
+import Register from './components/Register';
 
 export default function Home() {
-  return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol>
-          <li>
-            Get started by editing <code>src/app/page.tsx</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const { user, loading } = useAuth();
+  const [selectedTab, setSelectedTab] = useState('tickets');
+  const [authMode, setAuthMode] = useState<'login' | 'register'>('login');
 
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
+  if (loading) {
+    return (
+      <div className={styles.loading}>
+        <p>Loading...</p>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return authMode === 'login' ? (
+      <Login />
+    ) : (
+      <Register />
+    );
+  }
+
+  return (
+    <div className={styles.container}>
+      <header className={styles.header}>
+        <div className={styles.headerContent}>
+          <h1 className={styles.title}>DevAgent</h1>
+          <p className={styles.subtitle}>Full-Stack Developer & DevOps AI Agent</p>
         </div>
+        <div className={styles.userInfo}>
+          <span className={styles.userName}>{user.name}</span>
+          <span className={styles.userRole}>{user.role}</span>
+        </div>
+      </header>
+
+      <nav className={styles.nav}>
+        <button 
+          className={`${styles.navButton} ${selectedTab === 'tickets' ? styles.active : ''}`}
+          onClick={() => setSelectedTab('tickets')}
+        >
+          Tickets
+        </button>
+        <button 
+          className={`${styles.navButton} ${selectedTab === 'plans' ? styles.active : ''}`}
+          onClick={() => setSelectedTab('plans')}
+        >
+          Plans
+        </button>
+        <button 
+          className={`${styles.navButton} ${selectedTab === 'code' ? styles.active : ''}`}
+          onClick={() => setSelectedTab('code')}
+        >
+          Code Generation
+        </button>
+        <button 
+          className={`${styles.navButton} ${selectedTab === 'tests' ? styles.active : ''}`}
+          onClick={() => setSelectedTab('tests')}
+        >
+          Test Generation
+        </button>
+        <button 
+          className={`${styles.navButton} ${selectedTab === 'version' ? styles.active : ''}`}
+          onClick={() => setSelectedTab('version')}
+        >
+          Version Control
+        </button>
+        <button 
+          className={`${styles.navButton} ${selectedTab === 'cicd' ? styles.active : ''}`}
+          onClick={() => setSelectedTab('cicd')}
+        >
+          CI/CD
+        </button>
+      </nav>
+
+      <main className={styles.main}>
+        {selectedTab === 'tickets' && <Tickets />}
+        {selectedTab === 'plans' && (
+          <div className={styles.content}>
+            <h2>Development Plans</h2>
+            <p>View and manage development plans</p>
+          </div>
+        )}
+        {selectedTab === 'code' && <CodeGeneration />}
+        {selectedTab === 'tests' && (
+          <div className={styles.content}>
+            <h2>Test Generation</h2>
+            <p>Generate tests for your code</p>
+          </div>
+        )}
+        {selectedTab === 'version' && (
+          <div className={styles.content}>
+            <h2>Version Control</h2>
+            <p>Manage version control operations</p>
+          </div>
+        )}
+        {selectedTab === 'cicd' && (
+          <div className={styles.content}>
+            <h2>CI/CD</h2>
+            <p>Manage continuous integration and deployment</p>
+          </div>
+        )}
       </main>
+
       <footer className={styles.footer}>
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+        <p>DevAgent v0.1.0</p>
       </footer>
     </div>
   );

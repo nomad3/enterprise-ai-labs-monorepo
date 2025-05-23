@@ -4,8 +4,8 @@ API endpoints for solution planning.
 from typing import Any, Dict, List
 
 from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy.ext.asyncio import AsyncSession
 from pydantic import BaseModel
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from devagent.core.database import get_session
 from devagent.core.planning.engine import PlanningEngine, SolutionPlanner

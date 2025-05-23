@@ -2,15 +2,20 @@ import os
 import subprocess
 from typing import Optional
 
+
 class GitService:
     def __init__(self, repo_path: str = "."):
         self.repo_path = repo_path
 
     def run_git(self, *args) -> str:
         try:
-            result = subprocess.run([
-                "git", *args
-            ], cwd=self.repo_path, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+            result = subprocess.run(
+                ["git", *args],
+                cwd=self.repo_path,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                text=True,
+            )
             if result.returncode != 0:
                 return f"Error: {result.stderr}"
             return result.stdout
@@ -42,4 +47,4 @@ class GitService:
 
     def get_current_branch(self) -> str:
         result = self.run_git("rev-parse", "--abbrev-ref", "HEAD")
-        return result.strip() if not result.startswith("Error") else "main" 
+        return result.strip() if not result.startswith("Error") else "main"

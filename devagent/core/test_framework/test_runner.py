@@ -1,8 +1,9 @@
-import tempfile
-import subprocess
 import os
 import re
+import subprocess
+import tempfile
 from typing import Dict
+
 
 class TestRunner:
     def run_tests(self, code: str, tests: str) -> Dict[str, str]:
@@ -37,5 +38,7 @@ class TestRunner:
 
     def _remove_main_block(self, code: str) -> str:
         # Remove 'if __name__ == "__main__":' and its indented block
-        pattern = re.compile(r"^if __name__ == ['\"]__main__['\"]:\n(?:    .+\n?)*", re.MULTILINE)
-        return re.sub(pattern, "", code) 
+        pattern = re.compile(
+            r"^if __name__ == ['\"]__main__['\"]:\n(?:    .+\n?)*", re.MULTILINE
+        )
+        return re.sub(pattern, "", code)

@@ -1,5 +1,7 @@
 import logging
+
 import requests
+
 
 class NotificationService:
     def __init__(self, slack_webhook_url: str = None, teams_webhook_url: str = None):
@@ -45,4 +47,4 @@ class NotificationService:
 
     def mock_send_to_teams(self, message: str) -> str:
         logging.info(f"Mock Teams notification: {message}")
-        return f"Mock Teams notification sent successfully. Message: {message}" 
+        return f"Mock Teams notification sent successfully. Message: {message}"

@@ -15,7 +15,7 @@ services:
       - LOG_LEVEL=INFO
       - ENVIRONMENT=development
       - DATABASE_URL=postgresql://devagent:devagent@postgres:5432/devagent
-      - REDIS_URL=redis://redis:6379/0
+      - REDIS_URL=redis://redis:6379
     env_file:
       - .env
     depends_on:
@@ -40,7 +40,7 @@ services:
       retries: 5
 
   redis:
-    image: redis:6-alpine
+    image: redis:alpine
     ports:
       - "6379:6379"
     volumes:
@@ -117,8 +117,8 @@ services:
     volumes:
       - ./devagent-ui:/app
     ports:
-      - "3000:3000"
-    command: sh -c "npm install && npm run dev"
+      - "3002:3000"
+    command: sh -c "npm install --legacy-peer-deps && npm run dev"
     environment:
       - NODE_ENV=development
     depends_on:
