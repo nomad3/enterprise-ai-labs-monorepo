@@ -9,8 +9,12 @@ from typing import Any, Dict, List, Optional, Tuple
 
 from dateutil import parser as date_parser
 
-from devagent.core.ticket_engine.models import (Requirement, Ticket,
-                                                TicketStatus, TicketType)
+from devagent.core.ticket_engine.models import (
+    Requirement,
+    Ticket,
+    TicketStatus,
+    TicketType,
+)
 
 
 class TicketEngine:
@@ -57,27 +61,29 @@ class TicketEngine:
 
         return ticket
 
-    def extract_requirements(self, ticket_data: Dict[str, Any]) -> List[Requirement]:
+    def extract_requirements(
+        self, ticket: Ticket, ticket_description: str
+    ) -> List[Requirement]:
         """
         Extract requirements from a ticket's description.
 
         Args:
-            ticket_data: Raw ticket data from Jira
+            ticket: The parsed Ticket object (SQLAlchemy model)
+            ticket_description: The raw description string from the ticket data
 
         Returns:
             List[Requirement]: List of extracted requirements
         """
-        description = ticket_data["fields"]["description"]
         requirements = []
 
         # Extract requirements from bullet points
         requirement_pattern = r"[-•]\s*(.*?)(?=\n[-•]|\n\n|$)"
-        matches = re.finditer(requirement_pattern, description, re.MULTILINE)
+        matches = re.finditer(requirement_pattern, ticket_description, re.MULTILINE)
 
         for match in matches:
             requirement = Requirement(
                 id=str(uuid.uuid4()),
-                ticket_id=ticket_data["key"],
+                ticket_id=ticket.id,
                 description=match.group(1).strip(),
                 status=TicketStatus.TODO,
             )
@@ -141,6 +147,7 @@ class TicketEngine:
         ticket = self.parse_ticket(ticket_data)
 
         # Extract requirements
-        requirements = self.extract_requirements(ticket_data)
+        ticket_description_str = ticket_data.get("fields", {}).get("description", "")
+        requirements = self.extract_requirements(ticket, ticket_description_str)
 
         return ticket, requirements

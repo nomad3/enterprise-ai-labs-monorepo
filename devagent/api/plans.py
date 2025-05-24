@@ -8,10 +8,16 @@ from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import selectinload
 
 from devagent.core.database import get_session
 from devagent.core.planning.engine import PlanningEngine, SolutionPlanner
-from devagent.core.planning.models import SolutionPlan, Task
+from devagent.core.planning.models import (
+    SolutionPlan,
+    SolutionPlanResponse,
+    Task,
+    TaskResponse,
+)
 from devagent.core.ticket_engine.models import Requirement, Ticket
 
 router = APIRouter(prefix="/plans", tags=["plans"])
@@ -19,10 +25,10 @@ planning_engine = PlanningEngine()
 planner = SolutionPlanner()
 
 
-@router.post("/tickets/{ticket_id}", response_model=Dict[str, Any])
+@router.post("/tickets/{ticket_id}", response_model=SolutionPlanResponse)
 async def create_solution_plan(
     ticket_id: str, db: AsyncSession = Depends(get_session)
-) -> Dict[str, Any]:
+) -> SolutionPlanResponse:
     """
     Create a solution plan for a ticket.
 
@@ -31,7 +37,7 @@ async def create_solution_plan(
         db: Database session
 
     Returns:
-        Dict containing the created plan and its tasks
+        The created solution plan
     """
     # Get ticket
     ticket_stmt = select(Ticket).where(Ticket.id == ticket_id)
@@ -50,28 +56,42 @@ async def create_solution_plan(
         )
 
     try:
-        # Create plan
-        plan = planning_engine.create_solution_plan(ticket, requirements)
+        # Create plan object (not yet saved)
+        plan_to_save = planning_engine.create_solution_plan(ticket, requirements)
 
         # Save to database
-        db.add(plan)
+        db.add(plan_to_save)
         await db.commit()
 
-        return {
-            "plan": plan,
-            "tasks": plan.tasks,
-            "message": "Solution plan created successfully",
-        }
+        # Fetch the saved plan with tasks eagerly loaded to ensure they are available for Pydantic
+        # This is more reliable than db.refresh() for complex relationship loading for serialization
+        stmt = (
+            select(SolutionPlan)
+            .options(selectinload(SolutionPlan.tasks))
+            .where(SolutionPlan.id == plan_to_save.id)
+        )
+        result = await db.execute(stmt)
+        created_plan = result.scalars().first()
+
+        if not created_plan:
+            # This should ideally not happen if commit was successful
+            raise HTTPException(
+                status_code=500, detail="Failed to retrieve created plan after saving."
+            )
+
+        return created_plan
     except Exception as e:
+        # Log the exception for debugging
+        # logger.error(f"Error creating solution plan: {e}", exc_info=True)
         raise HTTPException(
             status_code=500, detail=f"Error creating solution plan: {str(e)}"
         )
 
 
-@router.get("/{plan_id}", response_model=Dict[str, Any])
+@router.get("/{plan_id}", response_model=SolutionPlanResponse)
 async def get_solution_plan(
     plan_id: str, db: AsyncSession = Depends(get_session)
-) -> Dict[str, Any]:
+) -> SolutionPlanResponse:
     """
     Get a solution plan by its ID.
 
@@ -80,27 +100,25 @@ async def get_solution_plan(
         db: Database session
 
     Returns:
-        Dict containing the plan and its tasks
+        The solution plan
     """
-    # Query plan
-    plan_stmt = select(SolutionPlan).where(SolutionPlan.id == plan_id)
+    plan_stmt = (
+        select(SolutionPlan)
+        .options(selectinload(SolutionPlan.tasks))
+        .where(SolutionPlan.id == plan_id)
+    )
     plan_result = await db.execute(plan_stmt)
     plan = plan_result.scalars().first()
     if not plan:
         raise HTTPException(status_code=404, detail=f"Plan {plan_id} not found")
 
-    # Query tasks
-    task_stmt = select(Task).where(Task.plan_id == plan_id)
-    task_result = await db.execute(task_stmt)
-    tasks = task_result.scalars().all()
-
-    return {"plan": plan, "tasks": tasks}
+    return plan
 
 
-@router.get("/tickets/{ticket_id}", response_model=Dict[str, Any])
+@router.get("/tickets/{ticket_id}", response_model=SolutionPlanResponse)
 async def get_ticket_plan(
     ticket_id: str, db: AsyncSession = Depends(get_session)
-) -> Dict[str, Any]:
+) -> SolutionPlanResponse:
     """
     Get the solution plan for a ticket.
 
@@ -109,10 +127,13 @@ async def get_ticket_plan(
         db: Database session
 
     Returns:
-        Dict containing the plan and its tasks
+        The solution plan for the ticket
     """
-    # Query plan
-    plan_stmt = select(SolutionPlan).where(SolutionPlan.ticket_id == ticket_id)
+    plan_stmt = (
+        select(SolutionPlan)
+        .options(selectinload(SolutionPlan.tasks))
+        .where(SolutionPlan.ticket_id == ticket_id)
+    )
     plan_result = await db.execute(plan_stmt)
     plan = plan_result.scalars().first()
     if not plan:
@@ -120,18 +141,13 @@ async def get_ticket_plan(
             status_code=404, detail=f"No plan found for ticket {ticket_id}"
         )
 
-    # Query tasks
-    task_stmt = select(Task).where(Task.plan_id == plan.id)
-    task_result = await db.execute(task_stmt)
-    tasks = task_result.scalars().all()
-
-    return {"plan": plan, "tasks": tasks}
+    return plan
 
 
-@router.get("/", response_model=List[Dict[str, Any]])
+@router.get("/", response_model=List[SolutionPlanResponse])
 async def list_solution_plans(
     db: AsyncSession = Depends(get_session),
-) -> List[Dict[str, Any]]:
+) -> List[SolutionPlanResponse]:
     """
     List all solution plans.
 
@@ -139,20 +155,13 @@ async def list_solution_plans(
         db: Database session
 
     Returns:
-        List of plans with their tasks
+        List of solution plans
     """
-    plan_stmt = select(SolutionPlan)
+    plan_stmt = select(SolutionPlan).options(selectinload(SolutionPlan.tasks))
     plan_result = await db.execute(plan_stmt)
     plans = plan_result.scalars().all()
-    
-    response_list = []
-    for plan_item in plans:
-        task_stmt = select(Task).where(Task.plan_id == plan_item.id)
-        task_result = await db.execute(task_stmt)
-        tasks = task_result.scalars().all()
-        response_list.append({"plan": plan_item, "tasks": tasks})
 
-    return response_list
+    return plans
 
 
 class PlanRequest(BaseModel):

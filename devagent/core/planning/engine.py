@@ -9,8 +9,7 @@ from datetime import datetime
 from typing import Any, Dict, List, Optional, Tuple
 
 from devagent.core.code_gen.gemini import GeminiClient
-from devagent.core.planning.models import (SolutionPlan, Task, TaskPriority,
-                                           TaskStatus)
+from devagent.core.planning.models import SolutionPlan, Task, TaskPriority, TaskStatus
 from devagent.core.ticket_engine.models import Requirement, Ticket
 
 

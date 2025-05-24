@@ -20,7 +20,12 @@ from devagent.api.plans import router as plans_router
 from devagent.api.test_gen import router as test_gen_router
 from devagent.api.tickets import router as tickets_router
 from devagent.api.version_control import router as version_control_router
+from devagent.api.auth import router as auth_router
+from devagent.api.devops import router as devops_router
 from devagent.core.database import get_session, init_db
+from devagent.core.models.user_model import (
+    User,
+)  # noqa: F401 -> Ensures User table is created by init_db
 
 # Initialize OpenTelemetry
 trace.set_tracer_provider(TracerProvider())
@@ -58,6 +63,8 @@ app.include_router(version_control_router)
 app.include_router(ci_cd_router)
 app.include_router(communication_router)
 app.include_router(files_router)
+app.include_router(auth_router)
+app.include_router(devops_router)
 
 
 @app.on_event("startup")

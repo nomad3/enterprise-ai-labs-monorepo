@@ -6,8 +6,7 @@ from typing import Any, Dict, List, Optional
 
 from .agent import Agent
 from .config import settings
-from .models import (AgentInteraction, AgentResponse, Ticket, TicketFilter,
-                     TicketUpdate)
+from .models import AgentInteraction, AgentResponse, Ticket, TicketFilter, TicketUpdate
 
 
 class TicketManager:

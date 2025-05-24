@@ -95,7 +95,7 @@ async def list_tickets(db: AsyncSession = Depends(get_session)) -> List[Dict[str
     stmt = select(Ticket)
     result = await db.execute(stmt)
     tickets = result.scalars().all()
-    
+
     response_list = []
 
     for ticket_item in tickets:

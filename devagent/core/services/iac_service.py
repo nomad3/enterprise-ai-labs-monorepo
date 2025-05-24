@@ -8,14 +8,21 @@ import json
 from typing import Any, Dict, Optional
 
 from ..database import get_redis
-from ..knowledge.helm_knowledge import (HELM_BEST_PRACTICES,
-                                        HELM_CHART_STRUCTURE, HELM_TESTING)
-from ..knowledge.kubernetes_knowledge import (KUBERNETES_BEST_PRACTICES,
-                                              KUBERNETES_TROUBLESHOOTING)
-from ..knowledge.terraform_knowledge import (TERRAFORM_BEST_PRACTICES,
-                                             TERRAFORM_MODULES,
-                                             TERRAFORM_PROVIDERS,
-                                             TERRAFORM_TEMPLATES)
+from ..knowledge.helm_knowledge import (
+    HELM_BEST_PRACTICES,
+    HELM_CHART_STRUCTURE,
+    HELM_TESTING,
+)
+from ..knowledge.kubernetes_knowledge import (
+    KUBERNETES_BEST_PRACTICES,
+    KUBERNETES_TROUBLESHOOTING,
+)
+from ..knowledge.terraform_knowledge import (
+    TERRAFORM_BEST_PRACTICES,
+    TERRAFORM_MODULES,
+    TERRAFORM_PROVIDERS,
+    TERRAFORM_TEMPLATES,
+)
 from ..services.gemini_service import GeminiService
 
 
