@@ -79,9 +79,21 @@ class DevOpsService:
                 ) as response:
                     error_rate = await response.json()
 
+            request_rate_value = 0.0
+            if request_rate.get("data", {}).get("result"):
+                request_rate_value = float(
+                    request_rate["data"]["result"][0]["value"][1]
+                )
+
+            error_rate_value = 0.0
+            if error_rate.get("data", {}).get("result"):
+                # Ensure the division is safe if error_rate's result is present but request_rate's is not (though query implies dependency)
+                # The query for error_rate itself might return 'NaN' or 'inf' if denominator is zero, float() handles this.
+                error_rate_value = float(error_rate["data"]["result"][0]["value"][1])
+
             return {
-                "request_rate": float(request_rate["data"]["result"][0]["value"][1]),
-                "error_rate": float(error_rate["data"]["result"][0]["value"][1]),
+                "request_rate": request_rate_value,
+                "error_rate": error_rate_value,
                 "timestamp": datetime.utcnow().isoformat(),
             }
         except Exception as e:
@@ -99,13 +111,15 @@ class DevOpsService:
 
             return [
                 {
-                    "name": alert["labels"]["alertname"],
-                    "severity": alert["labels"]["severity"],
-                    "status": alert["status"]["state"],
-                    "description": alert["annotations"]["description"],
-                    "start_time": alert["startsAt"],
+                    "name": alert.get("labels", {}).get("alertname", "Unknown Alert"),
+                    "severity": alert.get("labels", {}).get("severity", "unknown"),
+                    "status": alert.get("status", {}).get("state", "unknown"),
+                    "description": alert.get("annotations", {}).get(
+                        "description", "No description"
+                    ),
+                    "start_time": alert.get("startsAt", ""),
                 }
-                for alert in alerts["data"]["alerts"]
+                for alert in alerts.get("data", {}).get("alerts", [])
             ]
         except Exception as e:
             self.logger.error(f"Error fetching alerts: {e}")
