@@ -65,7 +65,7 @@ app.include_router(ci_cd_router)
 app.include_router(communication_router)
 app.include_router(files_router)
 app.include_router(auth_router)
-app.include_router(devops_router)
+app.include_router(devops_router, prefix="/api")
 
 
 @app.on_event("startup")

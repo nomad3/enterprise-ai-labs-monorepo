@@ -10,7 +10,7 @@ from pydantic import BaseModel
 from devagent.core.config import get_settings
 from devagent.core.devops.service import DevOpsService
 
-router = APIRouter(prefix="/api/devops", tags=["devops"])
+router = APIRouter(prefix="/devops", tags=["devops"])
 settings = get_settings()
 
 # Initialize DevOps service
