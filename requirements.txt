@@ -1,6 +1,6 @@
 # Web Framework
-fastapi
-uvicorn[standard]
+fastapi>=0.100.0
+uvicorn[standard]>=0.20.0
 pydantic>=1.8.0,<2.0.0
 
 # Testing

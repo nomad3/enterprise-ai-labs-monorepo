@@ -4,7 +4,7 @@ Configuration settings for the DevAgent application.
 
 from functools import lru_cache
 
-from pydantic_settings import BaseSettings
+from pydantic import BaseSettings
 
 
 class Settings(BaseSettings):

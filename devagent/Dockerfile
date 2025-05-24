@@ -11,6 +11,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libffi-dev \
     libpq-dev \
     && rm -rf /var/lib/apt/lists/* \
+    && pip install --upgrade pip setuptools wheel \
     && pip install --no-cache-dir -r requirements.txt
 
 COPY . .
