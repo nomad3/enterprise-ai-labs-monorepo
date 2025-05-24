@@ -1,9 +1,11 @@
 """
 API endpoints for ticket management.
 """
+
 from typing import Any, Dict, List
 
 from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from devagent.core.database import get_session
@@ -64,14 +66,17 @@ async def get_ticket(
         Dict containing the ticket and its requirements
     """
     # Query ticket
-    ticket = await db.query(Ticket).filter(Ticket.key == ticket_key).first()
+    stmt = select(Ticket).where(Ticket.key == ticket_key)
+    result = await db.execute(stmt)
+    ticket = result.scalars().first()
+
     if not ticket:
         raise HTTPException(status_code=404, detail=f"Ticket {ticket_key} not found")
 
     # Query requirements
-    requirements = (
-        await db.query(Requirement).filter(Requirement.ticket_id == ticket_key).all()
-    )
+    req_stmt = select(Requirement).where(Requirement.ticket_id == ticket.id)
+    req_result = await db.execute(req_stmt)
+    requirements = req_result.scalars().all()
 
     return {"ticket": ticket, "requirements": requirements}
 
@@ -87,15 +92,16 @@ async def list_tickets(db: AsyncSession = Depends(get_session)) -> List[Dict[str
     Returns:
         List of tickets with their requirements
     """
-    tickets = await db.query(Ticket).all()
-    result = []
+    stmt = select(Ticket)
+    result = await db.execute(stmt)
+    tickets = result.scalars().all()
+    
+    response_list = []
 
-    for ticket in tickets:
-        requirements = (
-            await db.query(Requirement)
-            .filter(Requirement.ticket_id == ticket.key)
-            .all()
-        )
-        result.append({"ticket": ticket, "requirements": requirements})
+    for ticket_item in tickets:
+        req_stmt = select(Requirement).where(Requirement.ticket_id == ticket_item.id)
+        req_result = await db.execute(req_stmt)
+        requirements = req_result.scalars().all()
+        response_list.append({"ticket": ticket_item, "requirements": requirements})
 
-    return result
+    return response_list

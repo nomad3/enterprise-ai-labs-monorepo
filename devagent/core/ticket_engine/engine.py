@@ -1,9 +1,10 @@
 """
 Ticket Ingestion & Interpretation Engine implementation.
 """
+
 import re
 import uuid
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional, Tuple
 
 from dateutil import parser as date_parser
@@ -35,6 +36,12 @@ class TicketEngine:
         # Parse dates
         created_at = date_parser.parse(fields["created"])
         updated_at = date_parser.parse(fields["updated"])
+
+        # Convert to UTC and make naive
+        if created_at.tzinfo:
+            created_at = created_at.astimezone(timezone.utc).replace(tzinfo=None)
+        if updated_at.tzinfo:
+            updated_at = updated_at.astimezone(timezone.utc).replace(tzinfo=None)
 
         # Create ticket
         ticket = Ticket(

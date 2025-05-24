@@ -60,18 +60,33 @@ export const TicketList: React.FC<TicketListProps> = ({ onSelectTicket }) => {
     }
   };
 
-  const getPriorityClass = (priority: TicketPriority) => {
+  const getPriorityClass = (priority: TicketPriority | string) => {
     switch (priority) {
-      case 'Critical':
+      case 'CRITICAL':
         return 'priority-critical';
-      case 'High':
+      case 'HIGH':
         return 'priority-high';
-      case 'Medium':
+      case 'MEDIUM':
         return 'priority-medium';
-      case 'Low':
+      case 'LOW':
         return 'priority-low';
       default:
         return '';
+    }
+  };
+
+  const getPriorityDisplay = (priority: TicketPriority | string) => {
+    switch (priority) {
+      case 'CRITICAL':
+        return 'Critical';
+      case 'HIGH':
+        return 'High';
+      case 'MEDIUM':
+        return 'Medium';
+      case 'LOW':
+        return 'Low';
+      default:
+        return priority;
     }
   };
 
@@ -127,10 +142,10 @@ export const TicketList: React.FC<TicketListProps> = ({ onSelectTicket }) => {
             value={filters.priority}
             onChange={(e) => handleFilterChange('priority', Array.from(e.target.selectedOptions, option => option.value))}
           >
-            <option value="Critical">Critical</option>
-            <option value="High">High</option>
-            <option value="Medium">Medium</option>
-            <option value="Low">Low</option>
+            <option value="CRITICAL">Critical</option>
+            <option value="HIGH">High</option>
+            <option value="MEDIUM">Medium</option>
+            <option value="LOW">Low</option>
           </select>
         </div>
       </div>
@@ -158,7 +173,7 @@ export const TicketList: React.FC<TicketListProps> = ({ onSelectTicket }) => {
               {ticket.status}
             </div>
             <div className={`ticket-priority ${getPriorityClass(ticket.priority)}`}>
-              {ticket.priority}
+              {getPriorityDisplay(ticket.priority)}
             </div>
             <div className="ticket-assignee">{ticket.assignee || 'Unassigned'}</div>
           </div>

@@ -1,15 +1,20 @@
-import axios from 'axios';
-import type { AxiosError as AxiosErrorType } from 'axios';
+import axios, { AxiosError } from 'axios';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+
+export type TicketStatus = 'To Do' | 'In Progress' | 'In Review' | 'Done' | 'Blocked';
+export type TicketType = 'Task' | 'Story' | 'Bug' | 'Epic';
+export type TicketPriority = 'CRITICAL' | 'HIGH' | 'MEDIUM' | 'LOW';
 
 export interface Ticket {
   id: string;
   key: string;
   summary: string;
   description: string;
-  type: 'Task' | 'Story' | 'Bug' | 'Epic';
-  status: 'To Do' | 'In Progress' | 'In Review' | 'Done' | 'Blocked';
+  type: TicketType;
+  status: TicketStatus;
+  priority: TicketPriority | string;
+  assignee?: string;
   created_at: string;
   updated_at: string;
 }
@@ -56,19 +61,19 @@ interface Context {
   [key: string]: any;
 }
 
-interface TestPlan {
+export interface TestPlan {
   testCases: string[];
-  coverage: number;
+  coverage: string;
 }
 
-interface InfrastructureSetup {
-  services: string[];
-  configuration: Record<string, any>;
+export interface InfrastructureSetup {
+  components: string[];
+  configuration: string;
 }
 
 export interface FileNode {
   name: string;
-  type: string;
+  type: 'directory' | 'file';
   path: string;
   children?: FileNode[];
 }
@@ -82,22 +87,6 @@ export interface FileWrite {
   content: string;
 }
 
-export interface TestPlan {
-  testCases: string[];
-  coverage: string;
-}
-
-export interface GitOperation {
-  type: string;
-  status: string;
-  message: string;
-}
-
-export interface InfrastructureSetup {
-  components: string[];
-  configuration: string;
-}
-
 export interface FileOperation {
     source_path: string;
     destination_path: string;
@@ -109,13 +98,31 @@ export interface SearchResult {
     type: string;
 }
 
+export interface AgentResponse {
+  message: string;
+  code_changes?: Array<{
+    file: string;
+    content: string;
+  }>;
+  suggestions?: string[];
+  requires_approval: boolean;
+}
+
+export interface AgentInteraction {
+  ticket_id: string;
+  user_message: string;
+  timestamp: string;
+  response?: AgentResponse;
+  approved?: boolean;
+}
+
 export const coreService = {
   async getTicket(ticketId: string): Promise<{ ticket: Ticket; requirements: Requirement[] }> {
     try {
       const response = await axios.get<{ ticket: Ticket; requirements: Requirement[] }>(`${API_BASE_URL}/tickets/${ticketId}`);
       return response.data;
-    } catch (error: unknown) {
-      if (axios.isAxiosError(error)) {
+    } catch (error) {
+      if (error instanceof AxiosError) {
         throw new Error(error.response?.data?.detail || 'Failed to get ticket');
       }
       throw error;
@@ -126,8 +133,8 @@ export const coreService = {
     try {
       const response = await axios.get<SolutionPlan>(`${API_BASE_URL}/tickets/${ticketId}/solution`);
       return response.data;
-    } catch (error: unknown) {
-      if (axios.isAxiosError(error)) {
+    } catch (error) {
+      if (error instanceof AxiosError) {
         throw new Error(error.response?.data?.detail || 'Failed to generate solution plan');
       }
       throw error;
@@ -138,8 +145,8 @@ export const coreService = {
     try {
       const response = await axios.get<TestPlan>(`${API_BASE_URL}/tickets/${ticketId}/tests`);
       return response.data;
-    } catch (error: unknown) {
-      if (axios.isAxiosError(error)) {
+    } catch (error) {
+      if (error instanceof AxiosError) {
         throw new Error(error.response?.data?.detail || 'Failed to generate tests');
       }
       throw error;
@@ -150,8 +157,8 @@ export const coreService = {
     try {
       const response = await axios.post<GitOperation>(`${API_BASE_URL}/pipeline/run`);
       return response.data;
-    } catch (error: unknown) {
-      if (axios.isAxiosError(error)) {
+    } catch (error) {
+      if (error instanceof AxiosError) {
         throw new Error(error.response?.data?.detail || 'Failed to run pipeline');
       }
       throw error;
@@ -162,8 +169,8 @@ export const coreService = {
     try {
       const response = await axios.post<InfrastructureSetup>(`${API_BASE_URL}/infrastructure/setup/${ticketId}`);
       return response.data;
-    } catch (error: unknown) {
-      if (axios.isAxiosError(error)) {
+    } catch (error) {
+      if (error instanceof AxiosError) {
         throw new Error(error.response?.data?.detail || 'Failed to setup infrastructure');
       }
       throw error;
@@ -175,8 +182,8 @@ export const coreService = {
     try {
       const response = await axios.get<FileNode[]>(`${API_BASE_URL}/files/list/${path}`);
       return response.data;
-    } catch (error: unknown) {
-      if (axios.isAxiosError(error)) {
+    } catch (error) {
+      if (error instanceof AxiosError) {
         throw new Error(error.response?.data?.detail || 'Failed to list files');
       }
       throw error;
@@ -187,8 +194,8 @@ export const coreService = {
     try {
       const response = await axios.get<FileContent>(`${API_BASE_URL}/files/read/${path}`);
       return response.data;
-    } catch (error: unknown) {
-      if (axios.isAxiosError(error)) {
+    } catch (error) {
+      if (error instanceof AxiosError) {
         throw new Error(error.response?.data?.detail || 'Failed to read file');
       }
       throw error;
@@ -198,8 +205,8 @@ export const coreService = {
   async writeFile(path: string, content: string): Promise<void> {
     try {
       await axios.post(`${API_BASE_URL}/files/write/${path}`, { content });
-    } catch (error: unknown) {
-      if (axios.isAxiosError(error)) {
+    } catch (error) {
+      if (error instanceof AxiosError) {
         throw new Error(error.response?.data?.detail || 'Failed to write file');
       }
       throw error;
@@ -209,8 +216,8 @@ export const coreService = {
   async deleteFile(path: string): Promise<void> {
     try {
       await axios.delete(`${API_BASE_URL}/files/delete/${path}`);
-    } catch (error: unknown) {
-      if (axios.isAxiosError(error)) {
+    } catch (error) {
+      if (error instanceof AxiosError) {
         throw new Error(error.response?.data?.detail || 'Failed to delete file');
       }
       throw error;
@@ -220,8 +227,8 @@ export const coreService = {
   async createDirectory(path: string): Promise<void> {
     try {
       await axios.post(`${API_BASE_URL}/files/mkdir/${path}`);
-    } catch (error: unknown) {
-      if (axios.isAxiosError(error)) {
+    } catch (error) {
+      if (error instanceof AxiosError) {
         throw new Error(error.response?.data?.detail || 'Failed to create directory');
       }
       throw error;
@@ -234,8 +241,8 @@ export const coreService = {
         source_path: sourcePath,
         destination_path: destinationPath
       });
-    } catch (error: unknown) {
-      if (axios.isAxiosError(error)) {
+    } catch (error) {
+      if (error instanceof AxiosError) {
         throw new Error(error.response?.data?.detail || 'Failed to copy file');
       }
       throw error;
@@ -248,8 +255,8 @@ export const coreService = {
         source_path: sourcePath,
         destination_path: destinationPath
       });
-    } catch (error: unknown) {
-      if (axios.isAxiosError(error)) {
+    } catch (error) {
+      if (error instanceof AxiosError) {
         throw new Error(error.response?.data?.detail || 'Failed to move file');
       }
       throw error;
@@ -266,8 +273,8 @@ export const coreService = {
         }
       });
       return response.data;
-    } catch (error: unknown) {
-      if (axios.isAxiosError(error)) {
+    } catch (error) {
+      if (error instanceof AxiosError) {
         throw new Error(error.response?.data?.detail || 'Failed to search files');
       }
       throw error;
@@ -284,9 +291,48 @@ export const coreService = {
         }
       });
       return response.data;
-    } catch (error: unknown) {
-      if (axios.isAxiosError(error)) {
+    } catch (error) {
+      if (error instanceof AxiosError) {
         throw new Error(error.response?.data?.detail || 'Failed to search files by name');
+      }
+      throw error;
+    }
+  },
+
+  async gitOperation(operation: string, payload: any = {}): Promise<GitOperation> {
+    try {
+      const response = await axios.post<GitOperation>(
+        `${API_BASE_URL}/version/operation`,
+        { operation, ...payload }
+      );
+      return response.data;
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        throw new Error(error.response?.data?.detail || 'Failed to perform git operation');
+      }
+      throw error;
+    }
+  },
+
+  async getTicketInteractions(ticketId: string): Promise<AgentInteraction[]> {
+    try {
+      const response = await axios.get<AgentInteraction[]>(`${API_BASE_URL}/tickets/${ticketId}/interactions`);
+      return response.data;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        throw new Error(error.response?.data?.detail || 'Failed to fetch ticket interactions');
+      }
+      throw error;
+    }
+  },
+
+  async listTickets(filters: any = {}): Promise<Ticket[]> {
+    try {
+      const response = await axios.get<Ticket[]>(`${API_BASE_URL}/tickets`, { params: filters });
+      return response.data;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        throw new Error(error.response?.data?.detail || 'Failed to fetch tickets');
       }
       throw error;
     }

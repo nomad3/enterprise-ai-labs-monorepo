@@ -13,11 +13,6 @@ import {
   BarChart,
   Bar,
 } from 'recharts';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { useToast } from '@/components/ui/use-toast';
 
 interface SystemMetrics {
@@ -58,6 +53,7 @@ export default function DevOps() {
   const [incidents, setIncidents] = useState<Incident[]>([]);
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
+  const [tab, setTab] = useState('overview');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -116,99 +112,89 @@ export default function DevOps() {
     <div className="space-y-6 p-6">
       <h1 className="text-3xl font-bold">DevOps Dashboard</h1>
 
-      <Tabs defaultValue="overview">
-        <TabsList>
-          <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="alerts">Alerts</TabsTrigger>
-          <TabsTrigger value="incidents">Incidents</TabsTrigger>
-        </TabsList>
+      <div>
+        <button onClick={() => setTab('overview')}>Overview</button>
+        <button onClick={() => setTab('alerts')}>Alerts</button>
+        <button onClick={() => setTab('incidents')}>Incidents</button>
+      </div>
 
-        <TabsContent value="overview" className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>System Resources</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <ResponsiveContainer width="100%" height={300}>
-                  <LineChart data={systemMetrics}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="timestamp" />
-                    <YAxis />
-                    <Tooltip />
-                    <Legend />
-                    <Line type="monotone" dataKey="cpu_usage" stroke="#8884d8" name="CPU Usage (%)" />
-                    <Line type="monotone" dataKey="memory_usage" stroke="#82ca9d" name="Memory Usage (bytes)" />
-                  </LineChart>
-                </ResponsiveContainer>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>Application Performance</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <ResponsiveContainer width="100%" height={300}>
-                  <LineChart data={applicationMetrics}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="timestamp" />
-                    <YAxis />
-                    <Tooltip />
-                    <Legend />
-                    <Line type="monotone" dataKey="request_rate" stroke="#8884d8" name="Request Rate" />
-                    <Line type="monotone" dataKey="error_rate" stroke="#ff7300" name="Error Rate" />
-                  </LineChart>
-                </ResponsiveContainer>
-              </CardContent>
-            </Card>
+      {tab === 'overview' && (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="card">
+            <h2>System Resources</h2>
+            <div>
+              <ResponsiveContainer width="100%" height={300}>
+                <LineChart data={systemMetrics}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="timestamp" />
+                  <YAxis />
+                  <Tooltip />
+                  <Legend />
+                  <Line type="monotone" dataKey="cpu_usage" stroke="#8884d8" name="CPU Usage (%)" />
+                  <Line type="monotone" dataKey="memory_usage" stroke="#82ca9d" name="Memory Usage (bytes)" />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
           </div>
-        </TabsContent>
 
-        <TabsContent value="alerts" className="space-y-4">
+          <div className="card">
+            <h2>Application Performance</h2>
+            <div>
+              <ResponsiveContainer width="100%" height={300}>
+                <LineChart data={applicationMetrics}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="timestamp" />
+                  <YAxis />
+                  <Tooltip />
+                  <Legend />
+                  <Line type="monotone" dataKey="request_rate" stroke="#8884d8" name="Request Rate" />
+                  <Line type="monotone" dataKey="error_rate" stroke="#ff7300" name="Error Rate" />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {tab === 'alerts' && (
+        <div>
           {alerts.map((alert) => (
-            <Alert key={alert.name} className={getSeverityColor(alert.severity)}>
-              <AlertTitle>{alert.name}</AlertTitle>
-              <AlertDescription>
-                <div className="flex justify-between items-center">
-                  <span>{alert.description}</span>
-                  <Badge variant="outline">{alert.status}</Badge>
-                </div>
-              </AlertDescription>
-            </Alert>
+            <div key={alert.name} className={getSeverityColor(alert.severity)}>
+              <strong>{alert.name}</strong>
+              <div>
+                <span>{alert.description}</span>
+                <span style={{ border: '1px solid #ccc', padding: '2px 6px', marginLeft: 8 }}>{alert.status}</span>
+              </div>
+            </div>
           ))}
-        </TabsContent>
+        </div>
+      )}
 
-        <TabsContent value="incidents" className="space-y-4">
+      {tab === 'incidents' && (
+        <div>
           {incidents.map((incident) => (
-            <Card key={incident.id}>
-              <CardHeader>
-                <div className="flex justify-between items-center">
-                  <CardTitle>{incident.title}</CardTitle>
-                  <Badge className={getSeverityColor(incident.severity)}>
-                    {incident.severity}
-                  </Badge>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-2">
-                  <p><strong>Status:</strong> {incident.status}</p>
-                  <p><strong>Start Time:</strong> {new Date(incident.start_time).toLocaleString()}</p>
-                  {incident.end_time && (
-                    <p><strong>End Time:</strong> {new Date(incident.end_time).toLocaleString()}</p>
-                  )}
-                  {incident.root_cause && (
-                    <p><strong>Root Cause:</strong> {incident.root_cause}</p>
-                  )}
-                  {incident.resolution && (
-                    <p><strong>Resolution:</strong> {incident.resolution}</p>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
+            <div key={incident.id} className="card">
+              <div className="flex justify-between items-center">
+                <strong>{incident.title}</strong>
+                <span className={getSeverityColor(incident.severity)}>{incident.severity}</span>
+              </div>
+              <div>
+                <p><strong>Status:</strong> {incident.status}</p>
+                <p><strong>Start Time:</strong> {new Date(incident.start_time).toLocaleString()}</p>
+                {incident.end_time && (
+                  <p><strong>End Time:</strong> {new Date(incident.end_time).toLocaleString()}</p>
+                )}
+                {incident.root_cause && (
+                  <p><strong>Root Cause:</strong> {incident.root_cause}</p>
+                )}
+                {incident.resolution && (
+                  <p><strong>Resolution:</strong> {incident.resolution}</p>
+                )}
+              </div>
+            </div>
           ))}
-        </TabsContent>
-      </Tabs>
+        </div>
+      )}
     </div>
   );
 } 

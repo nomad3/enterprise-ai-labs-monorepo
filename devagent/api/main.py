@@ -1,6 +1,7 @@
 """
 Main FastAPI application entry point for DevAgent.
 """
+
 from fastapi import Depends, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from opentelemetry import trace

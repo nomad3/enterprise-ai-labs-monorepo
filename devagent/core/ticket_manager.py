@@ -213,9 +213,9 @@ class TicketManager:
             context["interactions"].append(
                 {
                     "message": interaction.user_message,
-                    "response": interaction.response.dict()
-                    if interaction.response
-                    else None,
+                    "response": (
+                        interaction.response.dict() if interaction.response else None
+                    ),
                     "approved": interaction.approved,
                 }
             )

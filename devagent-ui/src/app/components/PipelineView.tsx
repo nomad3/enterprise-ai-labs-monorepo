@@ -18,7 +18,11 @@ const PipelineView: React.FC = () => {
       setIsLoading(true);
       setError(null);
       const status = await coreService.runPipeline();
-      setPipelineStatus(status);
+      setPipelineStatus({
+        build: status.result || '',
+        test: status.result || '',
+        deploy: status.result || '',
+      });
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to fetch pipeline status');
     } finally {

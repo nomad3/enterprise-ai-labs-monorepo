@@ -39,7 +39,7 @@ const FileBrowser: React.FC = () => {
       setError(null);
       const content = await coreService.readFile(path);
       setSelectedFile(path);
-      setFileContent(content);
+      setFileContent(content.content);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to read file');
     } finally {

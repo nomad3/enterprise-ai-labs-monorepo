@@ -1,12 +1,10 @@
-version: '3.8'
-
 services:
-  frontend:
+  devagent-ui:
     build:
       context: ./devagent-ui
       dockerfile: Dockerfile
     ports:
-      - "3000:3000"
+      - "3002:3000"
     volumes:
       - ./devagent-ui:/app
       - /app/node_modules
@@ -35,10 +33,14 @@ services:
     env_file:
       - .env
     depends_on:
-      - postgres
-      - redis
-      - prometheus
-      - grafana
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      prometheus:
+        condition: service_started
+      grafana:
+        condition: service_started
     command: uvicorn devagent.api.main:app --host 0.0.0.0 --port 8000 --reload
 
   postgres:
@@ -52,7 +54,7 @@ services:
     ports:
       - "5432:5432"
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U devagent"]
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 5s
       timeout: 5s
       retries: 5
@@ -96,7 +98,7 @@ services:
   grafana:
     image: grafana/grafana:10.0.0
     ports:
-      - "3000:3000"
+      - "3001:3000"
     environment:
       - GF_SECURITY_ADMIN_USER=admin
       - GF_SECURITY_ADMIN_PASSWORD=admin

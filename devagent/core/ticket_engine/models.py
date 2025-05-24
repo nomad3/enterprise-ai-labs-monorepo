@@ -1,6 +1,7 @@
 """
 Models for the Ticket Ingestion & Interpretation Engine.
 """
+
 from datetime import datetime
 from enum import Enum
 from typing import List, Optional

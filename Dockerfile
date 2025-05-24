@@ -1,5 +1,5 @@
-# Use Python 3.9 slim image as base
-FROM python:3.9-slim
+# Use Python 3.11 slim image as base
+FROM python:3.11-slim
 
 # Set working directory
 WORKDIR /app
@@ -15,11 +15,13 @@ RUN apt-get update \
         git \
         curl \
         build-essential \
+        python3-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Python dependencies
-COPY requirements.txt .
+COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir black isort flake8 mypy pytest pytest-cov
 
 # Copy project files
 COPY . .

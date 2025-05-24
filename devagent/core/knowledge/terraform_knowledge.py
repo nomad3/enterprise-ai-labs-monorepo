@@ -4,49 +4,41 @@ Contains patterns, best practices, and templates for Terraform code generation
 """
 
 TERRAFORM_PROVIDERS = {
-    'gcp': {
-        'provider': 'google',
-        'version': '>= 5.0',
-        'required_providers': {
-            'google': {
-                'source': 'hashicorp/google',
-                'version': '>= 5.0'
-            }
-        }
+    "gcp": {
+        "provider": "google",
+        "version": ">= 5.0",
+        "required_providers": {
+            "google": {"source": "hashicorp/google", "version": ">= 5.0"}
+        },
     },
-    'aws': {
-        'provider': 'aws',
-        'version': '~> 5.0',
-        'required_providers': {
-            'aws': {
-                'source': 'hashicorp/aws',
-                'version': '~> 5.0'
-            }
-        }
-    }
+    "aws": {
+        "provider": "aws",
+        "version": "~> 5.0",
+        "required_providers": {"aws": {"source": "hashicorp/aws", "version": "~> 5.0"}},
+    },
 }
 
 TERRAFORM_MODULES = {
-    'gcp': {
-        'compute': {
-            'gke': {
-                'description': 'Google Kubernetes Engine cluster',
-                'required_vars': ['project_id', 'region', 'cluster_name'],
-                'optional_vars': ['node_count', 'machine_type']
+    "gcp": {
+        "compute": {
+            "gke": {
+                "description": "Google Kubernetes Engine cluster",
+                "required_vars": ["project_id", "region", "cluster_name"],
+                "optional_vars": ["node_count", "machine_type"],
             },
-            'cloud_sql': {
-                'description': 'Cloud SQL instance',
-                'required_vars': ['instance_name', 'database_version'],
-                'optional_vars': ['tier', 'disk_size']
+            "cloud_sql": {
+                "description": "Cloud SQL instance",
+                "required_vars": ["instance_name", "database_version"],
+                "optional_vars": ["tier", "disk_size"],
+            },
+        },
+        "storage": {
+            "gcs": {
+                "description": "Google Cloud Storage bucket",
+                "required_vars": ["bucket_name"],
+                "optional_vars": ["location", "storage_class"],
             }
         },
-        'storage': {
-            'gcs': {
-                'description': 'Google Cloud Storage bucket',
-                'required_vars': ['bucket_name'],
-                'optional_vars': ['location', 'storage_class']
-            }
-        }
     }
 }
 
@@ -58,11 +50,11 @@ TERRAFORM_BEST_PRACTICES = [
     "Use data sources for existing resources",
     "Implement proper IAM and security controls",
     "Use workspaces for environment separation",
-    "Implement proper error handling and validation"
+    "Implement proper error handling and validation",
 ]
 
 TERRAFORM_TEMPLATES = {
-    'main': """
+    "main": """
 terraform {{
   required_providers {{
     {provider_block}
@@ -76,7 +68,7 @@ provider "{provider_name}" {{
 
 {resource_blocks}
 """,
-    'variables': """
+    "variables": """
 variable "project_id" {{
   description = "Project ID"
   type        = string
@@ -90,13 +82,14 @@ variable "region" {{
 
 {additional_variables}
 """,
-    'outputs': """
+    "outputs": """
 output "{resource_name}_id" {{
   description = "ID of the created resource"
   value       = {resource_reference}
 }}
-"""
+""",
 }
+
 
 def generate_terraform_code(requirements: dict) -> dict:
     """
@@ -107,10 +100,11 @@ def generate_terraform_code(requirements: dict) -> dict:
     # and the knowledge base above
     pass
 
+
 def validate_terraform_code(code: str) -> dict:
     """
     Validate generated Terraform code
     Returns validation results and suggestions
     """
     # Implementation will use terraform validate and custom checks
-    pass 
+    pass

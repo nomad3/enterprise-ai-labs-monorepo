@@ -1,0 +1,9 @@
+{
+  "id": "TEST-001",
+  "key": "TEST-001",
+  "summary": "Test ticket for API",
+  "description": "This is a test ticket created via API for testing purposes.",
+  "type": "Task",
+  "status": "To Do",
+  "priority": "Medium"
+} 

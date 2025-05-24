@@ -3,20 +3,21 @@ Infrastructure as Code Service for DevAgent
 Integrates Terraform, Kubernetes, and Helm capabilities
 """
 
-from typing import Dict, Any, Optional
-import json
 import hashlib
-from ..knowledge.terraform_knowledge import (
-    TERRAFORM_PROVIDERS, TERRAFORM_MODULES, TERRAFORM_BEST_PRACTICES, TERRAFORM_TEMPLATES
-)
-from ..knowledge.kubernetes_knowledge import (
-    KUBERNETES_TROUBLESHOOTING, KUBERNETES_BEST_PRACTICES
-)
-from ..knowledge.helm_knowledge import (
-    HELM_CHART_STRUCTURE, HELM_BEST_PRACTICES, HELM_TESTING
-)
-from ..services.gemini_service import GeminiService
+import json
+from typing import Any, Dict, Optional
+
 from ..database import get_redis
+from ..knowledge.helm_knowledge import (HELM_BEST_PRACTICES,
+                                        HELM_CHART_STRUCTURE, HELM_TESTING)
+from ..knowledge.kubernetes_knowledge import (KUBERNETES_BEST_PRACTICES,
+                                              KUBERNETES_TROUBLESHOOTING)
+from ..knowledge.terraform_knowledge import (TERRAFORM_BEST_PRACTICES,
+                                             TERRAFORM_MODULES,
+                                             TERRAFORM_PROVIDERS,
+                                             TERRAFORM_TEMPLATES)
+from ..services.gemini_service import GeminiService
+
 
 class IACService:
     def __init__(self):
@@ -24,19 +25,19 @@ class IACService:
         self.redis = get_redis()
         self.cache_ttl = 3600  # 1 hour cache TTL
         self.terraform_knowledge = {
-            'providers': TERRAFORM_PROVIDERS,
-            'modules': TERRAFORM_MODULES,
-            'best_practices': TERRAFORM_BEST_PRACTICES,
-            'templates': TERRAFORM_TEMPLATES
+            "providers": TERRAFORM_PROVIDERS,
+            "modules": TERRAFORM_MODULES,
+            "best_practices": TERRAFORM_BEST_PRACTICES,
+            "templates": TERRAFORM_TEMPLATES,
         }
         self.kubernetes_knowledge = {
-            'troubleshooting': KUBERNETES_TROUBLESHOOTING,
-            'best_practices': KUBERNETES_BEST_PRACTICES
+            "troubleshooting": KUBERNETES_TROUBLESHOOTING,
+            "best_practices": KUBERNETES_BEST_PRACTICES,
         }
         self.helm_knowledge = {
-            'structure': HELM_CHART_STRUCTURE,
-            'best_practices': HELM_BEST_PRACTICES,
-            'testing': HELM_TESTING
+            "structure": HELM_CHART_STRUCTURE,
+            "best_practices": HELM_BEST_PRACTICES,
+            "testing": HELM_TESTING,
         }
 
     def _generate_cache_key(self, operation: str, data: Dict[str, Any]) -> str:
@@ -65,11 +66,7 @@ class IACService:
         Cache the result
         """
         try:
-            await self.redis.set(
-                cache_key,
-                json.dumps(result),
-                ex=self.cache_ttl
-            )
+            await self.redis.set(cache_key, json.dumps(result), ex=self.cache_ttl)
         except Exception:
             pass  # Silently fail if caching fails
 
@@ -79,43 +76,39 @@ class IACService:
         """
         try:
             # Generate cache key
-            cache_key = self._generate_cache_key('terraform', requirements)
-            
+            cache_key = self._generate_cache_key("terraform", requirements)
+
             # Check cache first
             cached_result = await self._get_cached_result(cache_key)
             if cached_result:
                 return cached_result
-            
+
             # Prepare context for Gemini
             context = {
-                'knowledge_base': self.terraform_knowledge,
-                'requirements': requirements
+                "knowledge_base": self.terraform_knowledge,
+                "requirements": requirements,
             }
-            
+
             # Generate code using Gemini
             terraform_code = await self.gemini.generate_code(
-                prompt_type='terraform',
-                context=context
+                prompt_type="terraform", context=context
             )
-            
+
             # Validate generated code
             validation_results = await self._validate_terraform(terraform_code)
-            
+
             result = {
-                'status': 'success',
-                'code': terraform_code,
-                'validation': validation_results
+                "status": "success",
+                "code": terraform_code,
+                "validation": validation_results,
             }
-            
+
             # Cache the result
             await self._cache_result(cache_key, result)
-            
+
             return result
         except Exception as e:
-            return {
-                'status': 'error',
-                'message': str(e)
-            }
+            return {"status": "error", "message": str(e)}
 
     async def troubleshoot_kubernetes(self, issue_description: str) -> Dict[str, Any]:
         """
@@ -123,39 +116,34 @@ class IACService:
         """
         try:
             # Generate cache key
-            cache_key = self._generate_cache_key('kubernetes', {'issue': issue_description})
-            
+            cache_key = self._generate_cache_key(
+                "kubernetes", {"issue": issue_description}
+            )
+
             # Check cache first
             cached_result = await self._get_cached_result(cache_key)
             if cached_result:
                 return cached_result
-            
+
             # Prepare context for Gemini
             context = {
-                'knowledge_base': self.kubernetes_knowledge,
-                'issue_description': issue_description
+                "knowledge_base": self.kubernetes_knowledge,
+                "issue_description": issue_description,
             }
-            
+
             # Generate analysis using Gemini
             analysis = await self.gemini.generate_analysis(
-                prompt_type='kubernetes_troubleshooting',
-                context=context
+                prompt_type="kubernetes_troubleshooting", context=context
             )
-            
-            result = {
-                'status': 'success',
-                'analysis': analysis
-            }
-            
+
+            result = {"status": "success", "analysis": analysis}
+
             # Cache the result
             await self._cache_result(cache_key, result)
-            
+
             return result
         except Exception as e:
-            return {
-                'status': 'error',
-                'message': str(e)
-            }
+            return {"status": "error", "message": str(e)}
 
     async def generate_helm_chart(self, requirements: Dict[str, Any]) -> Dict[str, Any]:
         """
@@ -163,64 +151,60 @@ class IACService:
         """
         try:
             # Generate cache key
-            cache_key = self._generate_cache_key('helm', requirements)
-            
+            cache_key = self._generate_cache_key("helm", requirements)
+
             # Check cache first
             cached_result = await self._get_cached_result(cache_key)
             if cached_result:
                 return cached_result
-            
+
             # Prepare context for Gemini
             context = {
-                'knowledge_base': self.helm_knowledge,
-                'requirements': requirements
+                "knowledge_base": self.helm_knowledge,
+                "requirements": requirements,
             }
-            
+
             # Generate chart using Gemini
             chart = await self.gemini.generate_code(
-                prompt_type='helm_chart',
-                context=context
+                prompt_type="helm_chart", context=context
             )
-            
+
             # Validate and test chart
             validation_results = await self._validate_helm_chart(chart)
             test_results = await self._test_helm_chart(chart)
-            
+
             result = {
-                'status': 'success',
-                'chart': chart,
-                'validation': validation_results,
-                'tests': test_results
+                "status": "success",
+                "chart": chart,
+                "validation": validation_results,
+                "tests": test_results,
             }
-            
+
             # Cache the result
             await self._cache_result(cache_key, result)
-            
+
             return result
         except Exception as e:
-            return {
-                'status': 'error',
-                'message': str(e)
-            }
+            return {"status": "error", "message": str(e)}
 
     async def _validate_terraform(self, code: str) -> Dict[str, Any]:
         """
         Validate Terraform code
         """
         # Generate cache key
-        cache_key = self._generate_cache_key('terraform_validate', {'code': code})
-        
+        cache_key = self._generate_cache_key("terraform_validate", {"code": code})
+
         # Check cache first
         cached_result = await self._get_cached_result(cache_key)
         if cached_result:
             return cached_result
-        
+
         # Implementation will use terraform validate and custom checks
         validation_result = {}  # Placeholder for actual implementation
-        
+
         # Cache the result
         await self._cache_result(cache_key, validation_result)
-        
+
         return validation_result
 
     async def _validate_helm_chart(self, chart: Dict[str, Any]) -> Dict[str, Any]:
@@ -228,19 +212,19 @@ class IACService:
         Validate Helm chart
         """
         # Generate cache key
-        cache_key = self._generate_cache_key('helm_validate', chart)
-        
+        cache_key = self._generate_cache_key("helm_validate", chart)
+
         # Check cache first
         cached_result = await self._get_cached_result(cache_key)
         if cached_result:
             return cached_result
-        
+
         # Implementation will use helm lint and custom checks
         validation_result = {}  # Placeholder for actual implementation
-        
+
         # Cache the result
         await self._cache_result(cache_key, validation_result)
-        
+
         return validation_result
 
     async def _test_helm_chart(self, chart: Dict[str, Any]) -> Dict[str, Any]:
@@ -248,33 +232,37 @@ class IACService:
         Test Helm chart
         """
         # Generate cache key
-        cache_key = self._generate_cache_key('helm_test', chart)
-        
+        cache_key = self._generate_cache_key("helm_test", chart)
+
         # Check cache first
         cached_result = await self._get_cached_result(cache_key)
         if cached_result:
             return cached_result
-        
+
         # Implementation will use helm test and custom checks
         test_result = {}  # Placeholder for actual implementation
-        
+
         # Cache the result
         await self._cache_result(cache_key, test_result)
-        
+
         return test_result
 
-    async def process_iac_request(self, request_type: str, requirements: Dict[str, Any]) -> Dict[str, Any]:
+    async def process_iac_request(
+        self, request_type: str, requirements: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """
         Process IaC generation request
         """
-        if request_type == 'terraform':
+        if request_type == "terraform":
             return await self.generate_terraform(requirements)
-        elif request_type == 'kubernetes':
-            return await self.troubleshoot_kubernetes(requirements.get('issue_description', ''))
-        elif request_type == 'helm':
+        elif request_type == "kubernetes":
+            return await self.troubleshoot_kubernetes(
+                requirements.get("issue_description", "")
+            )
+        elif request_type == "helm":
             return await self.generate_helm_chart(requirements)
         else:
             return {
-                'status': 'error',
-                'message': f'Unknown request type: {request_type}'
-            } 
+                "status": "error",
+                "message": f"Unknown request type: {request_type}",
+            }

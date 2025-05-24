@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { coreService } from '../services/coreService';
+import { apiService } from '../services/api';
 import { fileService } from '../services/fileService';
 import './CodeGenerationView.css';
 
@@ -9,6 +9,8 @@ interface CodeGenerationViewProps {
 
 const CodeGenerationView: React.FC<CodeGenerationViewProps> = ({ ticketId }) => {
   const [prompt, setPrompt] = useState('');
+  const [language, setLanguage] = useState('python');
+  const [framework, setFramework] = useState('');
   const [generatedCode, setGeneratedCode] = useState('');
   const [generatedTests, setGeneratedTests] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -21,16 +23,16 @@ const CodeGenerationView: React.FC<CodeGenerationViewProps> = ({ ticketId }) => 
     try {
       setIsLoading(true);
       setError(null);
-      const code = await coreService.generateCode(prompt, {
-        ticketId,
-        ...context
+      const response = await apiService.generateCode({
+        prompt,
+        language,
+        framework: framework || undefined,
       });
-      setGeneratedCode(code);
+      setGeneratedCode(response.code);
       setFileName(prompt.toLowerCase().replace(/[^a-z0-9]/g, '_'));
-      // Update context with generated code
       setContext(prev => ({
         ...prev,
-        lastGeneratedCode: code
+        lastGeneratedCode: response.code
       }));
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to generate code');
@@ -48,15 +50,15 @@ const CodeGenerationView: React.FC<CodeGenerationViewProps> = ({ ticketId }) => 
     try {
       setIsLoading(true);
       setError(null);
-      const tests = await coreService.generateTests(generatedCode, {
-        ticketId,
-        ...context
+      const response = await apiService.generateTests({
+        code: generatedCode,
+        language,
+        framework: framework || undefined,
       });
-      setGeneratedTests(tests);
-      // Update context with generated tests
+      setGeneratedTests(response.tests);
       setContext(prev => ({
         ...prev,
-        lastGeneratedTests: tests
+        lastGeneratedTests: response.tests
       }));
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to generate tests');

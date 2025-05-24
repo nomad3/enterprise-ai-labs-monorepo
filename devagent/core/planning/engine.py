@@ -1,6 +1,7 @@
 """
 Solution Planning & Strategy Engine implementation.
 """
+
 import logging
 import re
 import uuid
@@ -167,13 +168,17 @@ class PlanningEngine:
         dep_lower = potential_dependency.description.lower()
 
         # Check for explicit dependencies
-        if any(phrase in task_lower for phrase in ["after", "following", "once", "when"]):
+        if any(
+            phrase in task_lower for phrase in ["after", "following", "once", "when"]
+        ):
             # Check if the dependency's description is referenced
             if any(word in task_lower for word in dep_lower.split()):
                 return True
 
         # Check for implicit dependencies
-        if any(phrase in task_lower for phrase in ["using", "based on", "with", "from"]):
+        if any(
+            phrase in task_lower for phrase in ["using", "based on", "with", "from"]
+        ):
             # Check if the dependency's description is referenced
             if any(word in task_lower for word in dep_lower.split()):
                 return True

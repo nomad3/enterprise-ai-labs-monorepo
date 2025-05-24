@@ -1,10 +1,12 @@
 """
 API endpoints for solution planning.
 """
+
 from typing import Any, Dict, List
 
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from devagent.core.database import get_session
@@ -31,14 +33,17 @@ async def create_solution_plan(
     Returns:
         Dict containing the created plan and its tasks
     """
-    # Get ticket and requirements
-    ticket = await db.query(Ticket).filter(Ticket.id == ticket_id).first()
+    # Get ticket
+    ticket_stmt = select(Ticket).where(Ticket.id == ticket_id)
+    ticket_result = await db.execute(ticket_stmt)
+    ticket = ticket_result.scalars().first()
     if not ticket:
         raise HTTPException(status_code=404, detail=f"Ticket {ticket_id} not found")
 
-    requirements = (
-        await db.query(Requirement).filter(Requirement.ticket_id == ticket_id).all()
-    )
+    # Get requirements
+    req_stmt = select(Requirement).where(Requirement.ticket_id == ticket_id)
+    req_result = await db.execute(req_stmt)
+    requirements = req_result.scalars().all()
     if not requirements:
         raise HTTPException(
             status_code=400, detail=f"No requirements found for ticket {ticket_id}"
@@ -78,12 +83,16 @@ async def get_solution_plan(
         Dict containing the plan and its tasks
     """
     # Query plan
-    plan = await db.query(SolutionPlan).filter(SolutionPlan.id == plan_id).first()
+    plan_stmt = select(SolutionPlan).where(SolutionPlan.id == plan_id)
+    plan_result = await db.execute(plan_stmt)
+    plan = plan_result.scalars().first()
     if not plan:
         raise HTTPException(status_code=404, detail=f"Plan {plan_id} not found")
 
     # Query tasks
-    tasks = await db.query(Task).filter(Task.plan_id == plan_id).all()
+    task_stmt = select(Task).where(Task.plan_id == plan_id)
+    task_result = await db.execute(task_stmt)
+    tasks = task_result.scalars().all()
 
     return {"plan": plan, "tasks": tasks}
 
@@ -103,16 +112,18 @@ async def get_ticket_plan(
         Dict containing the plan and its tasks
     """
     # Query plan
-    plan = (
-        await db.query(SolutionPlan).filter(SolutionPlan.ticket_id == ticket_id).first()
-    )
+    plan_stmt = select(SolutionPlan).where(SolutionPlan.ticket_id == ticket_id)
+    plan_result = await db.execute(plan_stmt)
+    plan = plan_result.scalars().first()
     if not plan:
         raise HTTPException(
             status_code=404, detail=f"No plan found for ticket {ticket_id}"
         )
 
     # Query tasks
-    tasks = await db.query(Task).filter(Task.plan_id == plan.id).all()
+    task_stmt = select(Task).where(Task.plan_id == plan.id)
+    task_result = await db.execute(task_stmt)
+    tasks = task_result.scalars().all()
 
     return {"plan": plan, "tasks": tasks}
 
@@ -130,14 +141,18 @@ async def list_solution_plans(
     Returns:
         List of plans with their tasks
     """
-    plans = await db.query(SolutionPlan).all()
-    result = []
+    plan_stmt = select(SolutionPlan)
+    plan_result = await db.execute(plan_stmt)
+    plans = plan_result.scalars().all()
+    
+    response_list = []
+    for plan_item in plans:
+        task_stmt = select(Task).where(Task.plan_id == plan_item.id)
+        task_result = await db.execute(task_stmt)
+        tasks = task_result.scalars().all()
+        response_list.append({"plan": plan_item, "tasks": tasks})
 
-    for plan in plans:
-        tasks = await db.query(Task).filter(Task.plan_id == plan.id).all()
-        result.append({"plan": plan, "tasks": tasks})
-
-    return result
+    return response_list
 
 
 class PlanRequest(BaseModel):
