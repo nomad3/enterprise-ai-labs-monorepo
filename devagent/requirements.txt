@@ -15,4 +15,5 @@ asyncpg
 python-jose
 passlib
 pydantic-settings
-email-validator 
+email-validator
+python-multipart 
