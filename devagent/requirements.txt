@@ -5,4 +5,10 @@ pytest-cov
 black
 isort
 flake8
-mypy 
+mypy
+opentelemetry-api
+opentelemetry-sdk
+opentelemetry-exporter-prometheus
+opentelemetry-instrumentation-fastapi
+SQLAlchemy
+asyncpg 
