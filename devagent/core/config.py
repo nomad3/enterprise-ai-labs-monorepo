@@ -26,7 +26,7 @@ class Settings(BaseSettings):
     PROJECT_NAME: str = "DevAgent"
 
     # CORS settings
-    BACKEND_CORS_ORIGINS: list = ["http://localhost:3000"]
+    BACKEND_CORS_ORIGINS: list = ["http://localhost:3000", "http://localhost:3002"]
 
     # Monitoring settings
     PROMETHEUS_URL: str = "http://localhost:9090"

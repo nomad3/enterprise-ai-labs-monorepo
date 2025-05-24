@@ -22,6 +22,7 @@ from devagent.api.plans import router as plans_router
 from devagent.api.test_gen import router as test_gen_router
 from devagent.api.tickets import router as tickets_router
 from devagent.api.version_control import router as version_control_router
+from devagent.core.config import get_settings
 from devagent.core.database import get_session, init_db
 from devagent.core.models.user_model import \
     User  # noqa: F401 -> Ensures User table is created by init_db
@@ -42,6 +43,7 @@ app = FastAPI(
 )
 
 # Configure CORS
+settings = get_settings()
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],  # In production, replace with specific origins
