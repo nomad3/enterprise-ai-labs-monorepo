@@ -1,0 +1,12 @@
+dependencies:
+- name: devagent-ui
+  repository: file://./charts/devagent-ui
+  version: 0.1.0
+- name: postgresql
+  repository: https://charts.bitnami.com/bitnami
+  version: 14.3.3
+- name: redis
+  repository: https://charts.bitnami.com/bitnami
+  version: 18.19.4
+digest: sha256:3be022a5bf460c216a913c93ec941ebca74ac5a9908ed2d09dad4cead9d22cd1
+generated: "2025-05-24T15:51:18.032278-04:00"

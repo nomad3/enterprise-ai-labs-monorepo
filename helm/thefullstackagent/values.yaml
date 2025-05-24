@@ -1,0 +1,158 @@
+# Top-level values for thefullstackagent Helm chart
+
+devagentApi:
+  replicaCount: 1 # Adjusted from 3 for local testing initially
+
+  image:
+    repository: devagent # Assuming local image 'devagent:latest'
+    tag: "1748117771"
+    pullPolicy: IfNotPresent # Or Never, if image is definitely local
+
+  service:
+    type: ClusterIP
+    port: 8000 # Default FastAPI port
+    targetPort: 8000 # Container port for the API
+
+  ingress:
+    enabled: true
+    className: "nginx"
+    annotations:
+      kubernetes.io/ingress.class: nginx
+      # cert-manager.io/cluster-issuer: letsencrypt-prod # Keep commented for local
+    hosts:
+      - host: devagent-api.local # Adjusted for local testing
+        paths:
+          - path: /
+            pathType: Prefix
+    tls: []
+    #  - secretName: devagent-api-tls
+    #    hosts:
+    #      - devagent-api.local
+
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+
+  env:
+    # These will be templated to use K8s service names
+    DATABASE_URL: "postgresql://{{ .Values.postgresql.auth.username }}:{{ .Values.postgresql.auth.password }}@{{ printf \"%s-postgresql\" .Release.Name }}:5432/{{ .Values.postgresql.auth.database }}"
+    REDIS_URL: "redis://{{ printf \"%s-redis-master\" .Release.Name }}:6379/0" # Bitnami Redis master service name
+    JWT_SECRET: "a-very-secure-jwt-secret-for-local-dev" # Replace or manage via secrets for prod
+    PROMETHEUS_URL: "http://prometheus-server:9090" # Assuming prometheus is deployed in the same namespace
+    GRAFANA_URL: "http://grafana:3000"
+    # ALERT_WEBHOOK_URL: "http://alertmanager:9093/api/v1/alerts" # Needs Alertmanager service name
+    SMTP_HOST: "smtp.example.com"
+    SMTP_PORT: "587"
+    SMTP_USER: "your-email@example.com"
+    SMTP_PASSWORD: "your-password"
+    # SLACK_WEBHOOK_URL: "https://hooks.slack.com/services/your-webhook-url"
+    # TEAMS_WEBHOOK_URL: "https://outlook.office.com/webhook/your-webhook-url"
+
+  livenessProbe:
+    enabled: true
+    path: /health
+    initialDelaySeconds: 60 # Increased delay
+    periodSeconds: 15
+
+  readinessProbe:
+    enabled: true
+    path: /health # Changed from /ready as it does not exist
+    initialDelaySeconds: 30 # Increased delay
+    periodSeconds: 10
+
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+
+  serviceAccount:
+    create: true # Set to false if you manage SAs separately or use default
+    annotations: {}
+    # name: "" # Not needed if using component fullname
+
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 3 # Example, adjust as needed
+    targetCPUUtilizationPercentage: 80
+    # targetMemoryUtilizationPercentage: 80
+
+# Configuration for the devagent-ui subchart
+devagentUi:
+  enabled: true # Assuming we want to deploy it by default
+  replicaCount: 1
+  image:
+    repository: devagent-ui # Assuming local image 'devagent-ui:latest'
+    tag: latest
+    pullPolicy: IfNotPresent # Or Never, if image is definitely local
+  service:
+    type: ClusterIP
+    port: 80
+    targetPort: 3000
+  ingress:
+    enabled: true
+    className: "nginx"
+    annotations:
+      kubernetes.io/ingress.class: nginx
+      # cert-manager.io/cluster-issuer: letsencrypt-prod
+    hosts:
+      - host: devagent.local # Main entry point for users
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+    tls: []
+    #  - secretName: devagent-ui-tls
+    #    hosts:
+    #      - devagent.local
+
+# Configuration for the PostgreSQL subchart (Bitnami)
+postgresql:
+  enabled: true
+  # Global values apply to both primary and readReplicas (if any)
+  global:
+    postgresql:
+      auth:
+        postgresPassword: "a-secure-postgres-password" # Admin password for postgres user
+        username: "devagent_user"
+        password: "a-secure-devagent-password" # Password for the application user
+        database: "devagent_db"
+      # service:
+      #   ports:
+      #     postgresql: 5432
+  # Primary specific values
+  primary:
+    # persistence:
+    #   enabled: true
+    #   size: 8Gi
+    resources:
+      requests:
+        cpu: 100m
+        memory: 256Mi
+      limits:
+        cpu: 200m
+        memory: 512Mi
+
+# Configuration for the Redis subchart (Bitnami)
+redis:
+  enabled: true
+  global:
+    redis:
+      password: "a-secure-redis-password" # Set a password for Redis
+  architecture: standalone # Use standalone for simplicity in local dev. 'replication' for HA.
+  # master:
+  #   persistence:
+  #     enabled: true
+  #     size: 8Gi
+  master:
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        cpu: 200m
+        memory: 256Mi
+  # sentinel: 
+  #   enabled: false # Disable sentinel if using standalone architecture 

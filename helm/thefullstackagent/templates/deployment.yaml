@@ -1,0 +1,8 @@
+{{/* Call the common deployment template for the API component */}}
+{{- include "thefullstackagent.component.deployment" (dict 
+    "Chart" .Chart 
+    "Release" .Release 
+    "Values" .Values
+    "componentName" "api" 
+    "componentValues" .Values.devagentApi 
+  ) | nindent 0 }} 

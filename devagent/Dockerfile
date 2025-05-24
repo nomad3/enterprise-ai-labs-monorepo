@@ -14,6 +14,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && pip install --upgrade pip setuptools wheel \
     && pip install --no-cache-dir -r requirements.txt
 
-COPY . .
+ENV PYTHONPATH=/app
+COPY . /app/devagent/
 
-CMD ["uvicorn", "devagent.api.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"] 
+CMD ["uvicorn", "devagent.api.main:app", "--host", "0.0.0.0", "--port", "8000"]
+# CMD ["tail", "-f", "/dev/null"] 

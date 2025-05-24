@@ -1,0 +1,8 @@
+{{/* Call the common ingress template from the parent chart for the UI component */}}
+{{- include "thefullstackagent.component.ingress" (dict 
+    "Chart" .Chart 
+    "Release" .Release 
+    "Values" .Values 
+    "componentName" "ui" 
+    "componentValues" .Values
+  ) | nindent 0 }} 

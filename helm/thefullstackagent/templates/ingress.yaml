@@ -1,0 +1,9 @@
+{{/* Call the common ingress template for the API component */}}
+{{- include "thefullstackagent.component.ingress" (dict 
+    "Chart" .Chart 
+    "Release" .Release 
+    "Values" .Values
+    "componentName" "api" 
+    "componentValues" .Values.devagentApi 
+    "root" . 
+  ) | nindent 0 }} 
