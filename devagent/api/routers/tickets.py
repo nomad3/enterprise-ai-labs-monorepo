@@ -2,13 +2,8 @@ from typing import List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query, WebSocket
 
-from ...core.models import (
-    AgentInteraction,
-    AgentResponse,
-    Ticket,
-    TicketFilter,
-    TicketUpdate,
-)
+from ...core.models import (AgentInteraction, AgentResponse, Ticket,
+                            TicketFilter, TicketUpdate)
 from ...core.ticket_manager import TicketManager
 from ..dependencies import get_ticket_manager
 

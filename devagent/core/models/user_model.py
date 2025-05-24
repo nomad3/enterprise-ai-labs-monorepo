@@ -5,10 +5,10 @@ SQLAlchemy and Pydantic models for User and Authentication.
 import uuid
 from datetime import datetime
 
-from sqlalchemy import Column, DateTime, String, Boolean
+from pydantic import BaseModel, EmailStr, Field
+from sqlalchemy import Boolean, Column, DateTime, String
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
-from pydantic import BaseModel, EmailStr, Field
 
 from devagent.core.database import Base
 

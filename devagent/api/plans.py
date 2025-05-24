@@ -12,12 +12,8 @@ from sqlalchemy.orm import selectinload
 
 from devagent.core.database import get_session
 from devagent.core.planning.engine import PlanningEngine, SolutionPlanner
-from devagent.core.planning.models import (
-    SolutionPlan,
-    SolutionPlanResponse,
-    Task,
-    TaskResponse,
-)
+from devagent.core.planning.models import (SolutionPlan, SolutionPlanResponse,
+                                           Task, TaskResponse)
 from devagent.core.ticket_engine.models import Requirement, Ticket
 
 router = APIRouter(prefix="/plans", tags=["plans"])

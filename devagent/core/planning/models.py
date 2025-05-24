@@ -6,9 +6,8 @@ from datetime import datetime
 from enum import Enum
 from typing import List, Optional
 
-from pydantic import (
-    BaseModel as PydanticBaseModel,
-)  # Added for Pydantic response models
+from pydantic import \
+    BaseModel as PydanticBaseModel  # Added for Pydantic response models
 from sqlalchemy import Column, DateTime
 from sqlalchemy import Enum as SQLEnum
 from sqlalchemy import ForeignKey, Integer, String, Text

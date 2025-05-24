@@ -12,20 +12,19 @@ from opentelemetry.sdk.trace.export import BatchSpanProcessor
 from prometheus_client import start_http_server
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from devagent.api.auth import router as auth_router
 from devagent.api.ci_cd import router as ci_cd_router
 from devagent.api.code_gen import router as code_gen_router
 from devagent.api.communication import router as communication_router
+from devagent.api.devops import router as devops_router
 from devagent.api.files import router as files_router
 from devagent.api.plans import router as plans_router
 from devagent.api.test_gen import router as test_gen_router
 from devagent.api.tickets import router as tickets_router
 from devagent.api.version_control import router as version_control_router
-from devagent.api.auth import router as auth_router
-from devagent.api.devops import router as devops_router
 from devagent.core.database import get_session, init_db
-from devagent.core.models.user_model import (
-    User,
-)  # noqa: F401 -> Ensures User table is created by init_db
+from devagent.core.models.user_model import \
+    User  # noqa: F401 -> Ensures User table is created by init_db
 
 # Initialize OpenTelemetry
 trace.set_tracer_provider(TracerProvider())
