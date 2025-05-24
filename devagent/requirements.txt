@@ -11,4 +11,5 @@ opentelemetry-sdk
 opentelemetry-exporter-prometheus
 opentelemetry-instrumentation-fastapi
 SQLAlchemy
-asyncpg 
+asyncpg
+python-jose 
