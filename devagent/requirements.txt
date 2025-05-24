@@ -19,4 +19,5 @@ email-validator
 python-multipart
 requests
 aiohttp
-prometheus-client 
+prometheus-client
+python-dateutil 
