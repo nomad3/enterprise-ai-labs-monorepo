@@ -16,4 +16,5 @@ python-jose
 passlib
 pydantic-settings
 email-validator
-python-multipart 
+python-multipart
+requests 
