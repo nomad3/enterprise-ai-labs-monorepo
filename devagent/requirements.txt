@@ -13,4 +13,5 @@ opentelemetry-instrumentation-fastapi
 SQLAlchemy
 asyncpg
 python-jose
-passlib 
+passlib
+pydantic-settings 
