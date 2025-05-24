@@ -127,7 +127,7 @@ async def register_user(
         )
 
     hashed_password = get_password_hash(user_in.password)
-    new_user_data = user_in.model_dump(exclude={"password"})
+    new_user_data = user_in.dict(exclude={"password"})
     new_user = User(**new_user_data, hashed_password=hashed_password, is_active=True)
 
     db.add(new_user)
