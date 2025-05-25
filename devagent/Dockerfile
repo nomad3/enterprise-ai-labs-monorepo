@@ -15,7 +15,14 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && pip install --no-cache-dir -r requirements.txt
 
 ENV PYTHONPATH=/app
-COPY . /app/devagent/
+
+# Add a cache-busting argument (optional, but can help ensure freshness)
+ARG CACHEBUST=1
+
+# Copy the application code specifically
+# Assuming your Docker build context is the root of the project,
+# and your application code is in the 'devagent' subdirectory.
+COPY ./devagent /app/devagent
 
 CMD ["uvicorn", "devagent.api.main:app", "--host", "0.0.0.0", "--port", "8000"]
 # CMD ["tail", "-f", "/dev/null"] 
