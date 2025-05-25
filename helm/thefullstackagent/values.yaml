@@ -39,7 +39,7 @@ devagentApi:
 
   env:
     # These will be templated to use K8s service names
-    DATABASE_URL: "postgresql://{{ .Values.postgresql.auth.username }}:{{ .Values.postgresql.auth.password }}@{{ printf \"%s-postgresql\" .Release.Name }}:5432/{{ .Values.postgresql.auth.database }}"
+    DATABASE_URL: "postgresql://{{ .Values.postgresql.global.postgresql.auth.username }}:{{ .Values.postgresql.global.postgresql.auth.password }}@{{ printf \"%s-postgresql\" .Release.Name }}:5432/{{ .Values.postgresql.global.postgresql.auth.database }}"
     REDIS_URL: "redis://{{ printf \"%s-redis-master\" .Release.Name }}:6379/0" # Bitnami Redis master service name
     JWT_SECRET: "a-very-secure-jwt-secret-for-local-dev" # Replace or manage via secrets for prod
     PROMETHEUS_URL: "http://prometheus-server:9090" # Assuming prometheus is deployed in the same namespace

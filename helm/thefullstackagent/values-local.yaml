@@ -46,6 +46,7 @@ env:
 devagentApi:
   image:
     tag: "latest"
+    pullPolicy: IfNotPresent
 
 livenessProbe:
   enabled: true

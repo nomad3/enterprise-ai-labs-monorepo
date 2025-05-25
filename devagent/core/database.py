@@ -57,6 +57,7 @@ async def init_db():
     settings = get_settings()
     # Construct async URL from settings
     async_db_url = settings.DATABASE_URL.replace("postgresql://", "postgresql+asyncpg://")
+    logger.info(f"Attempting to connect to database with URL: {async_db_url}") # Log the URL
     engine = create_async_engine(async_db_url, echo=False) # Using async_db_url
 
     max_retries = 5

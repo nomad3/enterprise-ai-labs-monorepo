@@ -128,7 +128,7 @@ spec:
           env:
             {{- range $key, $value := .componentValues.env }}
             - name: {{ $key }}
-              value: {{ $value | quote }}
+              value: {{ tpl $value $ | quote }}
             {{- end }}
           {{- end }}
           {{- if .componentValues.livenessProbe.enabled }}
