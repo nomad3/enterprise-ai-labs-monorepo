@@ -4,16 +4,16 @@
 import { useState } from 'react';
 import { useAuth } from './contexts/AuthContext';
 import styles from './page.module.css';
-import Tickets from './components/Tickets';
-import CodeGeneration from './components/CodeGeneration';
-import Plans from './components/Plans';
-import TestGeneration from './components/TestGeneration';
-import VersionControl from './components/VersionControl';
-import CICD from './components/CICD';
+import Tickets from './components/tickets/Tickets';
+import CodeGeneration from './components/code/CodeGeneration';
+import Plans from './components/plans/Plans';
+import TestGeneration from './components/test-generation/TestGeneration';
+import VersionControl from './components/version-control/VersionControl';
+import CICD from './components/devops/CICD';
 import Login from './components/auth/Login';
 import Register from './components/auth/Register';
-import DevOps from './components/DevOps';
-import { Toaster } from '@/components/ui/toaster';
+import DevOps from './components/devops/DevOps';
+import { Toaster } from './components/ui/toaster';
 import { Rocket, ShieldCheck, Code2, GitBranch, ServerCog, Activity, Users, Cloud, Zap, Briefcase, CloudCog, Network } from 'lucide-react'; // Added Briefcase, CloudCog, Network
 import Link from 'next/link';
 // import AgentCard from './components/AgentCard'; // Removed as it's not used and file is missing
