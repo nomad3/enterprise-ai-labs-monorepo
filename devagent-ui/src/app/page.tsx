@@ -52,11 +52,10 @@ export default function LandingPage() {
         </div>
         <div className="relative z-10">
           <h1 className="text-5xl sm:text-7xl font-extrabold text-white mb-6 leading-tight">
-            Revolutionize Your Enterprise with <span className="text-blue-400">Intelligent Agent Orchestration</span>
+            Unlock Strategic Agility & Drive Growth with <span className="text-blue-400">Intelligent Automation</span>
           </h1>
           <p className="text-xl sm:text-2xl text-blue-100/90 mb-10 max-w-4xl">
-            AgentForge empowers your business with a cutting-edge <strong className="text-blue-300">Multi-Cloud, Multi-Tenant, and Multi-Agent platform</strong>.
-            Drive innovation, enhance productivity, and scale operations with unparalleled security and control.
+            AgentForge empowers your enterprise to streamline complex workflows, accelerate innovation, and optimize resource allocation across your multi-cloud landscape – all with robust security and governance.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
             <Link href="#contact">
@@ -78,42 +77,42 @@ export default function LandingPage() {
 
       {/* Features Grid */}
       <section id="features" className="py-20 bg-background">
-        <h2 className="text-4xl font-bold text-center text-blue-200 mb-16">Unlock Unprecedented Efficiency with AgentForge</h2>
+        <h2 className="text-4xl font-bold text-center text-blue-200 mb-16">Key Capabilities for Enterprise Transformation</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 max-w-7xl mx-auto px-6">
           <FeatureCard 
             icon={<CloudCog className="w-10 h-10 text-blue-400" />} 
             title="Seamless Multi-Cloud Operations" 
-            desc="Deploy and manage agents across AWS, Azure, GCP, and private clouds with a unified control plane. Optimize costs and avoid vendor lock-in."
+            desc="Deploy and manage agents across AWS, Azure, GCP, and private clouds with a unified control plane, enabling strategic workload placement, cost optimization, and freedom from vendor lock-in."
             image="https://images.unsplash.com/photo-1544197150-b99a580bb7a8"
           />
           <FeatureCard 
             icon={<Network className="w-10 h-10 text-blue-400" />} 
             title="Secure Multi-Tenant Architecture" 
-            desc="Isolate data and operations for different departments or clients within a single platform. Ensure data privacy and granular access control."
+            desc="Isolate data and operations for different departments or clients within a single platform, ensuring stringent data privacy, regulatory compliance, and granular access control for distinct business units or clients."
             image="https://images.unsplash.com/photo-1558494949-ef010cbdcc31"
           />
           <FeatureCard 
             icon={<Zap className="w-10 h-10 text-blue-400" />} 
             title="Powerful Multi-Agent Collaboration" 
-            desc="Orchestrate diverse AI agents specializing in development, DevOps, QA, data analysis, and more. Foster synergy for complex problem-solving."
+            desc="Orchestrate diverse AI agents specializing in development, DevOps, QA, data analysis, and more. Foster cross-functional synergy to tackle complex business challenges and unlock new opportunities faster."
             image="https://images.unsplash.com/photo-1550751827-4bd374c3f58b"
           />
           <FeatureCard 
             icon={<Code2 className="w-10 h-10 text-blue-400" />} 
             title="Accelerated Software Delivery" 
-            desc="Automate coding, testing, and deployment pipelines. Reduce development cycles and improve code quality with AI-powered assistance."
+            desc="Automate coding, testing, and deployment pipelines. Reduce development cycles and improve code quality with AI-powered assistance. Deliver higher quality software to market faster, gaining a competitive edge."
             image="https://images.unsplash.com/photo-1555066931-4365d14bab8c"
           />
           <FeatureCard 
             icon={<GitBranch className="w-10 h-10 text-blue-400" />} 
             title="Intelligent DevOps & IaC" 
-            desc="Streamline infrastructure management, CI/CD, and GitOps workflows. Proactively manage your cloud resources with AI-driven insights."
+            desc="Streamline infrastructure management, CI/CD, and GitOps workflows. Proactively manage your cloud resources with AI-driven insights. Enhance operational stability, reduce deployment risks, and optimize cloud spend."
             image="https://images.unsplash.com/photo-1558494949-ef010cbdcc31"
           />
           <FeatureCard 
             icon={<Briefcase className="w-10 h-10 text-blue-400" />} 
             title="Custom Enterprise Solutions" 
-            desc="Tailor agent capabilities and workflows to your specific business needs. Integrate seamlessly with your existing enterprise ecosystem."
+            desc="Tailor agent capabilities and workflows to your specific business needs. Integrate seamlessly with your existing enterprise ecosystem. Maximize the value of your current investments and address unique operational requirements effectively."
             image="https://images.unsplash.com/photo-1552664730-d307ca884978"
           />
         </div>
@@ -135,19 +134,19 @@ export default function LandingPage() {
             <StepCard 
               step="1" 
               title="Strategic Cloud Setup" 
-              desc="Define your multi-cloud strategy. AgentForge integrates with your existing infrastructure, ensuring optimal performance and data sovereignty."
+              desc="Collaboratively define your multi-cloud strategy. AgentForge seamlessly integrates with your existing infrastructure, offering expert guidance to ensure optimal performance, cost-efficiency, and data sovereignty."
               image="https://images.unsplash.com/photo-1558494949-ef010cbdcc31"
             />
             <StepCard 
               step="2" 
               title="Tenant & Agent Configuration" 
-              desc="Easily onboard tenants and deploy specialized AI agents. Customize roles, permissions, and workflows to match your organizational structure."
+              desc="Efficiently onboard distinct business units or clients as tenants and deploy specialized AI agents. Intuitively customize roles, permissions, and intelligent workflows that mirror your organizational structure and scale with your needs."
               image="https://images.unsplash.com/photo-1550751827-4bd374c3f58b"
             />
             <StepCard 
               step="3" 
               title="Govern, Monitor & Optimize" 
-              desc="Leverage comprehensive dashboards for real-time insights into agent performance, resource utilization, and compliance. Scale with confidence."
+              desc="Utilize comprehensive dashboards for continuous, real-time insights into agent performance, resource utilization, and adherence to compliance mandates. Proactively optimize operations and scale your AI initiatives with confidence."
               image="https://images.unsplash.com/photo-1552664730-d307ca884978"
             />
           </div>
@@ -162,7 +161,7 @@ export default function LandingPage() {
           <BenefitCard title="Future-Proof Scalability" desc="Built for growth, AgentForge scales seamlessly across multiple clouds and tenants, adapting to your evolving business demands." />
           <BenefitCard title="Uncompromised Security" desc="Benefit from enterprise-grade security, robust multi-tenancy, and adherence to stringent compliance standards (SOC2, ISO, GDPR)." />
           <BenefitCard title="Unified Control Plane" desc="Manage all your agents, tenants, and cloud resources from a single, intuitive interface. Simplify complexity and enhance visibility." />
-          <BenefitCard title="Drive Innovation" desc="Empower your teams with specialized AI tools to tackle challenges in software development, DevOps, data analytics, and beyond." />
+          <BenefitCard title="Drive Innovation" desc="Empower your teams with specialized AI tools to tackle challenges in software development, DevOps, data analytics, and beyond, fostering a culture of innovation and maintaining a competitive edge." />
           <BenefitCard title="Strategic Partnership" desc="Gain a dedicated partner in your AI transformation journey, with expert support and continuous platform enhancements." />
         </div>
       </section>
@@ -180,7 +179,7 @@ export default function LandingPage() {
           </a>
           <Link href="/docs/enterprise-overview">
             <Button size="lg" variant="outline" className="border-blue-400 text-blue-200 hover:bg-blue-800 hover:text-white font-bold text-xl px-10 py-4 transition-transform hover:scale-105">
-              Read Enterprise Docs
+              Explore Enterprise Overview
             </Button>
           </Link>
         </div>
