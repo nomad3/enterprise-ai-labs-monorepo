@@ -118,6 +118,8 @@ services:
     environment:
       - TESTING=True
       - DATABASE_URL=postgresql://devagent:devagent@postgres:5432/devagent_test
+      - ALLOWED_ORIGINS='["http://testserver"]' # Explicitly set for tests as JSON string
+      - BACKEND_CORS_ORIGINS='["http://testserver"]' # Explicitly set for tests as JSON string
     depends_on:
       - postgres
     command: pytest -v --cov=devagent devagent/tests/
@@ -169,4 +171,4 @@ volumes:
   postgres_data:
   redis_data:
   prometheus_data:
-  grafana_data: 
+  grafana_data:
