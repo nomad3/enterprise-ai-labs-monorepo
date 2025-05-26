@@ -9,6 +9,7 @@ redis:
   enabled: false
 
 devagentApi:
+  replicaCount: 1 # Ensure API replicas are set to 1
   image:
     repository: gcr.io/aremko-e51ae/devagent-api # Ensure this image exists in your GCR
     tag: latest # Or a specific version/tag
