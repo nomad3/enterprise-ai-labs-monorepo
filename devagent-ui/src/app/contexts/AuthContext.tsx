@@ -26,14 +26,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const checkAuth = async () => {
     try {
-      const token = localStorage.getItem('token');
-      if (token) {
-        const currentUser = await authService.getCurrentUser();
-        setUser(currentUser);
+      if (typeof window !== 'undefined') {
+        const token = localStorage.getItem('token');
+        if (token) {
+          const currentUser = await authService.getCurrentUser();
+          setUser(currentUser);
+        }
       }
     } catch (err) {
       console.error('Auth check failed:', err);
-      localStorage.removeItem('token');
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('token');
+      }
     } finally {
       setLoading(false);
     }

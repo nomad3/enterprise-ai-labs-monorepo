@@ -33,9 +33,11 @@ const authApi = axios.create({
 
 // Add token to requests if it exists
 authApi.interceptors.request.use((config: InternalAxiosRequestConfig) => {
-  const token = localStorage.getItem('token');
-  if (token && config.headers) {
-    config.headers.Authorization = `Bearer ${token}`;
+  if (typeof window !== 'undefined') {
+    const token = localStorage.getItem('token');
+    if (token && config.headers) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
   }
   return config;
 });
@@ -43,18 +45,24 @@ authApi.interceptors.request.use((config: InternalAxiosRequestConfig) => {
 export const authService = {
   login: async (credentials: LoginCredentials): Promise<AuthResponse> => {
     const response = await authApi.post<AuthResponse>('/auth/login', credentials);
-    localStorage.setItem('token', response.data.token);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('token', response.data.token);
+    }
     return response.data;
   },
 
   register: async (data: RegisterData): Promise<AuthResponse> => {
     const response = await authApi.post<AuthResponse>('/auth/register', data);
-    localStorage.setItem('token', response.data.token);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('token', response.data.token);
+    }
     return response.data;
   },
 
   logout: () => {
-    localStorage.removeItem('token');
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('token');
+    }
   },
 
   getCurrentUser: async (): Promise<User> => {
@@ -63,6 +71,7 @@ export const authService = {
   },
 
   isAuthenticated: (): boolean => {
+    if (typeof window === 'undefined') return false;
     return !!localStorage.getItem('token');
   },
 }; 
