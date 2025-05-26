@@ -21,5 +21,5 @@ RUN NEXT_DISABLE_ESLINT=1 npm run build
 # Expose port
 EXPOSE 3000
 
-# Start the application in development mode
-CMD ["npm", "run", "dev"] 
+# Start the application for production
+CMD ["npm", "start"] 
