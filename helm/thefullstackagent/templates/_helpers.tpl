@@ -111,7 +111,7 @@ spec:
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "thefullstackagent.component.fullname" (dict "Release" .Release "Chart" .Chart "Values" .Values "componentName" .componentName) }}
+      serviceAccountName: {{ include "thefullstackagent.component.serviceAccountName" (dict "Release" .Release "Chart" .Chart "Values" .Values "componentName" .componentName "componentValues" .componentValues) }}
       securityContext:
         {{- toYaml .componentValues.podSecurityContext | nindent 8 }}
       containers:
@@ -149,6 +149,9 @@ spec:
           {{- end }}
           resources:
             {{- toYaml .componentValues.resources | nindent 12 }}
+        {{- if .componentValues.sidecars }}
+        {{- toYaml .componentValues.sidecars | nindent 8 }}
+        {{- end }}
       {{- with .componentValues.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
@@ -161,6 +164,17 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+{{- end -}}
+
+{{/*
+Determine the service account name for a component.
+*/}}
+{{- define "thefullstackagent.component.serviceAccountName" -}}
+{{- if .componentValues.serviceAccount.create -}}
+{{- include "thefullstackagent.component.fullname" . -}}
+{{- else -}}
+{{- .componentValues.serviceAccount.name | default (include "thefullstackagent.component.fullname" .) -}}
+{{- end -}}
 {{- end -}}
 
 {{/*

@@ -74,6 +74,7 @@ variable "db_password" {
   description = "Database master password"
   type        = string
   sensitive   = true
+  default     = "replace-with-secure-password"
 }
 
 variable "redis_cluster_id" {
@@ -103,16 +104,19 @@ variable "app_assets_bucket_name" {
 variable "domain_name" {
   description = "Domain name for the application"
   type        = string
+  default     = "example.com"
 }
 
 variable "certificate_arn" {
   description = "ARN of the SSL certificate"
   type        = string
+  default     = ""
 }
 
 variable "gcp_project" {
   description = "GCP project ID"
   type        = string
+  default     = "aremko-e51ae"
 }
 
 variable "gcp_region" {
@@ -125,4 +129,16 @@ variable "gke_cluster_name" {
   description = "Name of the GKE cluster"
   type        = string
   default     = "devagent-gke"
+}
+
+variable "service_account_id" {
+  description = "The ID for the GKE deployment service account."
+  type        = string
+  default     = "gke-deploy-sa"
+}
+
+variable "service_account_display_name" {
+  description = "The display name for the GKE deployment service account."
+  type        = string
+  default     = "GKE Deployment Service Account"
 } 

@@ -54,4 +54,32 @@ help:
 	@echo "  make clean     - Clean up Docker resources"
 	@echo "  make logs      - Show logs"
 	@echo "  make restart   - Restart services"
-	@echo "  make new-branch - Create a new development branch" 
+	@echo "  make new-branch - Create a new development branch"
+
+# Terraform commands (assuming execution within the 'terraform' directory)
+TF_DIR := terraform
+
+## Initialize Terraform in the terraform directory
+tf-init:
+	@echo "Initializing Terraform in $(TF_DIR)..."
+	terraform -chdir=$(TF_DIR) init
+
+## Generate a Terraform execution plan
+tf-plan:
+	@echo "Generating Terraform plan in $(TF_DIR)..."
+	terraform -chdir=$(TF_DIR) plan
+
+## Apply the Terraform configuration
+tf-apply:
+	@echo "Applying Terraform configuration in $(TF_DIR)..."
+	terraform -chdir=$(TF_DIR) apply -auto-approve
+
+## Destroy Terraform-managed infrastructure
+tf-destroy:
+	@echo "Destroying Terraform-managed infrastructure in $(TF_DIR)..."
+	terraform -chdir=$(TF_DIR) destroy -auto-approve
+
+## Show Terraform outputs (if any defined)
+tf-output:
+	@echo "Showing Terraform outputs from $(TF_DIR)..."
+	terraform -chdir=$(TF_DIR) output 

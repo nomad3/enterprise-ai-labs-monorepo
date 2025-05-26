@@ -1,0 +1,64 @@
+# GCP specific values for thefullstackagent Helm chart
+
+# Disable PostgreSQL subchart (using Cloud SQL)
+postgresql:
+  enabled: false
+
+# Disable Redis subchart (using Memorystore)
+redis:
+  enabled: false
+
+devagentApi:
+  image:
+    repository: gcr.io/aremko-e51ae/devagent-api # Ensure this image exists in your GCR
+    tag: latest # Or a specific version/tag
+    # pullPolicy: Always # Recommended for GCR to ensure fresh images
+
+  env:
+    DATABASE_URL: "postgresql://postgres:replace-with-secure-password@/devagent?host=/cloudsql/aremko-e51ae:southamerica-west1:devagent-postgres"
+    REDIS_URL: "redis://10.93.221.219:6379"
+    # JWT_SECRET should be a strong, unique secret managed via K8s secrets, not hardcoded here for prod.
+    # For now, we'll let it take the default from the main values.yaml or you can override it.
+    # JWT_SECRET: "your-gcp-specific-jwt-secret" 
+
+  # Configure to use the existing GKE service account created by Terraform
+  serviceAccount:
+    create: false # Do not create a new service account
+    name: gke-deploy-sa # Name of the Terraform-managed Google Service Account (GSA)
+                        # This assumes K8s SA with the same name exists or is linked via Workload Identity.
+                        # For Cloud SQL Proxy, the POD needs to run with an SA that has cloudsql.client perm.
+
+  sidecars:
+    - name: cloud-sql-proxy
+      image: "gcr.io/cloud-sql-connectors/cloud-sql-proxy:2.8.0" # Use a specific version tag
+      # imagePullPolicy: Always # Optional, but good for ensuring latest patch of the version
+      args:
+        - "--structured-logs"
+        - "--port=5432"
+        - "aremko-e51ae:southamerica-west1:devagent-postgres"
+      securityContext:
+        runAsNonRoot: true
+      resources:
+        requests:
+          memory: "64Mi"
+          cpu: "50m"
+        limits:
+          memory: "128Mi"
+          cpu: "100m"
+
+# devagentUi can be configured similarly if it needs cloud-specific settings
+devagentUi:
+  enabled: true # Assuming we still want to deploy the UI
+  image:
+    repository: gcr.io/aremko-e51ae/devagent-ui # Ensure this image exists
+    tag: latest
+  # ingress:
+  #   hosts:
+  #     - host: devagent.your-gcp-domain.com # Update with your actual domain
+  #       paths:
+  #         - path: /
+  #           pathType: ImplementationSpecific
+  #   tls:
+  #     - secretName: devagent-ui-tls-gcp
+  #       hosts:
+  #         - devagent.your-gcp-domain.com 

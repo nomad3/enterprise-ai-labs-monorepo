@@ -25,19 +25,38 @@ resource "google_container_cluster" "gke" {
   network  = google_compute_network.vpc_network.name
   remove_default_node_pool = true
   initial_node_count = 1
+
+  workload_identity_config {
+    workload_pool = "${var.gcp_project}.svc.id.goog"
+  }
+
+  # Attempt to influence the disk size of the initial (to be removed) node pool
+  node_config {
+    machine_type = "e2-small"
+    disk_size_gb = 30
+  }
 }
 
 resource "google_container_node_pool" "primary_nodes" {
   name       = "primary-node-pool"
   cluster    = google_container_cluster.gke.name
   location   = var.gcp_region
-  node_count = 3
+  node_count = 1
+
+  management {
+    auto_repair  = true
+    auto_upgrade = true
+  }
 
   node_config {
-    machine_type = "e2-medium"
+    machine_type = "e2-small"
+    disk_size_gb = 30
     oauth_scopes = [
       "https://www.googleapis.com/auth/cloud-platform"
     ]
+    workload_metadata_config {
+      mode = "GKE_METADATA"
+    }
   }
 }
 
@@ -46,6 +65,7 @@ resource "google_sql_database_instance" "postgres" {
   name             = "devagent-postgres"
   database_version = "POSTGRES_15"
   region           = var.gcp_region
+  deletion_protection = false
 
   settings {
     tier = "db-f1-micro"
@@ -78,4 +98,32 @@ resource "google_storage_bucket" "app_assets" {
   force_destroy = true
 }
 
-# (Optional) Cloud DNS and SSL can be added here as needed 
+# (Optional) Cloud DNS and SSL can be added here as needed
+
+# Service Account for GKE Deployments
+resource "google_service_account" "gke_deploy_sa" {
+  account_id   = var.service_account_id
+  display_name = var.service_account_display_name
+  project      = var.gcp_project
+}
+
+# IAM binding for GKE cluster access (developer role)
+resource "google_project_iam_member" "gke_deploy_sa_container_developer" {
+  project = var.gcp_project
+  role    = "roles/container.developer"
+  member  = "serviceAccount:${google_service_account.gke_deploy_sa.email}"
+}
+
+# IAM binding for GCR/Artifact Registry access (if pushing images)
+resource "google_project_iam_member" "gke_deploy_sa_storage_admin" {
+  project = var.gcp_project
+  role    = "roles/storage.objectAdmin" # Broad role, consider roles/artifactregistry.writer if only using Artifact Registry
+  member  = "serviceAccount:${google_service_account.gke_deploy_sa.email}"
+}
+
+# IAM binding for Cloud SQL client access
+resource "google_project_iam_member" "gke_deploy_sa_cloudsql_client" {
+  project = var.gcp_project
+  role    = "roles/cloudsql.client"
+  member  = "serviceAccount:${google_service_account.gke_deploy_sa.email}"
+} 
