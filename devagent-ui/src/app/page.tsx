@@ -27,7 +27,7 @@ export default function LandingPage() {
       <nav className="flex items-center justify-between px-8 py-6 bg-white/80 shadow-sm sticky top-0 z-10">
         <div className="flex items-center gap-2 text-2xl font-bold text-blue-700">
           <Rocket className="w-7 h-7 text-blue-500" />
-          DevAgent
+          AgentForge
         </div>
         <div className="flex gap-4">
           <Link href="/app">
@@ -42,79 +42,80 @@ export default function LandingPage() {
       {/* Hero Section */}
       <section className="flex flex-col items-center justify-center flex-1 text-center px-4 py-16">
         <h1 className="text-5xl sm:text-6xl font-extrabold text-blue-800 mb-4 leading-tight">
-          The All-in-One <span className="text-blue-500">AI DevOps Agent</span>
+          Enterprise-Grade <span className="text-blue-500">Multi-Agent Platform</span>
         </h1>
-        <p className="text-xl sm:text-2xl text-blue-900/80 mb-8 max-w-2xl">
-          Automate your software delivery, infrastructure, and operations with a single, intelligent agent. <br />
-          <span className="font-semibold">Code. Deploy. Monitor. Scale.</span>
+        <p className="text-xl sm:text-2xl text-blue-900/80 mb-8 max-w-3xl">
+          Deploy, manage, and orchestrate specialized AI agents across your organization. <br />
+          <span className="font-semibold">Secure. Compliant. Scalable.</span>
         </p>
         <div className="flex gap-4 justify-center mb-12">
           <Link href="/app">
             <button className="px-8 py-3 rounded-lg bg-blue-600 text-white font-bold text-lg shadow-lg hover:bg-blue-700 transition">Get Started</button>
           </Link>
-          <a href="#features" className="px-8 py-3 rounded-lg border border-blue-600 text-blue-700 font-bold text-lg hover:bg-blue-50 transition">See Features</a>
+          <a href="#features" className="px-8 py-3 rounded-lg border border-blue-600 text-blue-700 font-bold text-lg hover:bg-blue-50 transition">Explore Features</a>
         </div>
         <div className="flex flex-wrap gap-4 justify-center mt-8">
-          <span className="inline-flex items-center gap-2 px-4 py-2 bg-blue-100 text-blue-700 rounded-full text-sm font-medium"><Zap className="w-4 h-4" /> AI-Powered</span>
-          <span className="inline-flex items-center gap-2 px-4 py-2 bg-blue-100 text-blue-700 rounded-full text-sm font-medium"><Cloud className="w-4 h-4" /> Cloud Native</span>
-          <span className="inline-flex items-center gap-2 px-4 py-2 bg-blue-100 text-blue-700 rounded-full text-sm font-medium"><ShieldCheck className="w-4 h-4" /> Secure by Design</span>
+          <span className="inline-flex items-center gap-2 px-4 py-2 bg-blue-100 text-blue-700 rounded-full text-sm font-medium"><Zap className="w-4 h-4" /> Multi-Agent</span>
+          <span className="inline-flex items-center gap-2 px-4 py-2 bg-blue-100 text-blue-700 rounded-full text-sm font-medium"><Cloud className="w-4 h-4" /> Enterprise Ready</span>
+          <span className="inline-flex items-center gap-2 px-4 py-2 bg-blue-100 text-blue-700 rounded-full text-sm font-medium"><ShieldCheck className="w-4 h-4" /> SOC 2 & ISO 27001</span>
         </div>
       </section>
 
       {/* Features Grid */}
       <section id="features" className="py-16 bg-white/90">
-        <h2 className="text-3xl font-bold text-center text-blue-800 mb-10">Features</h2>
+        <h2 className="text-3xl font-bold text-center text-blue-800 mb-10">Specialized Agent Types</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto px-4">
-          <FeatureCard icon={<Code2 className="w-8 h-8 text-blue-500" />} title="AI Code Generation" desc="Generate production-ready code, tests, and infrastructure from requirements using Gemini AI." />
-          <FeatureCard icon={<GitBranch className="w-8 h-8 text-blue-500" />} title="Version Control" desc="Integrated Git workflows: branch, commit, merge, and review with a single click." />
-          <FeatureCard icon={<ServerCog className="w-8 h-8 text-blue-500" />} title="CI/CD Automation" desc="Automate build, test, and deployment pipelines with rollback and notifications." />
-          <FeatureCard icon={<Activity className="w-8 h-8 text-blue-500" />} title="Monitoring & Alerts" desc="Real-time metrics, dashboards, and smart alerting with Prometheus & Grafana." />
-          <FeatureCard icon={<ShieldCheck className="w-8 h-8 text-blue-500" />} title="Security & Compliance" desc="Built-in best practices for secrets, access, and audit trails." />
-          <FeatureCard icon={<Users className="w-8 h-8 text-blue-500" />} title="Team Collaboration" desc="Role-based access, ticketing, and shared knowledge base." />
-          <FeatureCard icon={<Cloud className="w-8 h-8 text-blue-500" />} title="Cloud & On-Prem" desc="Deploy anywhere: GCP, AWS, Azure, or your own Kubernetes cluster." />
-          <FeatureCard icon={<Zap className="w-8 h-8 text-blue-500" />} title="Agent as a Service" desc="API-first, scalable, and ready to integrate with your stack." />
+          <FeatureCard icon={<Code2 className="w-8 h-8 text-blue-500" />} title="Full-Stack Development" desc="AI agents for code generation, testing, and deployment automation." />
+          <FeatureCard icon={<GitBranch className="w-8 h-8 text-blue-500" />} title="DevOps & Infrastructure" desc="Intelligent infrastructure management and CI/CD orchestration." />
+          <FeatureCard icon={<ServerCog className="w-8 h-8 text-blue-500" />} title="QA & Testing" desc="Automated testing, quality assurance, and performance monitoring." />
+          <FeatureCard icon={<Activity className="w-8 h-8 text-blue-500" />} title="Data Analysis" desc="Advanced data processing, analytics, and business intelligence." />
+          <FeatureCard icon={<ShieldCheck className="w-8 h-8 text-blue-500" />} title="Security & Compliance" desc="Proactive security monitoring and compliance management." />
+          <FeatureCard icon={<Users className="w-8 h-8 text-blue-500" />} title="Documentation" desc="Automated technical writing and documentation generation." />
+          <FeatureCard icon={<Cloud className="w-8 h-8 text-blue-500" />} title="Multi-Tenant" desc="Complete isolation between organizations and teams." />
+          <FeatureCard icon={<Zap className="w-8 h-8 text-blue-500" />} title="Enterprise Integration" desc="Seamless integration with existing enterprise tools." />
         </div>
       </section>
 
       {/* How it Works */}
       <section className="py-16 bg-gradient-to-r from-blue-50 to-blue-100">
-        <h2 className="text-3xl font-bold text-center text-blue-800 mb-10">How It Works</h2>
+        <h2 className="text-3xl font-bold text-center text-blue-800 mb-10">Enterprise Deployment</h2>
         <div className="flex flex-col md:flex-row gap-8 max-w-5xl mx-auto px-4 items-center justify-center">
-          <StepCard step="1" title="Connect" desc="Link your repo, cloud, and tools." />
-          <StepCard step="2" title="Automate" desc="Describe your goal. Let DevAgent generate code, infra, and pipelines." />
-          <StepCard step="3" title="Deploy & Monitor" desc="Ship to production with confidence. Get real-time feedback and alerts." />
+          <StepCard step="1" title="Configure" desc="Set up your organization's policies, security, and compliance requirements." />
+          <StepCard step="2" title="Deploy Agents" desc="Choose and configure specialized agents for your needs." />
+          <StepCard step="3" title="Monitor & Scale" desc="Track performance, manage resources, and scale as needed." />
         </div>
       </section>
 
       {/* Benefits */}
       <section className="py-16 bg-white/90">
-        <h2 className="text-3xl font-bold text-center text-blue-800 mb-10">Why DevAgent?</h2>
+        <h2 className="text-3xl font-bold text-center text-blue-800 mb-10">Enterprise Benefits</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto px-4">
-          <BenefitCard title="Faster Delivery" desc="Accelerate your SDLC with automation and AI." />
-          <BenefitCard title="Fewer Incidents" desc="Proactive monitoring and smart troubleshooting." />
-          <BenefitCard title="Lower Costs" desc="Optimize resources and reduce manual work." />
+          <BenefitCard title="Enhanced Security" desc="Enterprise-grade security with multi-tenant isolation." />
+          <BenefitCard title="Compliance Ready" desc="Built-in compliance frameworks and audit trails." />
+          <BenefitCard title="Operational Efficiency" desc="Streamlined workflows and automated processes." />
         </div>
       </section>
 
       {/* Call to Action */}
       <section className="py-16 flex flex-col items-center bg-blue-50">
-        <h2 className="text-3xl font-bold text-blue-800 mb-4">Ready to supercharge your DevOps?</h2>
-        <p className="text-lg text-blue-900 mb-8">Start your free trial or request a demo today.</p>
+        <h2 className="text-3xl font-bold text-blue-800 mb-4">Ready to transform your organization?</h2>
+        <p className="text-lg text-blue-900 mb-8">Schedule a demo or start your enterprise trial today.</p>
         <div className="flex gap-4">
           <Link href="/app">
-            <button className="px-8 py-3 rounded-lg bg-blue-600 text-white font-bold text-lg shadow-lg hover:bg-blue-700 transition">Get Started</button>
+            <button className="px-8 py-3 rounded-lg bg-blue-600 text-white font-bold text-lg shadow-lg hover:bg-blue-700 transition">Start Trial</button>
           </Link>
-          <a href="mailto:sales@devagent.ai" className="px-8 py-3 rounded-lg border border-blue-600 text-blue-700 font-bold text-lg hover:bg-blue-50 transition">Request Demo</a>
+          <a href="mailto:enterprise@agentforge.ai" className="px-8 py-3 rounded-lg border border-blue-600 text-blue-700 font-bold text-lg hover:bg-blue-50 transition">Request Demo</a>
         </div>
       </section>
 
       {/* Footer */}
       <footer className="py-8 text-center text-blue-900/70 bg-white border-t mt-8">
-        <div className="mb-2 font-semibold">DevAgent &copy; {new Date().getFullYear()}</div>
+        <div className="mb-2 font-semibold">AgentForge &copy; {new Date().getFullYear()}</div>
         <div className="flex justify-center gap-6 text-sm">
           <a href="https://github.com/thefullstackagent" target="_blank" rel="noopener" className="hover:underline">GitHub</a>
-          <a href="/docs" className="hover:underline">Docs</a>
-          <a href="mailto:hello@devagent.ai" className="hover:underline">Contact</a>
+          <a href="/docs" className="hover:underline">Documentation</a>
+          <a href="/enterprise" className="hover:underline">Enterprise</a>
+          <a href="mailto:enterprise@agentforge.ai" className="hover:underline">Contact</a>
         </div>
       </footer>
     </div>
