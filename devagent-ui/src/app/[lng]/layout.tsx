@@ -1,28 +1,26 @@
-import { i18n } from '../../../next-i18next.config'; // Adjust path as needed
-import LayoutClient from '../layout-client'; // Assuming this is still relevant
-import { AuthProvider } from '../contexts/AuthContext'; // Assuming this is still relevant
+import nextI18NextConfig from '../../../next-i18next.config.js';
+import { I18NProviderClient } from '../i18n-provider-client';
+import { AuthProvider } from '../contexts/AuthContext';
 
 // This function helps Next.js to know which languages are supported
 // and generate static paths for them if you're using SSG.
 export async function generateStaticParams() {
-  return i18n.locales.map((lng) => ({ lng }));
+  return nextI18NextConfig.i18n.locales.map((lng: string) => ({ lng }));
 }
 
 export default function LocaleLayout({
   children,
-  params: { lng },
+  params,
 }: {
   children: React.ReactNode;
   params: { lng: string };
 }) {
+  // The html and body tags, lang, dir attributes are handled by the root layout (app/layout.tsx)
   return (
-    // The html and body tags are usually in the root layout.
-    // This layout component will be nested within the root layout.
-    // We pass lng down or components can use useTranslation to get it.
-    // The critical part is that the URL has /en/ or /es/
-    // and that next.config.js and next-i18next.config.js are set up.
-    <AuthProvider> {/* Assuming AuthProvider is still needed here */}
-      <LayoutClient>{children}</LayoutClient> {/* Assuming LayoutClient is still needed here */}
-    </AuthProvider>
+    <I18NProviderClient locale={params.lng}>
+      <AuthProvider>
+        {children}
+      </AuthProvider>
+    </I18NProviderClient>
   );
 } 
