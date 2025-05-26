@@ -48,7 +48,7 @@ Key Terraform files: `terraform/main.tf`, `terraform/variables.tf`, `terraform/o
 
 1.  **`values-gcp.yaml`:**
     *   Disables PostgreSQL (`postgresql.enabled: false`) and Redis (`redis.enabled: false`) subcharts.
-    *   Sets `DATABASE_URL` for API to use Cloud SQL Proxy (e.g., `postgresql://USER:PASS@/DB_NAME?host=/cloudsql/PROJECT:REGION:INSTANCE_NAME`).
+    *   Sets `DATABASE_URL` for API to use Cloud SQL Proxy. Initially via Unix socket, later updated to TCP (`postgresql+asyncpg://postgres:replace-with-secure-password@127.0.0.1:5432/devagent`) for better compatibility with the proxy's listener within the pod.
     *   Sets `REDIS_URL` to Memorystore private IP and port.
     *   API deployment uses KSA `gke-deploy-sa` for Workload Identity: `devagentApi.serviceAccount.create: false`, `devagentApi.serviceAccount.name: "gke-deploy-sa"`.
 
@@ -59,30 +59,69 @@ Key Terraform files: `terraform/main.tf`, `terraform/variables.tf`, `terraform/o
 3.  **Service Account Name in Pods (`templates/_helpers.tpl`):**
     *   **Critical Fix:** `_helpers.tpl` updated to correctly reference `componentValues.serviceAccount.name` for Pod spec's `serviceAccountName` when `componentValues.serviceAccount.create` is `false`.
 
-## IV. GitHub Actions Workflow (`.github/workflows/gcp-deploy.yml`):
+## IV. GitHub Actions CI/CD Workflow (`.github/workflows/gcp-deploy.yml`)
 
-1.  **Trigger:** Push to `main` branch.
-2.  **Permissions:** `contents: 'read'`, `id-token: 'write'` (for OIDC).
-3.  **Authentication to GCP:** `google-github-actions/auth@v1` with Workload Identity Federation (using CI/CD GSA).
-4.  **GKE Credentials:** `google-github-actions/get-gke-credentials@v1`.
-5.  **Docker Image Build & Push:**
-    *   **Login:** `gcloud auth configure-docker ${{ env.GCR_HOSTNAME }} --quiet`.
-    *   Builds `devagent-api` and `devagent-ui` images.
-    *   **Image Tagging:** Uses commit SHA (`${{ github.sha }}`).
-    *   **Build Context & Dockerfile Paths (Critical Fixes):**
-        *   API: `docker build ... -f ./devagent/Dockerfile ./devagent` (Corrected from `./devagent-api/`).
-        *   UI: `docker build ... -f ./devagent-ui/Dockerfile ./devagent-ui`.
-    *   **Dockerfile Corrections (`devagent/Dockerfile`) (Critical Fix):** `COPY` commands updated to be relative to the correct build context (e.g., `COPY requirements.txt .` instead of `COPY devagent/requirements.txt .`).
-6.  **Helm Deployment:**
-    *   `helm upgrade --install ...` with `-f helm/thefullstackagent/values-gcp.yaml`.
-    *   Dynamically sets image repositories and commit SHA tag using `--set`.
-7.  **Workflow Cleanup:** Old workflow files (`ci-cd.yml`, `ci.yml`) disabled by renaming (e.g., `ci.yml.disabled`).
+This section details the setup and key troubleshooting steps for the CI/CD pipeline using GitHub Actions.
 
-## V. Key Troubleshooting Insights:
+1.  **Workflow Trigger:**
+    *   The workflow is triggered on `push` to the `main` branch.
 
-*   **Iterative IAM:** GCR/Artifact Registry push errors required progressive addition of roles: `storage.admin` -> `artifactregistry.writer` -> `artifactregistry.repoAdmin`.
-*   **OIDC Token Debugging:** Temporarily decoding the GitHub OIDC token in the workflow was crucial for identifying exact claim values (e.g., `repository: "nomad3/thefullstackagent"`) to fix Workload Identity Federation conditions.
-*   **Docker Build Context:** Understanding and correctly setting Docker's build context (`docker build ... <context_path>`) and ensuring `COPY` paths in Dockerfiles are relative to that context is vital.
+2.  **Permissions for OIDC:**
+    *   The workflow requires `id-token: 'write'` and `contents: 'read'` permissions at the job level for Workload Identity Federation with GCP.
+
+3.  **Authentication to GCP:**
+    *   Uses `google-github-actions/auth@v1` action.
+    *   Authenticates using Workload Identity Federation, impersonating the `github-actions-cicd` Google Service Account.
+    *   **Troubleshooting (OIDC Token):** Debugging involved printing OIDC token claims to ensure the `attribute_condition` in the WIF provider (e.g., `attribute.repository/nomad3/thefullstackagent`) matched the actual claims.
+
+4.  **GKE Credentials:**
+    *   Uses `google-github-actions/get-gke-credentials@v1` to configure `kubectl` access to the GKE cluster.
+
+5.  **Docker Image Build & Push to Google Container Registry (GCR):**
+    *   **GCR Login:** `gcloud auth configure-docker ${{ env.GCR_HOSTNAME }} --quiet`.
+    *   **Image Building:** `devagent-api` and `devagent-ui` images are built using `docker build`.
+    *   **Image Tagging:** Images are tagged with the commit SHA (`${{ github.sha }}`) for versioning.
+    *   **Build Context & Dockerfile Paths (Fixes):**
+        *   Corrected API build context to `./devagent` and Dockerfile path to `./devagent/Dockerfile`.
+        *   `COPY` commands within `devagent/Dockerfile` were updated to be relative to the new build context.
+    *   **Dockerfile CMD for API (Fixes):**
+        *   The `CMD` in `devagent/Dockerfile` was iterated upon:
+            *   Initial: `devagent.api.main:app` (caused `ModuleNotFoundError: No module named 'devagent'` when `COPY . /app`)
+            *   Attempt 2: `api.main:app` (fixed initial error but led to internal `ModuleNotFoundError: No module named 'devagent.core'`)
+            *   Final (Correct): `COPY . /app/devagent` and `CMD ["uvicorn", "devagent.api.main:app", ...]`. This structure ensured Python's module resolution worked correctly within the container.
+    *   **GCR Push Permissions (Troubleshooting):**
+        *   Initial `roles/storage.admin` was insufficient.
+        *   Added `roles/artifactregistry.writer` to fix `artifactregistry.repositories.uploadArtifacts` denial.
+        *   Added `roles/artifactregistry.repoAdmin` to fix `gcr.io repo does not exist. Creating on push requires...` error.
+        *   Finally added `roles/artifactregistry.createOnPushWriter` which is more specific for GCR create-on-push scenarios.
+
+6.  **Helm Deployment to GKE:**
+    *   **Dependency Management (Fix):** Added `helm repo add bitnami https://charts.bitnami.com/bitnami` and `helm dependency build ./helm/thefullstackagent` to resolve missing chart dependencies (`postgresql`, `redis`) during `helm upgrade`.
+    *   Uses `helm upgrade --install devagent ./helm/thefullstackagent ...`
+    *   Specifies `devagent` namespace (`--namespace devagent --create-namespace`).
+    *   Uses GCP-specific values: `-f ./helm/thefullstackagent/values-gcp.yaml`.
+    *   **Dynamic Image Configuration (Fixes):**
+        *   Sets image repositories and tags:
+            *   `--set devagentApi.image.repository=${{ env.GCR_HOSTNAME }}/${{ env.GCP_PROJECT_ID }}/${{ env.IMAGE_API }}`
+            *   `--set devagentApi.image.tag=${{ github.sha }}`
+            *   `--set devagent-ui.image.repository=${{ env.GCR_HOSTNAME }}/${{ env.GCP_PROJECT_ID }}/${{ env.IMAGE_UI }}` (Corrected from `devagentUi.image.repository`)
+            *   `--set devagent-ui.image.tag=${{ github.sha }}`
+
+7.  **Workflow File Management:**
+    *   Older/redundant workflow files (e.g., `ci-cd.yml`, `ci.yml`) were disabled by renaming them (e.g., `ci.yml.disabled`) to prevent unintended runs.
+
+## V. Key Overall Troubleshooting Insights & Learnings:
+
+*   **API Enablement:** Crucially, the **Cloud SQL Admin API** needed to be manually enabled in the GCP project. The Cloud SQL Proxy requires this to fetch instance metadata, and its absence led to `Connection refused` errors for the API connecting to the database, despite the proxy container itself appearing to run. Other APIs like Kubernetes Engine API and Artifact Registry API were also enabled as needed.
+*   **Iterative IAM:** Permissions, especially for the CI/CD GSA interacting with GCR/Artifact Registry and the GKE pod GSA interacting with Cloud SQL, often require iterative refinement. Start with least privilege and add roles as specific errors indicate necessity.
+*   **OIDC Token Debugging (WIF):** When Workload Identity Federation fails, printing the OIDC token claims directly in the GitHub Actions workflow is invaluable for identifying discrepancies between expected and actual claims (e.g., `repository` name, `branch` name) used in the WIF provider's attribute conditions.
+*   **Docker Build Context & `COPY` Paths:** Mismatches between the `docker build` context path and the paths used in Dockerfile `COPY` commands are a common source of "file not found" errors during image builds or `ModuleNotFoundError` at runtime.
+*   **Helm Value Paths:** When using `helm --set`, the path to the value must exactly match the structure in `values.yaml` (e.g., `devagentApi.image.tag` vs. a sub-chart's `devagent-ui.image.tag`).
+*   **Terraform State & GCP Drift:** For GKE default node pools or other resources GCP might modify post-creation, ensure Terraform configurations align with GCP's actual state to avoid persistent diffs. Refreshing Terraform state (`terraform refresh`) can sometimes help, but direct configuration adjustment is often needed.
+*   **Cloud SQL Proxy Connectivity:** When the API fails to connect through the proxy:
+    1.  Check API's connection string (Unix socket vs. TCP `127.0.0.1:PORT`).
+    2.  Check Cloud SQL Proxy container logs for its own connection errors to the backend (often permission or API enablement issues).
+    3.  Ensure the GKE pod's service account has `roles/cloudsql.client`.
 
 ---
 *This summary should be updated as the DevOps setup evolves. Remember to replace placeholders like `YOUR_PROJECT_ID` with actual values if used in commands or direct references not handled by Terraform variables.* 
