@@ -21,9 +21,8 @@ ENV PYTHONPATH=/app
 ARG CACHEBUST=1
 
 # Copy the application code specifically
-# Since the build context is 'devagent/', '.' refers to the 'devagent/' directory itself.
-# We want to copy its contents into /app in the image.
-COPY . /app
+# Create a 'devagent' subdirectory in /app and copy the build context there
+COPY . /app/devagent
 
-CMD ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "devagent.api.main:app", "--host", "0.0.0.0", "--port", "8000"]
 # CMD ["tail", "-f", "/dev/null"] 
