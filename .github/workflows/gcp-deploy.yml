@@ -82,6 +82,6 @@ jobs:
             --namespace devagent --create-namespace \
             -f ./helm/thefullstackagent/values-gcp.yaml \
             --set devagentApi.image.repository=${{ env.GCR_HOSTNAME }}/${{ env.GCP_PROJECT_ID }}/${{ env.IMAGE_API }} \
-            --set devagentUi.image.repository=${{ env.GCR_HOSTNAME }}/${{ env.GCP_PROJECT_ID }}/${{ env.IMAGE_UI }} \
+            --set devagent-ui.image.repository=${{ env.GCR_HOSTNAME }}/${{ env.GCP_PROJECT_ID }}/${{ env.IMAGE_UI }} \
             --set devagentApi.image.tag=${{ github.sha }} \
-            --set devagentUi.image.tag=${{ github.sha }} 
+            --set devagent-ui.image.tag=${{ github.sha }} 
