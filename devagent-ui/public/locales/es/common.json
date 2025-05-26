@@ -23,7 +23,7 @@
     },
     "card2": {
       "title": "Multi-Tenencia Segura y RBAC",
-      "description": "Garantice un estricto aislamiento de datos e integridad operativa con nuestro diseño seguro multi-inquilino. Implemente un control granular mediante el Control de Acceso Basado en Roles (RBAC) y cumpla con rigurosos estándares de cumplimiento (SOC 2, ISO 27001)."
+      "description": "Garantice un estricto aislamiento de datos e integridad operativa con nuestro diseño seguro multi-inquilino. Implemente un control granular mediante Role-Based Access Control (RBAC) y cumpla con rigurosos estándares de cumplimiento (SOC 2, ISO 27001)."
     },
     "card3": {
       "title": "Hub de Integración Extensible",
@@ -56,7 +56,7 @@
     },
     "step3": {
       "title": "Monitorización y Optimización Integral",
-      "description": "Aproveche la monitorización en tiempo real (Prometheus/Grafana), el registro (ELK Stack) y los análisis para una supervisión operativa completa. Realice un seguimiento de los KPIs, gestione los costos y optimice continuamente el rendimiento de los agentes y la utilización de recursos."
+      "description": "Aproveche la monitorización en tiempo real (Prometheus/Grafana), el logging (ELK Stack) y los análisis para una supervisión operativa completa. Realice un seguimiento de KPIs, gestione los costos y optimice continuamente el rendimiento de los agentes y la utilización de recursos."
     }
   },
   "benefits": {
@@ -67,7 +67,7 @@
     },
     "card2": {
       "title": "Optimizar Operaciones Centrales de TI e Ingeniería",
-      "description": "Logre ganancias significativas de eficiencia en todo su ciclo de vida de desarrollo de software y operaciones de TI. Automatice procesos complejos, reduzca gastos generales y mejore la asignación de recursos con agentes de IA especializados."
+      "description": "Logre ganancias significativas de eficiencia en todo su SDLC y operaciones de TI. Automatice procesos complejos, reduzca gastos generales y mejore la asignación de recursos con agentes de IA especializados."
     },
     "card3": {
       "title": "Fortalecer la Postura de Seguridad y Garantizar el Cumplimiento",
