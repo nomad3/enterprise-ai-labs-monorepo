@@ -4,6 +4,12 @@ on:
   push:
     branches:
       - main # Or your default branch
+  workflow_dispatch: # Allows manual triggering
+    inputs:
+      logLevel: # Example input, not used yet but shows structure
+        description: 'Log level'
+        required: false
+        default: 'warning'
 
 env:
   GCP_PROJECT_ID: aremko-e51ae
@@ -22,30 +28,51 @@ permissions:
   id-token: 'write'
 
 jobs:
-  deploy:
-    name: Build and Deploy
+  build_images:
+    name: Build and Push Docker Images
     runs-on: ubuntu-latest
-
+    outputs:
+      commit_sha: ${{ steps.set_sha.outputs.sha }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # - name: Get GitHub OIDC Token and Decode Claims
-      #   id: get_oidc_token
-      #   run: |
-      #     token=$(curl -sSL "$ACTIONS_ID_TOKEN_REQUEST_URL&audience=gcp-cicd" -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN")
-      #     echo "OIDC Token: $token"
-      #     echo "::set-output name=oidc_token::$token"
-      #     echo "Decoding OIDC Token Claims:"
-      #     echo $token | cut -d. -f2 | base64 --decode | jq .
+      - name: Set Commit SHA
+        id: set_sha
+        run: echo "::set-output name=sha::${{ github.sha }}"
 
       - name: Authenticate to Google Cloud
-        id: auth # Give the auth step an id to reference its outputs if needed elsewhere
         uses: google-github-actions/auth@v1
         with:
           workload_identity_provider: 'projects/828573473542/locations/global/workloadIdentityPools/github-actions-pool/providers/github-actions-provider'
           service_account: 'github-actions-cicd@aremko-e51ae.iam.gserviceaccount.com'
-          # id_token: ${{ steps.get_oidc_token.outputs.oidc_token }} # Optionally pass the fetched token if needed for direct use
+
+      - name: Login to GCR
+        run: gcloud auth configure-docker ${{ env.GCR_HOSTNAME }} --quiet
+
+      - name: Build and push API image
+        run: |
+          docker build -t ${{ env.GCR_HOSTNAME }}/${{ env.GCP_PROJECT_ID }}/${{ env.IMAGE_API }}:${{ steps.set_sha.outputs.sha }} -f ./devagent/Dockerfile ./devagent
+          docker push ${{ env.GCR_HOSTNAME }}/${{ env.GCP_PROJECT_ID }}/${{ env.IMAGE_API }}:${{ steps.set_sha.outputs.sha }}
+
+      - name: Build and push UI image
+        run: |
+          docker build -t ${{ env.GCR_HOSTNAME }}/${{ env.GCP_PROJECT_ID }}/${{ env.IMAGE_UI }}:${{ steps.set_sha.outputs.sha }} -f ./devagent-ui/Dockerfile ./devagent-ui
+          docker push ${{ env.GCR_HOSTNAME }}/${{ env.GCP_PROJECT_ID }}/${{ env.IMAGE_UI }}:${{ steps.set_sha.outputs.sha }}
+
+  deploy_to_gke:
+    name: Deploy to GKE
+    runs-on: ubuntu-latest
+    needs: build_images # Depends on the build_images job
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v1
+        with:
+          workload_identity_provider: 'projects/828573473542/locations/global/workloadIdentityPools/github-actions-pool/providers/github-actions-provider'
+          service_account: 'github-actions-cicd@aremko-e51ae.iam.gserviceaccount.com'
 
       - name: Set up GKE credentials
         uses: google-github-actions/get-gke-credentials@v1
@@ -54,34 +81,14 @@ jobs:
           location: ${{ env.GCP_REGION }}
           project_id: ${{ env.GCP_PROJECT_ID }}
 
-      - name: Login to GCR
-        run: |-
-          gcloud auth configure-docker ${{ env.GCR_HOSTNAME }} --quiet
-        # Old docker/login-action method, configure-docker is preferred for GCR
-        # uses: docker/login-action@v2
-        # with:
-        #   registry: ${{ env.GCR_HOSTNAME }}
-        #   username: oauth2accesstoken
-        #   password: $(gcloud auth print-access-token)
-
-      - name: Build and push API image
-        run: |-
-          docker build -t ${{ env.GCR_HOSTNAME }}/${{ env.GCP_PROJECT_ID }}/${{ env.IMAGE_API }}:${{ github.sha }} -f ./devagent/Dockerfile ./devagent
-          docker push ${{ env.GCR_HOSTNAME }}/${{ env.GCP_PROJECT_ID }}/${{ env.IMAGE_API }}:${{ github.sha }}
-
-      - name: Build and push UI image
-        run: |-
-          docker build -t ${{ env.GCR_HOSTNAME }}/${{ env.GCP_PROJECT_ID }}/${{ env.IMAGE_UI }}:${{ github.sha }} -f ./devagent-ui/Dockerfile ./devagent-ui
-          docker push ${{ env.GCR_HOSTNAME }}/${{ env.GCP_PROJECT_ID }}/${{ env.IMAGE_UI }}:${{ github.sha }}
-
       - name: Deploy Helm chart
-        run: |-
+        run: |
           helm repo add bitnami https://charts.bitnami.com/bitnami
           helm dependency build ./helm/thefullstackagent
-          helm upgrade --install devagent ./helm/thefullstackagent \
-            --namespace devagent --create-namespace \
+          helm upgrade --install ${{ env.HELM_RELEASE_NAME }} ./helm/thefullstackagent \
+            --namespace ${{ env.HELM_NAMESPACE }} --create-namespace \
             -f ./helm/thefullstackagent/values-gcp.yaml \
             --set devagentApi.image.repository=${{ env.GCR_HOSTNAME }}/${{ env.GCP_PROJECT_ID }}/${{ env.IMAGE_API }} \
             --set devagent-ui.image.repository=${{ env.GCR_HOSTNAME }}/${{ env.GCP_PROJECT_ID }}/${{ env.IMAGE_UI }} \
-            --set devagentApi.image.tag=${{ github.sha }} \
-            --set devagent-ui.image.tag=${{ github.sha }} 
+            --set devagentApi.image.tag=${{ needs.build_images.outputs.commit_sha }} \
+            --set devagent-ui.image.tag=${{ needs.build_images.outputs.commit_sha }} 
