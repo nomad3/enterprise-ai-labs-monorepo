@@ -52,17 +52,25 @@ devagentApi:
     className: "" # Explicitly empty to use GKE default or annotation
     annotations:
       kubernetes.io/ingress.class: "gce" # Explicitly select GKE Ingress controller
-      # If you have a reserved global static IP, specify its name here.
-      # Otherwise, remove this line or GKE will try to find/create an IP with this name.
       kubernetes.io/ingress.global-static-ip-name: "devagent-static-ip"
-      # This annotation tells GKE to provision and manage an SSL certificate.
-      # 'devagent-managed-cert' is just a name for this managed certificate resource.
       networking.gke.io/managed-certificates: "devagent-managed-cert"
     hosts:
       - host: "agents.datamatic.app"
         paths:
           - path: /api
-            pathType: Prefix # Requests to agents.datamatic.app/api/* go to devagentApi
+            pathType: Prefix
+            backend: # Backend for the API
+              service:
+                name: devagent-thefullstackagent-api # Main API service
+                port:
+                  name: http
+          - path: / # New path for the UI
+            pathType: Prefix
+            backend: # Backend for the UI
+              service:
+                name: devagent-devagent-ui-ui # UI service name from subchart
+                port:
+                  name: http
     tls: [] # TLS is handled by the Google-managed certificate
 
 # Values for the devagent-ui subchart (using its direct name from Chart.yaml dependencies)
@@ -73,19 +81,18 @@ devagentApi:
 
   # Configuration for the ingress object within the devagent-ui subchart
   ingress:
-    enabled: true # THIS IS THE KEY for enabling the UI's ingress
-    className: "" # Explicitly empty to use GKE default or annotation
-    annotations:
-      kubernetes.io/ingress.class: "gce" # Explicitly select GKE Ingress controller
-      # If you have a reserved global static IP, specify its name here (should be the same as for the API if sharing the IP).
-      kubernetes.io/ingress.global-static-ip-name: "devagent-static-ip"
-      networking.gke.io/managed-certificates: "devagent-managed-cert"
-    hosts:
-      - host: "agents.datamatic.app"
-        paths:
-          - path: /
-            pathType: Prefix
-    tls: [] # TLS is handled by the Google-managed certificate
+    enabled: false # THIS IS THE KEY - Disabling UI subchart's ingress
+    # className: ""
+    # annotations:
+    #   kubernetes.io/ingress.class: "gce"
+    #   kubernetes.io/ingress.global-static-ip-name: "devagent-static-ip"
+    #   networking.gke.io/managed-certificates: "devagent-managed-cert"
+    # hosts:
+    #   - host: "agents.datamatic.app"
+    #     paths:
+    #       - path: /
+    #         pathType: Prefix
+    # tls: []
   # Other devagent-ui specific overrides if needed, e.g.:
   # image:
   #   repository: gcr.io/aremko-e51ae/devagent-ui

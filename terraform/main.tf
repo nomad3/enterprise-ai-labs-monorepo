@@ -126,4 +126,21 @@ resource "google_project_iam_member" "gke_deploy_sa_cloudsql_client" {
   project = var.gcp_project
   role    = "roles/cloudsql.client"
   member  = "serviceAccount:${google_service_account.gke_deploy_sa.email}"
+}
+
+# Global Static IP Address for Ingress
+resource "google_compute_global_address" "devagent_static_ip" {
+  name         = "devagent-static-ip"
+  project      = var.gcp_project
+  address_type = "EXTERNAL"
+}
+
+# Cloud DNS 'A' Record for agents.datamatic.app
+resource "google_dns_record_set" "agents_datamatic_app" {
+  name         = "agents.datamatic.app."
+  type         = "A"
+  ttl          = 300
+  managed_zone = var.dns_zone_name
+  project      = var.gcp_project # Specify the project for the DNS zone
+  rrdatas      = [google_compute_global_address.devagent_static_ip.address]
 } 

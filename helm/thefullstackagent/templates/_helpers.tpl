@@ -245,9 +245,9 @@ spec:
             pathType: {{ .pathType }}
             backend:
               service:
-                name: {{ include "thefullstackagent.component.fullname" (dict "Release" $.Release "Chart" $.Chart "Values" $.Values "componentName" $.componentName) }}
+                name: {{ .backend.service.name | default (include "thefullstackagent.component.fullname" (dict "Release" $.Release "Chart" $.Chart "Values" $.Values "componentName" $.componentName)) }}
                 port:
-                  name: http
+                  name: {{ .backend.service.port.name | default "http" }}
           {{- end }}
     {{- end }}
 {{- end }}

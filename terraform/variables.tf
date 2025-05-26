@@ -141,4 +141,10 @@ variable "service_account_display_name" {
   description = "The display name for the GKE deployment service account."
   type        = string
   default     = "GKE Deployment Service Account"
+}
+
+variable "dns_zone_name" {
+  description = "The name of the Cloud DNS managed zone."
+  type        = string
+  default     = "datamatic" # Your managed zone name
 } 
