@@ -52,7 +52,7 @@ resource "google_iam_workload_identity_pool_provider" "github_actions_provider" 
     "attribute.actor"      = "assertion.actor",
     "attribute.repository" = "assertion.repository"
   }
-  attribute_condition = "attribute.repository.startsWith('nomade/')"
+  attribute_condition = "attribute.repository.startsWith('nomad3/')"
   oidc {
     issuer_uri = "https://token.actions.githubusercontent.com"
   }
@@ -63,7 +63,7 @@ resource "google_service_account_iam_member" "cicd_sa_wif_user" {
   service_account_id = google_service_account.cicd_sa.name # SA to be impersonated
   role                 = "roles/iam.workloadIdentityUser"
   # Change `nomade/thefullstackagent` to your GitHub org/repo
-  member               = "principalSet://iam.googleapis.com/${google_iam_workload_identity_pool.github_actions_pool.name}/attribute.repository/nomade/thefullstackagent"
+  member               = "principalSet://iam.googleapis.com/${google_iam_workload_identity_pool.github_actions_pool.name}/attribute.repository/nomad3/thefullstackagent"
   depends_on = [
     google_iam_workload_identity_pool_provider.github_actions_provider
   ]

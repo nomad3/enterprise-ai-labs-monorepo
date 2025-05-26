@@ -30,14 +30,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Get GitHub OIDC Token and Decode Claims
-        id: get_oidc_token
-        run: |
-          token=$(curl -sSL "$ACTIONS_ID_TOKEN_REQUEST_URL&audience=gcp-cicd" -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN")
-          echo "OIDC Token: $token"
-          echo "::set-output name=oidc_token::$token"
-          echo "Decoding OIDC Token Claims:"
-          echo $token | cut -d. -f2 | base64 --decode | jq .
+      # - name: Get GitHub OIDC Token and Decode Claims
+      #   id: get_oidc_token
+      #   run: |
+      #     token=$(curl -sSL "$ACTIONS_ID_TOKEN_REQUEST_URL&audience=gcp-cicd" -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN")
+      #     echo "OIDC Token: $token"
+      #     echo "::set-output name=oidc_token::$token"
+      #     echo "Decoding OIDC Token Claims:"
+      #     echo $token | cut -d. -f2 | base64 --decode | jq .
 
       - name: Authenticate to Google Cloud
         id: auth # Give the auth step an id to reference its outputs if needed elsewhere
