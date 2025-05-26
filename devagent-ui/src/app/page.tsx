@@ -10,8 +10,8 @@ import Plans from './components/Plans';
 import TestGeneration from './components/TestGeneration';
 import VersionControl from './components/VersionControl';
 import CICD from './components/CICD';
-import Login from './components/Login';
-import Register from './components/Register';
+import Login from './components/auth/Login';
+import Register from './components/auth/Register';
 import DevOps from './components/DevOps';
 import { Toaster } from '@/components/ui/toaster';
 import { Rocket, ShieldCheck, Code2, GitBranch, ServerCog, Activity, Users, Cloud, Zap, Briefcase, CloudCog, Network } from 'lucide-react'; // Added Briefcase, CloudCog, Network

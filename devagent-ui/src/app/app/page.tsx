@@ -9,10 +9,10 @@ import Plans from '../components/Plans';
 import TestGeneration from '../components/TestGeneration';
 import VersionControl from '../components/VersionControl';
 import CICD from '../components/CICD';
-import Login from '../components/Login';
-import Register from '../components/Register';
+import Login from '../components/auth/Login';
+import Register from '../components/auth/Register';
 import DevOps from '../components/DevOps';
-import { Toaster } from '@/components/ui/toaster';
+import { Toaster } from '../components/ui/toaster';
 import { Button } from '@/components/ui/button';
 import { LayoutDashboard, Ticket, Bot, Lightbulb, GitMerge, CloudCog, LogOut, Settings } from 'lucide-react';
 

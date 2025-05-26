@@ -1,7 +1,7 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
-import Sidebar from './components/Sidebar';
+import Sidebar from './components/ui/Sidebar';
 
 export default function LayoutClient({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
