@@ -3,12 +3,53 @@ Tenant model for multi-tenant support.
 """
 
 from datetime import datetime
-from typing import Optional
+from typing import Optional, List
+from pydantic import BaseModel, Field
+from uuid import UUID, uuid4
 
 from sqlalchemy import Column, DateTime, Integer, String, Boolean, JSON
 from sqlalchemy.orm import relationship
 
 from devagent.core.base import Base
+
+
+class ResourceQuota(BaseModel):
+    cpu_cores: int = Field(default=2, description="Number of CPU cores allocated")
+    memory_gb: int = Field(default=4, description="Memory allocation in GB")
+    storage_gb: int = Field(default=50, description="Storage allocation in GB")
+    max_users: int = Field(default=100, description="Maximum number of users allowed")
+
+
+class Tenant(BaseModel):
+    id: UUID = Field(default_factory=uuid4)
+    name: str = Field(..., description="Name of the tenant")
+    status: str = Field(default="active", description="Tenant status (active, suspended, etc.)")
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+    updated_at: datetime = Field(default_factory=datetime.utcnow)
+    resource_quota: ResourceQuota = Field(default_factory=ResourceQuota)
+    admin_users: List[UUID] = Field(default_factory=list, description="List of admin user IDs")
+    api_keys: List[dict] = Field(default_factory=list, description="List of API keys")
+    compliance_status: dict = Field(
+        default_factory=lambda: {
+            "soc2": "pending",
+            "iso27001": "pending",
+            "gdpr": "pending"
+        }
+    )
+
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "name": "Acme Corp",
+                "status": "active",
+                "resource_quota": {
+                    "cpu_cores": 4,
+                    "memory_gb": 8,
+                    "storage_gb": 100,
+                    "max_users": 250
+                }
+            }
+        }
 
 
 class Tenant(Base):
