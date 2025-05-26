@@ -15,7 +15,7 @@ devagentApi:
     # pullPolicy: Always # Recommended for GCR to ensure fresh images
 
   env:
-    DATABASE_URL: "postgresql://postgres:replace-with-secure-password@/devagent?host=/cloudsql/aremko-e51ae:southamerica-west1:devagent-postgres"
+    DATABASE_URL: "postgresql+asyncpg://postgres:replace-with-secure-password@127.0.0.1:5432/devagent"
     REDIS_URL: "redis://10.93.221.219:6379"
     # JWT_SECRET should be a strong, unique secret managed via K8s secrets, not hardcoded here for prod.
     # For now, we'll let it take the default from the main values.yaml or you can override it.
