@@ -43,8 +43,8 @@ class Settings(BaseSettings):
     TENANT_ISOLATION_LEVEL: str = "strict"  # strict, relaxed, none
 
     # CORS settings
-    BACKEND_CORS_ORIGINS: List[str] = ["http://localhost:3000", "http://localhost:3002"]
-    ALLOWED_ORIGINS: List[str] = ["http://localhost:3000", "http://localhost:3002"]
+    BACKEND_CORS_ORIGINS: List[str] = [] # Default to empty list
+    ALLOWED_ORIGINS: List[str] = [] # Default to empty list
 
     # Monitoring settings
     PROMETHEUS_URL: str = "http://localhost:9090"
