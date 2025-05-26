@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { coreService } from '../services/coreService';
+import { coreService } from '../../services/coreService';
 import './FileBrowser.css';
 
 interface FileNode {
