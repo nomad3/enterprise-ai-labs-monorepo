@@ -1,3 +1,6 @@
+// Trigger CI build
+import React from 'react';
+
 'use client';
 
 import { useState } from 'react';
@@ -15,6 +18,9 @@ import DevOps from './components/DevOps';
 import { Toaster } from '@/components/ui/toaster';
 import { Rocket, ShieldCheck, Code2, GitBranch, ServerCog, Activity, Users, Cloud, Zap } from 'lucide-react';
 import Link from 'next/link';
+import AgentCard from './components/AgentCard';
+import Image from 'next/image';
+import { Button } from '@/components/ui/button';
 
 export default function LandingPage() {
   return (
