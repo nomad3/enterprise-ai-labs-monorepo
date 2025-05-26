@@ -5,7 +5,8 @@ Configuration settings for the AgentForge application.
 from functools import lru_cache
 from typing import List, Optional, Dict, Any
 
-from pydantic import BaseSettings, root_validator
+from pydantic_settings import BaseSettings
+from pydantic import root_validator
 
 
 class Settings(BaseSettings):
