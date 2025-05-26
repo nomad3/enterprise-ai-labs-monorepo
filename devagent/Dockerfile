@@ -25,5 +25,5 @@ ARG CACHEBUST=1
 # We want to copy its contents into /app in the image.
 COPY . /app
 
-CMD ["uvicorn", "devagent.api.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "8000"]
 # CMD ["tail", "-f", "/dev/null"] 
