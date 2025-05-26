@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { coreService } from '../services/coreService';
-import type { Ticket, TicketStatus, TicketType, TicketPriority } from '../services/coreService';
+import { coreService } from '../../services/coreService';
+import type { Ticket, TicketStatus, TicketType, TicketPriority } from '../../services/coreService';
 import './TicketList.css';
 
 interface TicketListProps {
