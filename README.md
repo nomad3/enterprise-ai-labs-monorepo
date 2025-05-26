@@ -48,12 +48,13 @@ A comprehensive development platform that combines AI-powered code generation, t
 - Automated rollback capabilities
 
 ### DevOps & Cloud Architecture
-- Infrastructure as Code (Terraform)
-- Kubernetes orchestration
-- Helm charts for deployment
+- Infrastructure as Code (Terraform) for GCP
+- Kubernetes orchestration on Google Kubernetes Engine (GKE)
+- Helm charts for application deployment to GKE
+- Automated CI/CD pipeline using GitHub Actions for GKE deployments
 - Cloud-native architecture design
-- Multi-cloud support
-- Automated scaling and load balancing
+- Multi-cloud support (initially focused on GCP)
+- Automated scaling and load balancing (via Kubernetes HPA, GKE features)
 
 ### Monitoring & Observability
 - Real-time metrics collection with Prometheus
@@ -88,10 +89,16 @@ A comprehensive development platform that combines AI-powered code generation, t
 - Redis
 
 ### DevOps & Cloud
-- Docker & Docker Compose
+- Docker & Docker Compose (for local development)
+- Google Cloud Platform (GCP)
+  - Google Kubernetes Engine (GKE)
+  - Google Container Registry (GCR)
+  - Cloud SQL (PostgreSQL)
+  - Memorystore (Redis)
+- Terraform (for GCP infrastructure)
 - Kubernetes
-- Terraform
 - Helm
+- GitHub Actions (for CI/CD)
 - Prometheus
 - Grafana
 - Node Exporter
@@ -100,58 +107,106 @@ A comprehensive development platform that combines AI-powered code generation, t
 
 ## Getting Started
 
+### Local Development (Docker Compose)
+
 1. Clone the repository:
-```bash
-git clone https://github.com/yourusername/devagent.git
-cd devagent
-```
+   ```bash
+   git clone https://github.com/nomad3/thefullstackagent.git
+   cd thefullstackagent
+   ```
 
 2. Start the development environment:
-```bash
-docker-compose up -d
-```
+   ```bash
+   docker-compose up -d
+   ```
 
 3. Access the services:
-- Frontend: http://localhost:3000
-- Backend API: http://localhost:8000
-- API Documentation: http://localhost:8000/docs
-- Grafana: http://localhost:3001 (admin/admin)
-- Prometheus: http://localhost:9090
-- PgAdmin: http://localhost:5050 (admin@devagent.com/admin)
+   - Frontend: http://localhost:3000
+   - Backend API: http://localhost:8000
+   - API Documentation: http://localhost:8000/docs
+   - Grafana: http://localhost:3001 (admin/admin)
+   - Prometheus: http://localhost:9090
+   - PgAdmin: http://localhost:5050 (admin@devagent.com/admin)
+
+### GCP / Google Kubernetes Engine (GKE) Deployment
+
+This project is configured for automated deployment to Google Kubernetes Engine (GKE) using Terraform for infrastructure provisioning and GitHub Actions for CI/CD (building Docker images, pushing to GCR, and deploying Helm charts).
+
+Key components of the GCP deployment:
+- **Terraform:** Manages all GCP resources including GKE, Cloud SQL, Memorystore, GCS, and IAM (see `terraform/` directory).
+- **GitHub Actions:** Orchestrates the CI/CD pipeline (see `.github/workflows/gcp-deploy.yml`).
+- **Helm:** Packages and deploys the application to GKE (see `helm/thefullstackagent/` and `helm/thefullstackagent/values-gcp.yaml`).
+- **Workload Identity:** Used for secure authentication between GitHub Actions & GCP, and between GKE pods & GCP services.
+
+For a detailed summary of the DevOps setup, configurations, and key learnings, please refer to the [DevOps Summary Document](devagent/core/knowledge/devops_summary.md).
 
 ## Project Structure
 
 ```
-devagent/
-├── devagent-ui/           # Frontend application
-│   ├── src/
-│   │   ├── app/          # Next.js app directory
-│   │   │   ├── components/  # React components
-│   │   │   ├── contexts/    # React contexts
-│   │   │   ├── services/    # API services
-│   │   │   └── styles/      # Global styles
-│   │   └── public/       # Static assets
-│   └── package.json
-│
-├── devagent/             # Backend application
-│   ├── api/             # API endpoints
-│   ├── core/            # Core functionality
-│   │   ├── code_gen/    # Code generation
-│   │   ├── planning/    # Solution planning
-│   │   └── ticket_engine/ # Ticket processing
-│   └── tests/           # Test suite
-│
-├── monitoring/          # Monitoring configuration
-│   ├── prometheus/     # Prometheus configs
-│   │   ├── rules/      # Alert rules
-│   │   └── prometheus.yml
-│   └── grafana/        # Grafana configs
-│       └── provisioning/
-│           └── dashboards/
-│
-└── terraform/          # Infrastructure as Code
-    ├── modules/        # Reusable modules
-    └── environments/   # Environment configs
+thefullstackagent/
+├── .github/
+│   └── workflows/
+│       ├── gcp-deploy.yml         # GitHub Actions CI/CD workflow for GCP
+│       └── *.disabled             # Disabled/old workflow files
+├── devagent/                      # Backend Python/FastAPI application
+│   ├── Dockerfile                 # Dockerfile for the backend API
+│   ├── requirements.txt           # Python dependencies
+│   ├── api/                       # API endpoint definitions (routers)
+│   ├── core/                      # Core backend logic
+│   │   ├── knowledge/             # Agent's knowledge base (DevOps, Terraform, etc.)
+│   │   │   └── devops_summary.md  # Detailed DevOps setup documentation
+│   │   ├── services/              # Business logic services
+│   │   ├── code_gen/              # Code generation modules
+│   │   ├── ticket_engine/         # Ticket processing logic
+│   │   ├── planning/              # Task planning modules
+│   │   ├── version_control/       # Git integration
+│   │   ├── models/                # Pydantic models / SQLAlchemy models
+│   │   ├── config.py              # Application configuration
+│   │   ├── database.py            # Database setup and session management
+│   │   └── ...                    # Other core components
+│   ├── tests/                     # Backend tests
+│   └── utils/                     # Utility functions
+├── devagent-ui/                   # Frontend Next.js application
+│   ├── Dockerfile                 # Dockerfile for the frontend UI
+│   ├── package.json               # Node.js dependencies
+│   ├── src/                       # Frontend source code
+│   │   ├── app/                   # Next.js app directory (pages, components)
+│   │   ├── components/            # Reusable React components
+│   │   ├── contexts/              # React contexts
+│   │   ├── services/              # API client services
+│   │   └── styles/                # CSS styles
+│   ├── public/                    # Static assets
+│   └── next.config.js             # Next.js configuration
+├── helm/                          # Helm charts
+│   └── thefullstackagent/         # Main application Helm chart
+│       ├── Chart.yaml             # Helm chart definition
+│       ├── values.yaml            # Default Helm values
+│       ├── values-gcp.yaml        # GCP-specific Helm values
+│       ├── values-local.yaml      # Local development Helm values
+│       ├── templates/             # Kubernetes manifest templates
+│       │   ├── deployment.yaml
+│       │   ├── service.yaml
+│       │   ├── ingress.yaml
+│       │   ├── secret.yaml
+│       │   ├── configmap.yaml
+│       │   ├── serviceaccount.yaml
+│       │   └── _helpers.tpl       # Helm helper templates
+│       └── charts/                # Subcharts (e.g., postgresql, redis if not disabled)
+├── terraform/                     # Infrastructure as Code (IaC) for GCP
+│   ├── main.tf                    # Main Terraform configuration (GKE, SQL, Redis, etc.)
+│   ├── variables.tf               # Input variables
+│   ├── outputs.tf                 # Output values (e.g., cluster name, DB connection)
+│   ├── cicd.tf                    # Terraform for CI/CD service account & WIF
+│   └── terraform.tfstate          # Terraform state file (managed remotely in GCS ideally)
+├── monitoring/                    # Local monitoring setup (Prometheus, Grafana)
+│   ├── prometheus/
+│   └── grafana/
+├── scripts/                       # Utility scripts
+├── Dockerfile                     # Root Dockerfile (if any, seems services have their own)
+├── docker-compose.yml             # Docker Compose for local development environment
+├── Makefile                       # Makefile for common tasks (lint, test, tf-* etc.)
+├── README.md                      # This file
+└── ...                            # Other configuration files (.gitignore, etc.)
 ```
 
 ## Contributing
@@ -175,12 +230,13 @@ DevAgent is an autonomous AI assistant designed to help developers by automating
 - [x] Health Checks (API health endpoint)
 - [x] Dockerized Development Environment
 - [x] Database & Caching (PostgreSQL, Redis, PgAdmin)
+- [x] CI/CD Pipeline Setup (GitHub Actions for GKE, including Docker build/push & Helm deploy)
+- [x] Deployment Assistance (Terraform for infra, Helm for app, automated via CI/CD)
 - [ ] Solution Design & Planning
 - [ ] Code & Test Generation (API endpoint for code generation via Gemini 2.5)
-- [ ] Version Control Integration
+- [ ] Version Control Integration (beyond basic commits, e.g., automated PRs)
 - [ ] Pull Request Management
-- [ ] Deployment Assistance
-- [ ] Post-Deployment Monitoring
+- [ ] Post-Deployment Monitoring (advanced, beyond basic Prometheus setup)
 
 ## Architecture
 DevAgent follows a modular architecture with the following key components:
@@ -214,25 +270,19 @@ DevAgent follows a modular architecture with the following key components:
    - Handles Slack/Teams integration
    - Manages Jira updates
 
-## Technology Stack
-- **Backend**: Python with FastAPI
-- **LLM Integration**: Gemini 2.5 API
-- **Testing**: pytest
-- **Version Control**: Git
-- **CI/CD**: GitHub Actions
-- **Documentation**: Sphinx
-
 ## Project Status
 🚧 **Under Development** 🚧
 
-Current Phase: Core API, Monitoring, and Infrastructure Setup Complete
+Current Phase: Core API, Monitoring, Infrastructure, and CI/CD for GKE Deployment Setup Complete.
 
 ## What's Next
 - **Code Generation & Refinement Core**: Integrate Gemini 2.5 API for code generation and refinement.
-- **Test Generation & Execution Framework**: Implement TDD practices, generate and run tests automatically.
+- **Test Generation & Execution Framework**: Implement TDD practices, generate and run tests automatically. Integrate these into the CI/CD pipeline.
 - **Troubleshooting Capabilities**: Add automated troubleshooting and debugging tools.
 - **Solution Planning Module**: Finalize and expand the planning/strategy engine.
-- **Version Control & CI/CD**: Integrate Git operations and CI/CD pipeline.
+- **Advanced Version Control & PR Management**: Automate more Git operations and PR workflows.
+- **Communication module**
+- **Comprehensive Documentation** (beyond current DevOps summary)
 
 ## Development Progress
 - [x] Project initialization
@@ -240,13 +290,14 @@ Current Phase: Core API, Monitoring, and Infrastructure Setup Complete
 - [x] Basic task ingestion (Ticket endpoints)
 - [x] Monitoring & Observability (Prometheus, Grafana, OpenTelemetry)
 - [x] Database & Caching (PostgreSQL, Redis, PgAdmin)
+- [x] Infrastructure as Code for GCP (Terraform for GKE, SQL, Redis, etc.)
+- [x] CI/CD pipeline setup for GKE (GitHub Actions: Docker build/push, Helm deploy, Workload Identity)
 - [ ] Solution planning module
 - [ ] Code generation integration
-- [ ] Test framework implementation
-- [ ] Version control integration
-- [ ] CI/CD pipeline setup
+- [ ] Test framework implementation & CI integration
+- [ ] Advanced version control integration
 - [ ] Communication module
-- [ ] Documentation
+- [ ] Comprehensive end-user and developer documentation (beyond current DevOps summary)
 
 ## API Endpoints
 
