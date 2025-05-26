@@ -59,11 +59,11 @@ ingress:
 
 resources:
   limits:
-    cpu: 500m
-    memory: 1Gi
+    cpu: "1"    # 1 full vCPU
+    memory: 2Gi # Increased memory limit
   requests:
-    cpu: 250m
-    memory: 512Mi
+    cpu: 500m   # Increased CPU request
+    memory: 1Gi   # Increased memory request
 
 autoscaling:
   enabled: false
