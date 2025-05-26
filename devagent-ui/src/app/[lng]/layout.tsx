@@ -1,7 +1,7 @@
 import nextI18NextConfig from '../../../next-i18next.config.js';
 import { I18NProviderClient } from '../i18n-provider-client';
 import { AuthProvider } from '../contexts/AuthContext';
-import initTranslations from '../i18n'; // Ensure this path is correct
+import initTranslations from '../i18n';
 
 const i18nNamespaces = ['common']; // Define namespaces here or pass as needed
 
