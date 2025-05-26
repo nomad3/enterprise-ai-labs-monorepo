@@ -52,10 +52,10 @@ export default function LandingPage() {
         </div>
         <div className="relative z-10">
           <h1 className="text-5xl sm:text-7xl font-extrabold text-white mb-6 leading-tight">
-            Unlock Strategic Agility & Drive Growth with <span className="text-blue-400">Intelligent Automation</span>
+            Future-Proof Your Enterprise: <span className="text-blue-400">AI-Powered Operations for Market Leadership</span>
           </h1>
           <p className="text-xl sm:text-2xl text-blue-100/90 mb-10 max-w-4xl mx-auto">
-            AgentForge empowers your enterprise to streamline complex workflows, accelerate innovation, and optimize resource allocation across your multi-cloud landscape – all with robust security and governance.
+            AgentForge delivers a unified AI orchestration platform to master multi-cloud complexity, accelerate go-to-market, and drive significant ROI—securely and at scale.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
             <Link href="#contact">
@@ -66,11 +66,10 @@ export default function LandingPage() {
             </Link>
           </div>
           <div className="flex flex-wrap gap-x-6 gap-y-3 justify-center items-center mt-10">
-            <span className="inline-flex items-center gap-2 px-4 py-2 bg-blue-800/70 text-blue-200 rounded-full text-md font-medium"><CloudCog className="w-5 h-5 text-blue-400" /> Multi-Cloud Flexibility</span>
-            <span className="inline-flex items-center gap-2 px-4 py-2 bg-blue-800/70 text-blue-200 rounded-full text-md font-medium"><Network className="w-5 h-5 text-blue-400" /> Secure Multi-Tenancy</span>
-            <span className="inline-flex items-center gap-2 px-4 py-2 bg-blue-800/70 text-blue-200 rounded-full text-md font-medium"><Zap className="w-5 h-5 text-blue-400" /> Diverse Agent Ecosystem</span>
-            <span className="inline-flex items-center gap-2 px-4 py-2 bg-blue-800/70 text-blue-200 rounded-full text-md font-medium"><Briefcase className="w-5 h-5 text-blue-400" /> Enterprise-Grade Solutions</span>
-            <span className="inline-flex items-center gap-2 px-4 py-2 bg-blue-800/70 text-blue-200 rounded-full text-md font-medium"><ShieldCheck className="w-5 h-5 text-blue-400" /> Robust Security & Compliance</span>
+            <span className="inline-flex items-center gap-2 px-4 py-2 bg-blue-800/70 text-blue-200 rounded-full text-md font-medium"><CloudCog className="w-5 h-5 text-blue-400" /> Strategic Cloud Dominance</span>
+            <span className="inline-flex items-center gap-2 px-4 py-2 bg-blue-800/70 text-blue-200 rounded-full text-md font-medium"><ShieldCheck className="w-5 h-5 text-blue-400" /> Ironclad Governance & Security</span>
+            <span className="inline-flex items-center gap-2 px-4 py-2 bg-blue-800/70 text-blue-200 rounded-full text-md font-medium"><Zap className="w-5 h-5 text-blue-400" /> Accelerated Innovation Cycles</span>
+            <span className="inline-flex items-center gap-2 px-4 py-2 bg-blue-800/70 text-blue-200 rounded-full text-md font-medium"><Briefcase className="w-5 h-5 text-blue-400" /> Measurable Business Impact</span>
           </div>
         </div>
       </section>
@@ -81,38 +80,38 @@ export default function LandingPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 max-w-7xl mx-auto px-6">
           <FeatureCard 
             icon={<CloudCog className="w-10 h-10 text-blue-400" />} 
-            title="Seamless Multi-Cloud Operations" 
-            desc="Deploy and manage agents across AWS, Azure, GCP, and private clouds with a unified control plane, enabling strategic workload placement, cost optimization, and freedom from vendor lock-in."
+            title="Optimize Multi-Cloud Investments" 
+            desc="Gain unified control over your entire cloud estate (AWS, Azure, GCP, private). Drive substantial cost savings, enhance workload performance, and eliminate vendor lock-in to maximize strategic flexibility."
             image="https://storage.googleapis.com/devagent-assets/landing-page/feature_multi_cloud.jpg"
           />
           <FeatureCard 
             icon={<Network className="w-10 h-10 text-blue-400" />} 
-            title="Secure Multi-Tenant Architecture" 
-            desc="Isolate data and operations for different departments or clients within a single platform, ensuring stringent data privacy, regulatory compliance, and granular access control for distinct business units or clients."
+            title="Enterprise-Wide Scalability & Governance" 
+            desc="Securely scale AI initiatives across all business units and client engagements. Ensure strict data isolation, maintain regulatory compliance (e.g., GDPR, SOC2), and enforce granular control with a robust, auditable framework."
             image="https://storage.googleapis.com/devagent-assets/landing-page/feature_multi_tenant_devops_howitworks_step1.jpg"
           />
           <FeatureCard 
             icon={<Zap className="w-10 h-10 text-blue-400" />} 
-            title="Powerful Multi-Agent Collaboration" 
-            desc="Orchestrate diverse AI agents specializing in development, DevOps, QA, data analysis, and more. Foster cross-functional synergy to tackle complex business challenges and unlock new opportunities faster."
+            title="Unlock Cross-Functional Synergies" 
+            desc="Empower specialized AI agents to collaborate seamlessly across departmental silos—from R&D and operations to GRC and customer success. Transform complex challenges into strategic growth opportunities."
             image="https://storage.googleapis.com/devagent-assets/landing-page/hero_multi_agent_step2.jpg"
           />
           <FeatureCard 
             icon={<Code2 className="w-10 h-10 text-blue-400" />} 
-            title="Accelerated Software Delivery" 
-            desc="Automate coding, testing, and deployment pipelines. Reduce development cycles and improve code quality with AI-powered assistance. Deliver higher quality software to market faster, gaining a competitive edge."
+            title="Drastically Reduce Time-to-Market" 
+            desc="Automate and intelligently optimize your entire software development lifecycle. Deliver innovative products and services faster, respond rapidly to market changes, and secure a decisive competitive advantage."
             image="https://storage.googleapis.com/devagent-assets/landing-page/feature_software_delivery.jpg"
           />
           <FeatureCard 
             icon={<GitBranch className="w-10 h-10 text-blue-400" />} 
-            title="Intelligent DevOps & IaC" 
-            desc="Streamline infrastructure management, CI/CD, and GitOps workflows. Proactively manage your cloud resources with AI-driven insights. Enhance operational stability, reduce deployment risks, and optimize cloud spend."
+            title="Enhance Operational Resilience & Efficiency" 
+            desc="Automate infrastructure provisioning, optimize CI/CD pipelines, and proactively manage cloud resources with AI-driven insights. Significantly improve uptime, reduce operational risk, and optimize total cost of ownership (TCO)."
             image="https://storage.googleapis.com/devagent-assets/landing-page/feature_multi_tenant_devops_howitworks_step1.jpg"
           />
           <FeatureCard 
             icon={<Briefcase className="w-10 h-10 text-blue-400" />} 
-            title="Custom Enterprise Solutions" 
-            desc="Tailor agent capabilities and workflows to your specific business needs. Integrate seamlessly with your existing enterprise ecosystem. Maximize the value of your current investments and address unique operational requirements effectively."
+            title="Tailored AI for Your Unique Strategy" 
+            desc="Adapt AgentForge to your precise business objectives and integrate flawlessly with existing enterprise systems. Leverage bespoke AI solutions to maximize ROI from current investments and conquer unique market challenges."
             image="https://storage.googleapis.com/devagent-assets/landing-page/feature_custom_solutions_step3.jpg"
           />
         </div>
@@ -133,20 +132,20 @@ export default function LandingPage() {
           <div className="flex flex-col md:flex-row gap-10 max-w-6xl mx-auto px-6 items-stretch justify-center">
             <StepCard 
               step="1" 
-              title="Strategic Cloud Setup" 
-              desc="Collaboratively define your multi-cloud strategy. AgentForge seamlessly integrates with your existing infrastructure, offering expert guidance to ensure optimal performance, cost-efficiency, and data sovereignty."
+              title="Phase 1: Strategic Architectural Alignment" 
+              desc="We partner with your leadership to align AgentForge with your overarching multi-cloud vision. Our experts ensure seamless integration, maximizing existing infrastructure investments while optimizing for peak performance, cost governance, and data sovereignty."
               image="https://storage.googleapis.com/devagent-assets/landing-page/feature_multi_tenant_devops_howitworks_step1.jpg"
             />
             <StepCard 
               step="2" 
-              title="Tenant & Agent Configuration" 
-              desc="Efficiently onboard distinct business units or clients as tenants and deploy specialized AI agents. Intuitively customize roles, permissions, and intelligent workflows that mirror your organizational structure and scale with your needs."
+              title="Phase 2: Tailored Implementation & Empowerment" 
+              desc="AgentForge is configured to mirror your precise organizational structure. We empower your teams by deploying bespoke AI agents and intelligent workflows, fully customized for your specific business units, client engagements, and strategic objectives, ensuring rapid adoption and value realization."
               image="https://storage.googleapis.com/devagent-assets/landing-page/hero_multi_agent_step2.jpg"
             />
             <StepCard 
               step="3" 
-              title="Govern, Monitor & Optimize" 
-              desc="Utilize comprehensive dashboards for continuous, real-time insights into agent performance, resource utilization, and adherence to compliance mandates. Proactively optimize operations and scale your AI initiatives with confidence."
+              title="Phase 3: Continuous Strategic Oversight & Evolution" 
+              desc="Maintain complete executive oversight with real-time dashboards tracking AI performance, resource allocation, and enterprise-wide compliance. AgentForge provides the critical insights needed to continuously optimize operations, mitigate risk, and strategically scale your AI capabilities for sustained competitive advantage."
               image="https://storage.googleapis.com/devagent-assets/landing-page/feature_custom_solutions_step3.jpg"
             />
           </div>
@@ -157,29 +156,46 @@ export default function LandingPage() {
       <section className="py-20 bg-background">
         <h2 className="text-4xl font-bold text-center text-blue-200 mb-16">The AgentForge Advantage for Your Enterprise</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10 max-w-7xl mx-auto px-6">
-          <BenefitCard title="Maximize ROI" desc="Automate complex tasks, reduce operational overhead, and accelerate innovation cycles, delivering tangible returns on your AI investment." />
-          <BenefitCard title="Future-Proof Scalability" desc="Built for growth, AgentForge scales seamlessly across multiple clouds and tenants, adapting to your evolving business demands." />
-          <BenefitCard title="Uncompromised Security" desc="Benefit from enterprise-grade security, robust multi-tenancy, and adherence to stringent compliance standards (SOC2, ISO, GDPR)." />
-          <BenefitCard title="Unified Control Plane" desc="Manage all your agents, tenants, and cloud resources from a single, intuitive interface. Simplify complexity and enhance visibility." />
-          <BenefitCard title="Drive Innovation" desc="Empower your teams with specialized AI tools to tackle challenges in software development, DevOps, data analytics, and beyond, fostering a culture of innovation and maintaining a competitive edge." />
-          <BenefitCard title="Strategic Partnership" desc="Gain a dedicated partner in your AI transformation journey, with expert support and continuous platform enhancements." />
+          <BenefitCard 
+            title="Deliver Demonstrable Shareholder Value" 
+            desc="Directly impact your bottom line. AgentForge automates complex operations, drastically cuts overhead, and accelerates revenue-generating innovation, delivering measurable and significant returns on your AI investment."
+          />
+          <BenefitCard 
+            title="Build Enduring Business Agility" 
+            desc="Navigate market volatility with confidence. AgentForge is architected for dynamic growth, scaling effortlessly across your global operations and adapting to your evolving strategic imperatives."
+          />
+          <BenefitCard 
+            title="Fortify Enterprise Trust & Compliance" 
+            desc="Operate with confidence. AgentForge embeds enterprise-grade security, guarantees data integrity across tenants, and ensures adherence to the most stringent global compliance mandates (SOC2, ISO, GDPR, etc.)."
+          />
+          <BenefitCard 
+            title="Achieve True Operational Command" 
+            desc="Gain a single source of truth. Oversee all AI agents, organizational tenants, and multi-cloud resources from an intuitive executive dashboard, simplifying complexity and amplifying strategic visibility."
+          />
+          <BenefitCard 
+            title="Cultivate Sustained Competitive Dominance" 
+            desc="Empower your organization to not just compete, but to lead. Equip every department with transformative AI tools to solve critical challenges in product development, operational excellence, and market expansion."
+          />
+          <BenefitCard 
+            title="Your Committed Partner in AI Transformation" 
+            desc="Beyond technology, gain a dedicated strategic ally. We provide C-suite level advisory, continuous platform innovation, and expert support to ensure your AI transformation journey is a resounding success."
+          />
         </div>
       </section>
 
       {/* Call to Action - Enhanced */}
       <section id="contact" className="py-24 flex flex-col items-center bg-blue-900 text-center">
-        <h2 className="text-4xl sm:text-5xl font-bold text-white mb-6">Ready to Elevate Your Enterprise with AI?</h2>
+        <h2 className="text-4xl sm:text-5xl font-bold text-white mb-6">Ready to Lead the Next Wave of AI-Driven Enterprise Performance?</h2>
         <p className="text-xl text-blue-100/90 mb-10 max-w-3xl">
-          Discover how AgentForge's multi-cloud, multi-tenant, and multi-agent platform can drive transformative results for your business.
-          Let's discuss your unique challenges and tailor a solution.
+          Let's architect your AI transformation. Partner with AgentForge to convert your strategic challenges into market-leading advantages. Schedule a confidential executive briefing today.
         </p>
         <div className="flex flex-col sm:flex-row gap-6">
-          <a href="mailto:sales@agentforge.ai?subject=AgentForge Enterprise Demo Request" className="px-10 py-4 rounded-lg bg-blue-600 text-white font-bold text-xl shadow-xl hover:bg-blue-700 transition-transform hover:scale-105">
-            Schedule Your Personalized Demo
+          <a href="mailto:sales@agentforge.ai?subject=AgentForge Executive Briefing Request" className="px-10 py-4 rounded-lg bg-blue-600 text-white font-bold text-xl shadow-xl hover:bg-blue-700 transition-transform hover:scale-105">
+            Request Executive Briefing
           </a>
           <Link href="/docs/enterprise-overview">
             <Button size="lg" variant="outline" className="border-blue-400 text-blue-200 hover:bg-blue-800 hover:text-white font-bold text-xl px-10 py-4 transition-transform hover:scale-105">
-              Explore Enterprise Overview
+              View Strategic Capabilities Deck
             </Button>
           </Link>
         </div>
