@@ -43,8 +43,8 @@ class Settings(BaseSettings):
     TENANT_ISOLATION_LEVEL: str = "strict"  # strict, relaxed, none
 
     # CORS settings
-    BACKEND_CORS_ORIGINS: List[str] = [] # Default to empty list
-    ALLOWED_ORIGINS: List[str] = [] # Default to empty list
+    BACKEND_CORS_ORIGINS: List[str] = Field(default_factory=list)
+    ALLOWED_ORIGINS: List[str] = Field(default_factory=list)
 
     # Monitoring settings
     PROMETHEUS_URL: str = "http://localhost:9090"
@@ -68,7 +68,7 @@ class Settings(BaseSettings):
     # Compliance settings
     ENABLE_AUDIT_LOGGING: bool = True
     AUDIT_LOG_RETENTION_DAYS: int = 365
-    COMPLIANCE_FRAMEWORKS: List[str] = ["SOC2", "ISO27001", "GDPR"]
+    COMPLIANCE_FRAMEWORKS: List[str] = Field(default_factory=lambda: ["SOC2", "ISO27001", "GDPR"])
     DATA_RETENTION_DAYS: int = 90
 
     # Agent settings
