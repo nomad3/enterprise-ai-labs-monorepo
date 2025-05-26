@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { apiService, Ticket } from '../services/api';
+import { apiService, Ticket } from '../../services/api';
 import styles from './Tickets.module.css';
 
 export default function Tickets() {
