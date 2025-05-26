@@ -43,7 +43,7 @@ export default function LandingPage() {
       <section className="relative flex flex-col items-center justify-center flex-1 text-center px-4 py-20 bg-gradient-to-b from-blue-900 to-background overflow-hidden">
         <div className="absolute inset-0 z-0">
           <Image
-            src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b"
+            src="https://storage.googleapis.com/devagent-assets/landing-page/hero_multi_agent_step2.jpg"
             alt="AI and Technology Background"
             fill
             className="object-cover opacity-20"
@@ -83,37 +83,37 @@ export default function LandingPage() {
             icon={<CloudCog className="w-10 h-10 text-blue-400" />} 
             title="Seamless Multi-Cloud Operations" 
             desc="Deploy and manage agents across AWS, Azure, GCP, and private clouds with a unified control plane, enabling strategic workload placement, cost optimization, and freedom from vendor lock-in."
-            image="https://images.unsplash.com/photo-1544197150-b99a580bb7a8"
+            image="https://storage.googleapis.com/devagent-assets/landing-page/feature_multi_cloud.jpg"
           />
           <FeatureCard 
             icon={<Network className="w-10 h-10 text-blue-400" />} 
             title="Secure Multi-Tenant Architecture" 
             desc="Isolate data and operations for different departments or clients within a single platform, ensuring stringent data privacy, regulatory compliance, and granular access control for distinct business units or clients."
-            image="https://images.unsplash.com/photo-1558494949-ef010cbdcc31"
+            image="https://storage.googleapis.com/devagent-assets/landing-page/feature_multi_tenant_devops_howitworks_step1.jpg"
           />
           <FeatureCard 
             icon={<Zap className="w-10 h-10 text-blue-400" />} 
             title="Powerful Multi-Agent Collaboration" 
             desc="Orchestrate diverse AI agents specializing in development, DevOps, QA, data analysis, and more. Foster cross-functional synergy to tackle complex business challenges and unlock new opportunities faster."
-            image="https://images.unsplash.com/photo-1550751827-4bd374c3f58b"
+            image="https://storage.googleapis.com/devagent-assets/landing-page/hero_multi_agent_step2.jpg"
           />
           <FeatureCard 
             icon={<Code2 className="w-10 h-10 text-blue-400" />} 
             title="Accelerated Software Delivery" 
             desc="Automate coding, testing, and deployment pipelines. Reduce development cycles and improve code quality with AI-powered assistance. Deliver higher quality software to market faster, gaining a competitive edge."
-            image="https://images.unsplash.com/photo-1555066931-4365d14bab8c"
+            image="https://storage.googleapis.com/devagent-assets/landing-page/feature_software_delivery.jpg"
           />
           <FeatureCard 
             icon={<GitBranch className="w-10 h-10 text-blue-400" />} 
             title="Intelligent DevOps & IaC" 
             desc="Streamline infrastructure management, CI/CD, and GitOps workflows. Proactively manage your cloud resources with AI-driven insights. Enhance operational stability, reduce deployment risks, and optimize cloud spend."
-            image="https://images.unsplash.com/photo-1558494949-ef010cbdcc31"
+            image="https://storage.googleapis.com/devagent-assets/landing-page/feature_multi_tenant_devops_howitworks_step1.jpg"
           />
           <FeatureCard 
             icon={<Briefcase className="w-10 h-10 text-blue-400" />} 
             title="Custom Enterprise Solutions" 
             desc="Tailor agent capabilities and workflows to your specific business needs. Integrate seamlessly with your existing enterprise ecosystem. Maximize the value of your current investments and address unique operational requirements effectively."
-            image="https://images.unsplash.com/photo-1552664730-d307ca884978"
+            image="https://storage.googleapis.com/devagent-assets/landing-page/feature_custom_solutions_step3.jpg"
           />
         </div>
       </section>
@@ -122,7 +122,7 @@ export default function LandingPage() {
       <section className="relative py-20 bg-gradient-to-br from-blue-900 via-blue-950 to-background overflow-hidden">
         <div className="absolute inset-0 z-0">
           <Image
-            src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31"
+            src="https://storage.googleapis.com/devagent-assets/landing-page/feature_multi_tenant_devops_howitworks_step1.jpg"
             alt="Enterprise Technology Background"
             fill
             className="object-cover opacity-10"
@@ -135,19 +135,19 @@ export default function LandingPage() {
               step="1" 
               title="Strategic Cloud Setup" 
               desc="Collaboratively define your multi-cloud strategy. AgentForge seamlessly integrates with your existing infrastructure, offering expert guidance to ensure optimal performance, cost-efficiency, and data sovereignty."
-              image="https://images.unsplash.com/photo-1558494949-ef010cbdcc31"
+              image="https://storage.googleapis.com/devagent-assets/landing-page/feature_multi_tenant_devops_howitworks_step1.jpg"
             />
             <StepCard 
               step="2" 
               title="Tenant & Agent Configuration" 
               desc="Efficiently onboard distinct business units or clients as tenants and deploy specialized AI agents. Intuitively customize roles, permissions, and intelligent workflows that mirror your organizational structure and scale with your needs."
-              image="https://images.unsplash.com/photo-1550751827-4bd374c3f58b"
+              image="https://storage.googleapis.com/devagent-assets/landing-page/hero_multi_agent_step2.jpg"
             />
             <StepCard 
               step="3" 
               title="Govern, Monitor & Optimize" 
               desc="Utilize comprehensive dashboards for continuous, real-time insights into agent performance, resource utilization, and adherence to compliance mandates. Proactively optimize operations and scale your AI initiatives with confidence."
-              image="https://images.unsplash.com/photo-1552664730-d307ca884978"
+              image="https://storage.googleapis.com/devagent-assets/landing-page/feature_custom_solutions_step3.jpg"
             />
           </div>
         </div>
