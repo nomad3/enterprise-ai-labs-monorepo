@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { apiService } from '../services/api';
-import { fileService } from '../services/fileService';
+import { apiService } from '../../services/api';
+import { fileService } from '../../services/fileService';
 import './CodeGenerationView.css';
 
 interface CodeGenerationViewProps {
