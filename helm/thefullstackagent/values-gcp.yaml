@@ -49,15 +49,15 @@ devagentApi:
 
   ingress:
     enabled: true
-    # className: "" # Default GKE Ingress controller will be used
+    className: "" # Explicitly empty to use GKE default or annotation
     annotations:
+      kubernetes.io/ingress.class: "gce" # Explicitly select GKE Ingress controller
       # If you have a reserved global static IP, specify its name here.
       # Otherwise, remove this line or GKE will try to find/create an IP with this name.
       kubernetes.io/ingress.global-static-ip-name: "devagent-static-ip"
       # This annotation tells GKE to provision and manage an SSL certificate.
       # 'devagent-managed-cert' is just a name for this managed certificate resource.
       networking.gke.io/managed-certificates: "devagent-managed-cert"
-      # kubernetes.io/ingress.class: "gce" # Optional: explicitly use GKE Ingress
     hosts:
       - host: "agents.datamatic.app"
         paths:
@@ -73,12 +73,12 @@ devagentUi:
 
   ingress:
     enabled: true
-    # className: "" # Default GKE Ingress controller will be used
+    className: "" # Explicitly empty to use GKE default or annotation
     annotations:
+      kubernetes.io/ingress.class: "gce" # Explicitly select GKE Ingress controller
       # If you have a reserved global static IP, specify its name here (should be the same as for the API if sharing the IP).
       kubernetes.io/ingress.global-static-ip-name: "devagent-static-ip"
       networking.gke.io/managed-certificates: "devagent-managed-cert" # Use the same managed certificate resource name
-      # kubernetes.io/ingress.class: "gce" # Optional: explicitly use GKE Ingress
     hosts:
       - host: "agents.datamatic.app"
         paths:
