@@ -12,6 +12,13 @@ resource "google_project_iam_member" "cicd_sa_gcr_admin" {
   member  = "serviceAccount:${google_service_account.cicd_sa.email}"
 }
 
+# Grant Artifact Registry write access to the CI/CD SA
+resource "google_project_iam_member" "cicd_sa_artifactregistry_writer" {
+  project = var.gcp_project
+  role    = "roles/artifactregistry.writer"
+  member  = "serviceAccount:${google_service_account.cicd_sa.email}"
+}
+
 # Grant GKE cluster access to the CI/CD SA
 resource "google_project_iam_member" "cicd_sa_gke_developer" {
   project = var.gcp_project
