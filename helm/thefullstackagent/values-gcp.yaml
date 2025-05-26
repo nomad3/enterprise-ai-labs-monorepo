@@ -65,7 +65,8 @@ devagentApi:
             pathType: Prefix # Requests to agents.datamatic.app/api/* go to devagentApi
     tls: [] # TLS is handled by the Google-managed certificate
 
-devagentUi:
+# Values for the devagent-ui subchart (using its direct name from Chart.yaml dependencies)
+"devagent-ui":
   # This enables the subchart itself if it had an enabled flag at its root
   # enabled: true # Assuming this is for the subchart deployment, not ingress specifically.
               # The subchart's own values.yaml has replicaCount > 0 so it's deployed.
@@ -85,14 +86,14 @@ devagentUi:
           - path: /
             pathType: Prefix
     tls: [] # TLS is handled by the Google-managed certificate
-  # Other devagentUi specific overrides if needed, e.g.:
+  # Other devagent-ui specific overrides if needed, e.g.:
   # image:
   #   repository: gcr.io/aremko-e51ae/devagent-ui
   #   tag: latest
   # replicaCount: 1
 
-# devagentUi can be configured similarly if it needs cloud-specific settings
-# devagentUi:
+# devagent-ui can be configured similarly if it needs cloud-specific settings
+# devagent-ui:
 #   enabled: true # Assuming we still want to deploy the UI
 #   image:
 #     repository: gcr.io/aremko-e51ae/devagent-ui # Ensure this image exists
