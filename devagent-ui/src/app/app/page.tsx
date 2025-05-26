@@ -78,7 +78,7 @@ export default function AppPage() {
 
   return (
     <div className="flex min-h-screen bg-slate-100">
-      <aside className="w-64 bg-slate-800 text-white p-4 flex flex-col">
+      <aside className="w-64 bg-slate-800 text-white p-4 flex flex-col lg:hidden">
         <div className="text-2xl font-bold mb-6 flex items-center">
            <Settings className="mr-2 h-6 w-6 text-sky-400" /> DevAgent
         </div>

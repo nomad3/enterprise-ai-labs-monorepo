@@ -13,15 +13,15 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
+  params,
 }: {
   children: React.ReactNode;
+  params: { lng: string };
 }) {
   return (
-    <html lang="en">
+    <html lang={params.lng}>
       <body className={inter.className}>
-        <AuthProvider>
-          <LayoutClient>{children}</LayoutClient>
-        </AuthProvider>
+        {children}
       </body>
     </html>
   );

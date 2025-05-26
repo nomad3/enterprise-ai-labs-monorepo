@@ -1,0 +1,104 @@
+{
+  "navbar": {
+    "login": "Iniciar Sesión",
+    "signUp": "Registrarse",
+    "productName": "AgentForge"
+  },
+  "hero": {
+    "title": "Forje su Futuro Impulsado por IA: <1>Orquestación Autónoma con AgentForge</1>",
+    "description": "AgentForge empodera a su empresa para diseñar, implementar y gestionar flotas de agentes de IA inteligentes. Integre sin problemas sistemas dispares en su panorama multinube, automatice flujos de trabajo de extremo a extremo y desbloquee una eficiencia operativa transformadora, todo gobernado por una plataforma segura, escalable y centrada en el desarrollador.",
+    "ctaDemo": "Solicitar una Demostración",
+    "ctaExplore": "Explorar Plataforma",
+    "badgeCloud": "Dominio Estratégico de la Nube",
+    "badgeGovernance": "Gobernanza y Seguridad Sólidas",
+    "badgeInnovation": "Ciclos de Innovación Acelerados",
+    "badgeImpact": "Impacto Empresarial Medible",
+    "altBg": "Fondo de IA y Tecnología"
+  },
+  "features": {
+    "title": "Capacidades Clave para la Transformación Empresarial",
+    "card1": {
+      "title": "Optimice las Inversiones Multinube",
+      "description": "Obtenga control unificado sobre todo su patrimonio en la nube (AWS, Azure, GCP, privado). Impulse ahorros de costos sustanciales, mejore el rendimiento de las cargas de trabajo y elimine la dependencia de proveedores para maximizar la flexibilidad estratégica."
+    },
+    "card2": {
+      "title": "Escalabilidad y Gobernanza a Nivel Empresarial",
+      "description": "Escale de forma segura las iniciativas de IA en todas las unidades de negocio y compromisos con clientes. Garantice un estricto aislamiento de datos, mantenga el cumplimiento normativo (por ejemplo, GDPR, SOC2) y aplique un control granular con un marco robusto y auditable."
+    },
+    "card3": {
+      "title": "Desbloquee Sinergias Interfuncionales",
+      "description": "Empodere a agentes de IA especializados para colaborar sin problemas entre silos departamentales, desde I+D y operaciones hasta GRC y éxito del cliente. Transforme desafíos complejos en oportunidades de crecimiento estratégico."
+    },
+    "card4": {
+      "title": "Reduzca Drásticamente el Tiempo de Comercialización",
+      "description": "Automatice y optimice de forma inteligente todo su ciclo de vida de desarrollo de software. Entregue productos y servicios innovadores más rápido, responda rápidamente a los cambios del mercado y asegure una ventaja competitiva decisiva."
+    },
+    "card5": {
+      "title": "Mejore la Resiliencia y Eficiencia Operacional",
+      "description": "Automatice el aprovisionamiento de infraestructura, optimice las canalizaciones de CI/CD y gestione proactivamente los recursos de la nube con conocimientos impulsados por IA. Mejore significativamente el tiempo de actividad, reduzca el riesgo operativo y optimice el costo total de propiedad (TCO)."
+    },
+    "card6": {
+      "title": "IA a Medida para su Estrategia Única",
+      "description": "Adapte AgentForge a sus objetivos comerciales precisos e integre sin problemas con los sistemas empresariales existentes. Aproveche soluciones de IA a medida para maximizar el ROI de las inversiones actuales y conquistar desafíos de mercado únicos."
+    }
+  },
+  "howItWorks": {
+    "title": "Integración e Implementación Empresarial Optimizadas",
+    "altBg": "Fondo de Tecnología Empresarial - Oscuro Abstracto",
+    "stepLabel": "Paso {{stepNumber}}",
+    "step1": {
+      "title": "Fase 1: Alineación Arquitectónica Estratégica",
+      "description": "Nos asociamos con su liderazgo para alinear AgentForge con su visión multinube general. Nuestros expertos aseguran una integración perfecta, maximizando las inversiones en infraestructura existentes mientras se optimiza para un rendimiento máximo, gobernanza de costos y soberanía de datos."
+    },
+    "step2": {
+      "title": "Fase 2: Implementación y Empoderamiento a Medida",
+      "description": "AgentForge se configura para reflejar su estructura organizativa precisa. Empoderamos a sus equipos mediante la implementación de agentes de IA a medida y flujos de trabajo inteligentes, totalmente personalizados para sus unidades de negocio específicas, compromisos con clientes y objetivos estratégicos, asegurando una rápida adopción y realización de valor."
+    },
+    "step3": {
+      "title": "Fase 3: Supervisión Estratégica Continua y Evolución",
+      "description": "Mantenga una supervisión ejecutiva completa con paneles en tiempo real que rastrean el rendimiento de la IA, la asignación de recursos y el cumplimiento normativo a nivel empresarial. AgentForge proporciona los conocimientos críticos necesarios para optimizar continuamente las operaciones, mitigar riesgos y escalar estratégicamente sus capacidades de IA para una ventaja competitiva sostenida."
+    }
+  },
+  "benefits": {
+    "title": "La Ventaja de AgentForge para su Empresa",
+    "card1": {
+      "title": "Maximice el ROI con Automatización Inteligente",
+      "description": "Aproveche nuestro motor de orquestación multiagente para automatizar procesos complejos de TI y de negocio. Utilice una arquitectura de plugins extensible para integrarse con herramientas existentes, reduciendo gastos generales y acelerando los ciclos de innovación para un ROI medible."
+    },
+    "card2": {
+      "title": "Alcance Verdadera Escalabilidad y Agilidad",
+      "description": "Construido sobre una base nativa de Kubernetes, AgentForge proporciona gestión elástica de recursos y escalado horizontal. Gestione sin problemas las cargas de trabajo en múltiples proveedores de nube (AWS, Azure, GCP) y entornos locales."
+    },
+    "card3": {
+      "title": "Garantice Seguridad y Gobernanza Sólidas",
+      "description": "Implemente multi-tenancy seguro con control de acceso granular basado en roles (RBAC). Haga cumplir la conformidad (SOC2, ISO, GDPR) con cifrado de datos de extremo a extremo, pistas de auditoría completas y capacidades de política como código."
+    },
+    "card4": {
+      "title": "Control Unificado Multinube y de Agentes",
+      "description": "Obtenga un panel centralizado para el monitoreo y la gestión en tiempo real de todos los agentes de IA, entornos de inquilinos y recursos de nube implementados. Utilice herramientas de observabilidad integradas para el seguimiento del rendimiento y la optimización de costos."
+    },
+    "card5": {
+      "title": "Acelere la Innovación Interfuncional",
+      "description": "Implemente un ecosistema diverso de agentes de IA preconstruidos y personalizados para DevOps, MLOps, QA, análisis de datos y más. Facilite la automatización de tareas complejas mediante el encadenamiento de habilidades de agentes y flujos de trabajo colaborativos entre departamentos."
+    },
+    "card6": {
+      "title": "Socio Dedicado en su Evolución de IA",
+      "description": "Más allá de una plataforma de vanguardia, obtenga un aliado estratégico. Brindamos asesoramiento a nivel C, alineación proactiva de la hoja de ruta, innovación continua de funciones y soporte técnico experto para garantizar que su transformación de IA sea un éxito."
+    }
+  },
+  "cta": {
+    "title": "¿Listo para Liderar la Próxima Ola de Rendimiento Empresarial Impulsado por IA?",
+    "description": "Arquitectemos su transformación de IA. Asóciese con AgentForge para convertir sus desafíos estratégicos en ventajas líderes en el mercado. Programe una reunión ejecutiva confidencial hoy mismo.",
+    "buttonBriefing": "Solicitar Reunión Ejecutiva",
+    "buttonDeck": "Ver Presentación de Capacidades Estratégicas"
+  },
+  "footer": {
+    "github": "GitHub",
+    "documentation": "Documentación",
+    "platformLogin": "Acceso a Plataforma",
+    "contactSales": "Contactar Ventas",
+    "privacyPolicy": "Política de Privacidad",
+    "terms": "Términos de Servicio",
+    "copyright": "AgentForge © {{year}}"
+  }
+} 

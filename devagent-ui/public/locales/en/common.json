@@ -1,0 +1,104 @@
+{
+  "navbar": {
+    "login": "Login",
+    "signUp": "Sign Up",
+    "productName": "AgentForge"
+  },
+  "hero": {
+    "title": "Forge Your AI-Powered Future: <1>Autonomous Orchestration with AgentForge</1>",
+    "description": "AgentForge empowers your enterprise to design, deploy, and manage fleets of intelligent AI agents. Seamlessly integrate disparate systems across your multi-cloud landscape, automate end-to-end workflows, and unlock transformative operational efficiency—all governed by a secure, scalable, and developer-centric platform.",
+    "ctaDemo": "Request a Demo",
+    "ctaExplore": "Explore Platform",
+    "badgeCloud": "Strategic Cloud Dominance",
+    "badgeGovernance": "Ironclad Governance & Security",
+    "badgeInnovation": "Accelerated Innovation Cycles",
+    "badgeImpact": "Measurable Business Impact",
+    "altBg": "AI and Technology Background"
+  },
+  "features": {
+    "title": "Key Capabilities for Enterprise Transformation",
+    "card1": {
+      "title": "Optimize Multi-Cloud Investments",
+      "description": "Gain unified control over your entire cloud estate (AWS, Azure, GCP, private). Drive substantial cost savings, enhance workload performance, and eliminate vendor lock-in to maximize strategic flexibility."
+    },
+    "card2": {
+      "title": "Enterprise-Wide Scalability & Governance",
+      "description": "Securely scale AI initiatives across all business units and client engagements. Ensure strict data isolation, maintain regulatory compliance (e.g., GDPR, SOC2), and enforce granular control with a robust, auditable framework."
+    },
+    "card3": {
+      "title": "Unlock Cross-Functional Synergies",
+      "description": "Empower specialized AI agents to collaborate seamlessly across departmental silos—from R&D and operations to GRC and customer success. Transform complex challenges into strategic growth opportunities."
+    },
+    "card4": {
+      "title": "Drastically Reduce Time-to-Market",
+      "description": "Automate and intelligently optimize your entire software development lifecycle. Deliver innovative products and services faster, respond rapidly to market changes, and secure a decisive competitive advantage."
+    },
+    "card5": {
+      "title": "Enhance Operational Resilience & Efficiency",
+      "description": "Automate infrastructure provisioning, optimize CI/CD pipelines, and proactively manage cloud resources with AI-driven insights. Significantly improve uptime, reduce operational risk, and optimize total cost of ownership (TCO)."
+    },
+    "card6": {
+      "title": "Tailored AI for Your Unique Strategy",
+      "description": "Adapt AgentForge to your precise business objectives and integrate flawlessly with existing enterprise systems. Leverage bespoke AI solutions to maximize ROI from current investments and conquer unique market challenges."
+    }
+  },
+  "howItWorks": {
+    "title": "Streamlined Enterprise Integration & Deployment",
+    "altBg": "Enterprise Technology Background - Abstract Dark",
+    "stepLabel": "Step {{stepNumber}}",
+    "step1": {
+      "title": "Phase 1: Strategic Architectural Alignment",
+      "description": "We partner with your leadership to align AgentForge with your overarching multi-cloud vision. Our experts ensure seamless integration, maximizing existing infrastructure investments while optimizing for peak performance, cost governance, and data sovereignty."
+    },
+    "step2": {
+      "title": "Phase 2: Tailored Implementation & Empowerment",
+      "description": "AgentForge is configured to mirror your precise organizational structure. We empower your teams by deploying bespoke AI agents and intelligent workflows, fully customized for your specific business units, client engagements, and strategic objectives, ensuring rapid adoption and value realization."
+    },
+    "step3": {
+      "title": "Phase 3: Continuous Strategic Oversight & Evolution",
+      "description": "Maintain complete executive oversight with real-time dashboards tracking AI performance, resource allocation, and enterprise-wide compliance. AgentForge provides the critical insights needed to continuously optimize operations, mitigate risk, and strategically scale your AI capabilities for sustained competitive advantage."
+    }
+  },
+  "benefits": {
+    "title": "The AgentForge Advantage for Your Enterprise",
+    "card1": {
+      "title": "Maximize ROI with Intelligent Automation",
+      "description": "Leverage our multi-agent orchestration engine to automate complex IT and business processes. Utilize an extensible plugin architecture to integrate with existing tools, cutting overhead and speeding up innovation cycles for measurable ROI."
+    },
+    "card2": {
+      "title": "Achieve True Scalability & Agility",
+      "description": "Built on a Kubernetes-native foundation, AgentForge provides elastic resource management and horizontal scaling. Seamlessly manage workloads across multiple cloud providers (AWS, Azure, GCP) and on-premise environments."
+    },
+    "card3": {
+      "title": "Ensure Ironclad Security & Governance",
+      "description": "Implement secure multi-tenancy with granular role-based access control (RBAC). Enforce compliance (SOC2, ISO, GDPR) with end-to-end data encryption, comprehensive audit trails, and policy-as-code capabilities."
+    },
+    "card4": {
+      "title": "Unified Multi-Cloud & Agent Control",
+      "description": "Gain a centralized dashboard for real-time monitoring and management of all AI agents, tenant environments, and deployed cloud resources. Utilize integrated observability tools for performance tracking and cost optimization."
+    },
+    "card5": {
+      "title": "Accelerate Cross-Functional Innovation",
+      "description": "Deploy a diverse ecosystem of pre-built and custom AI agents for DevOps, MLOps, QA, data analysis, and more. Facilitate complex task automation through agent skill-chaining and collaborative workflows across departments."
+    },
+    "card6": {
+      "title": "Dedicated Partner in Your AI Evolution",
+      "description": "Beyond a cutting-edge platform, gain a strategic ally. We provide C-suite advisory, proactive roadmap alignment, continuous feature innovation, and expert technical support to ensure your AI transformation is a success."
+    }
+  },
+  "cta": {
+    "title": "Ready to Lead the Next Wave of AI-Driven Enterprise Performance?",
+    "description": "Let's architect your AI transformation. Partner with AgentForge to convert your strategic challenges into market-leading advantages. Schedule a confidential executive briefing today.",
+    "buttonBriefing": "Request Executive Briefing",
+    "buttonDeck": "View Strategic Capabilities Deck"
+  },
+  "footer": {
+    "github": "GitHub",
+    "documentation": "Documentation",
+    "platformLogin": "Platform Login",
+    "contactSales": "Contact Sales",
+    "privacyPolicy": "Privacy Policy",
+    "terms": "Terms of Service",
+    "copyright": "AgentForge © {{year}}"
+  }
+} 
