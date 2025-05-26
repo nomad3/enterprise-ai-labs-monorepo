@@ -66,25 +66,30 @@ devagentApi:
     tls: [] # TLS is handled by the Google-managed certificate
 
 devagentUi:
-  enabled: true # Assuming we still want to deploy the UI
-  image:
-    repository: gcr.io/aremko-e51ae/devagent-ui # Ensure this image exists
-    tag: latest
+  # This enables the subchart itself if it had an enabled flag at its root
+  # enabled: true # Assuming this is for the subchart deployment, not ingress specifically.
+              # The subchart's own values.yaml has replicaCount > 0 so it's deployed.
 
+  # Configuration for the ingress object within the devagent-ui subchart
   ingress:
-    enabled: true
+    enabled: true # THIS IS THE KEY for enabling the UI's ingress
     className: "" # Explicitly empty to use GKE default or annotation
     annotations:
       kubernetes.io/ingress.class: "gce" # Explicitly select GKE Ingress controller
       # If you have a reserved global static IP, specify its name here (should be the same as for the API if sharing the IP).
       kubernetes.io/ingress.global-static-ip-name: "devagent-static-ip"
-      networking.gke.io/managed-certificates: "devagent-managed-cert" # Use the same managed certificate resource name
+      networking.gke.io/managed-certificates: "devagent-managed-cert"
     hosts:
       - host: "agents.datamatic.app"
         paths:
           - path: /
-            pathType: Prefix # Requests to agents.datamatic.app/* go to devagentUi
+            pathType: Prefix
     tls: [] # TLS is handled by the Google-managed certificate
+  # Other devagentUi specific overrides if needed, e.g.:
+  # image:
+  #   repository: gcr.io/aremko-e51ae/devagent-ui
+  #   tag: latest
+  # replicaCount: 1
 
 # devagentUi can be configured similarly if it needs cloud-specific settings
 # devagentUi:
