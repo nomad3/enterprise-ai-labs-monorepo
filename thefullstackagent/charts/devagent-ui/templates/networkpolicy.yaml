@@ -1,0 +1,15 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "devagent-ui.fullname" . }}-allow-all-egress
+  namespace: {{ .Release.Namespace }} # Uses the namespace of the Helm release
+  labels:
+    {{- include "devagent-ui.labels" . | nindent 4 }}
+spec:
+  podSelector:
+    matchLabels:
+      {{- include "devagent-ui.selectorLabels" . | nindent 6 }}
+  policyTypes:
+    - Egress
+  egress:
+    - {} # Allows all outbound traffic from the selected pods 
