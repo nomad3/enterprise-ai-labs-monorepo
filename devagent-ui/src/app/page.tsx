@@ -14,7 +14,7 @@ import Login from './components/Login';
 import Register from './components/Register';
 import DevOps from './components/DevOps';
 import { Toaster } from '@/components/ui/toaster';
-import { Rocket, ShieldCheck, Code2, GitBranch, ServerCog, Activity, Users, Cloud, Zap } from 'lucide-react';
+import { Rocket, ShieldCheck, Code2, GitBranch, ServerCog, Activity, Users, Cloud, Zap, Briefcase, CloudCog, Network } from 'lucide-react'; // Added Briefcase, CloudCog, Network
 import Link from 'next/link';
 // import AgentCard from './components/AgentCard'; // Removed as it's not used and file is missing
 import Image from 'next/image';
@@ -40,116 +40,130 @@ export default function LandingPage() {
       </nav>
 
       {/* Hero Section */}
-      <section className="flex flex-col items-center justify-center flex-1 text-center px-4 py-16">
-        <h1 className="text-5xl sm:text-6xl font-extrabold text-blue-200 mb-4 leading-tight">
-          Enterprise-Grade <span className="text-blue-400">Multi-Agent Platform</span>
+      <section className="flex flex-col items-center justify-center flex-1 text-center px-4 py-20 bg-gradient-to-b from-blue-900 to-background">
+        <h1 className="text-5xl sm:text-7xl font-extrabold text-white mb-6 leading-tight">
+          Revolutionize Your Enterprise with <span className="text-blue-400">Intelligent Agent Orchestration</span>
         </h1>
-        <p className="text-xl sm:text-2xl text-blue-100/80 mb-8 max-w-3xl">
-          Deploy, manage, and orchestrate specialized AI agents across your organization. <br />
-          <span className="font-semibold">Secure. Compliant. Scalable.</span>
+        <p className="text-xl sm:text-2xl text-blue-100/90 mb-10 max-w-4xl">
+          AgentForge empowers your business with a cutting-edge <strong className="text-blue-300">Multi-Cloud, Multi-Tenant, and Multi-Agent platform</strong>.
+          Drive innovation, enhance productivity, and scale operations with unparalleled security and control.
         </p>
-        <div className="flex gap-4 justify-center mb-12">
+        <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+          <Link href="#contact">
+            <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-lg shadow-xl px-10 py-6">Request a Demo</Button>
+          </Link>
           <Link href="/app">
-            <button className="px-8 py-3 rounded-lg bg-blue-700 text-white font-bold text-lg shadow-lg hover:bg-blue-800 transition">Get Started</button>
-          </Link>
-          <a href="#features" className="px-8 py-3 rounded-lg border border-blue-700 text-blue-300 font-bold text-lg hover:bg-blue-900 transition">Explore Features</a>
-          <Link href="/enterprise">
-            <button className="px-8 py-3 rounded-lg bg-blue-900 text-white font-bold text-lg shadow-lg hover:bg-blue-800 transition">Enterprise Dashboard</button>
+            <Button size="lg" variant="outline" className="border-blue-500 text-blue-300 hover:bg-blue-800 hover:text-white font-bold text-lg px-10 py-6">Explore Platform</Button>
           </Link>
         </div>
-        <div className="flex flex-wrap gap-4 justify-center mt-8">
-          <span className="inline-flex items-center gap-2 px-4 py-2 bg-blue-900 text-blue-300 rounded-full text-sm font-medium"><Zap className="w-4 h-4" /> Multi-Agent</span>
-          <span className="inline-flex items-center gap-2 px-4 py-2 bg-blue-900 text-blue-300 rounded-full text-sm font-medium"><Cloud className="w-4 h-4" /> Enterprise Ready</span>
-          <span className="inline-flex items-center gap-2 px-4 py-2 bg-blue-900 text-blue-300 rounded-full text-sm font-medium"><ShieldCheck className="w-4 h-4" /> SOC 2 & ISO 27001</span>
+        <div className="flex flex-wrap gap-x-6 gap-y-3 justify-center mt-10">
+          <span className="inline-flex items-center gap-2 px-4 py-2 bg-blue-800/70 text-blue-200 rounded-full text-md font-medium"><CloudCog className="w-5 h-5 text-blue-400" /> Multi-Cloud Flexibility</span>
+          <span className="inline-flex items-center gap-2 px-4 py-2 bg-blue-800/70 text-blue-200 rounded-full text-md font-medium"><Network className="w-5 h-5 text-blue-400" /> Secure Multi-Tenancy</span>
+          <span className="inline-flex items-center gap-2 px-4 py-2 bg-blue-800/70 text-blue-200 rounded-full text-md font-medium"><Zap className="w-5 h-5 text-blue-400" /> Diverse Agent Ecosystem</span>
+          <span className="inline-flex items-center gap-2 px-4 py-2 bg-blue-800/70 text-blue-200 rounded-full text-md font-medium"><Briefcase className="w-5 h-5 text-blue-400" /> Enterprise-Grade Solutions</span>
+          <span className="inline-flex items-center gap-2 px-4 py-2 bg-blue-800/70 text-blue-200 rounded-full text-md font-medium"><ShieldCheck className="w-5 h-5 text-blue-400" /> Robust Security & Compliance</span>
         </div>
       </section>
 
-      {/* Features Grid */}
-      <section id="features" className="py-16 bg-background/90">
-        <h2 className="text-3xl font-bold text-center text-blue-200 mb-10">Specialized Agent Types</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto px-4">
-          <FeatureCard icon={<Code2 className="w-8 h-8 text-blue-400" />} title="Full-Stack Development" desc="AI agents for code generation, testing, and deployment automation." />
-          <FeatureCard icon={<GitBranch className="w-8 h-8 text-blue-400" />} title="DevOps & Infrastructure" desc="Intelligent infrastructure management and CI/CD orchestration." />
-          <FeatureCard icon={<ServerCog className="w-8 h-8 text-blue-400" />} title="QA & Testing" desc="Automated testing, quality assurance, and performance monitoring." />
-          <FeatureCard icon={<Activity className="w-8 h-8 text-blue-400" />} title="Data Analysis" desc="Advanced data processing, analytics, and business intelligence." />
-          <FeatureCard icon={<ShieldCheck className="w-8 h-8 text-blue-400" />} title="Security & Compliance" desc="Proactive security monitoring and compliance management." />
-          <FeatureCard icon={<Users className="w-8 h-8 text-blue-400" />} title="Documentation" desc="Automated technical writing and documentation generation." />
-          <FeatureCard icon={<Cloud className="w-8 h-8 text-blue-400" />} title="Multi-Tenant" desc="Complete isolation between organizations and teams." />
-          <FeatureCard icon={<Zap className="w-8 h-8 text-blue-400" />} title="Enterprise Integration" desc="Seamless integration with existing enterprise tools." />
+      {/* Features Grid - Renamed and Refocused */}
+      <section id="features" className="py-20 bg-background">
+        <h2 className="text-4xl font-bold text-center text-blue-200 mb-16">Unlock Unprecedented Efficiency with AgentForge</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 max-w-7xl mx-auto px-6">
+          <FeatureCard icon={<CloudCog className="w-10 h-10 text-blue-400" />} title="Seamless Multi-Cloud Operations" desc="Deploy and manage agents across AWS, Azure, GCP, and private clouds with a unified control plane. Optimize costs and avoid vendor lock-in." />
+          <FeatureCard icon={<Network className="w-10 h-10 text-blue-400" />} title="Secure Multi-Tenant Architecture" desc="Isolate data and operations for different departments or clients within a single platform. Ensure data privacy and granular access control." />
+          <FeatureCard icon={<Zap className="w-10 h-10 text-blue-400" />} title="Powerful Multi-Agent Collaboration" desc="Orchestrate diverse AI agents specializing in development, DevOps, QA, data analysis, and more. Foster synergy for complex problem-solving." />
+          <FeatureCard icon={<Code2 className="w-10 h-10 text-blue-400" />} title="Accelerated Software Delivery" desc="Automate coding, testing, and deployment pipelines. Reduce development cycles and improve code quality with AI-powered assistance." />
+          <FeatureCard icon={<GitBranch className="w-10 h-10 text-blue-400" />} title="Intelligent DevOps & IaC" desc="Streamline infrastructure management, CI/CD, and GitOps workflows. Proactively manage your cloud resources with AI-driven insights." />
+          <FeatureCard icon={<Briefcase className="w-10 h-10 text-blue-400" />} title="Custom Enterprise Solutions" desc="Tailor agent capabilities and workflows to your specific business needs. Integrate seamlessly with your existing enterprise ecosystem." />
         </div>
       </section>
 
-      {/* How it Works */}
-      <section className="py-16 bg-gradient-to-r from-blue-950 to-blue-900">
-        <h2 className="text-3xl font-bold text-center text-blue-200 mb-10">Enterprise Deployment</h2>
-        <div className="flex flex-col md:flex-row gap-8 max-w-5xl mx-auto px-4 items-center justify-center">
-          <StepCard step="1" title="Configure" desc="Set up your organization's policies, security, and compliance requirements." />
-          <StepCard step="2" title="Deploy Agents" desc="Choose and configure specialized agents for your needs." />
-          <StepCard step="3" title="Monitor & Scale" desc="Track performance, manage resources, and scale as needed." />
+      {/* How it Works / Enterprise Deployment - Refocused */}
+      <section className="py-20 bg-gradient-to-br from-blue-900 via-blue-950 to-background">
+        <h2 className="text-4xl font-bold text-center text-blue-100 mb-16">Streamlined Enterprise Integration & Deployment</h2>
+        <div className="flex flex-col md:flex-row gap-10 max-w-6xl mx-auto px-6 items-stretch justify-center">
+          <StepCard step="1" title="Strategic Cloud Setup" desc="Define your multi-cloud strategy. AgentForge integrates with your existing infrastructure, ensuring optimal performance and data sovereignty." />
+          <StepCard step="2" title="Tenant & Agent Configuration" desc="Easily onboard tenants and deploy specialized AI agents. Customize roles, permissions, and workflows to match your organizational structure." />
+          <StepCard step="3" title="Govern, Monitor & Optimize" desc="Leverage comprehensive dashboards for real-time insights into agent performance, resource utilization, and compliance. Scale with confidence." />
         </div>
       </section>
 
-      {/* Benefits */}
-      <section className="py-16 bg-background/90">
-        <h2 className="text-3xl font-bold text-center text-blue-200 mb-10">Enterprise Benefits</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto px-4">
-          <BenefitCard title="Enhanced Security" desc="Enterprise-grade security with multi-tenant isolation." />
-          <BenefitCard title="Compliance Ready" desc="Built-in compliance frameworks and audit trails." />
-          <BenefitCard title="Operational Efficiency" desc="Streamlined workflows and automated processes." />
+      {/* Benefits - Refocused */}
+      <section className="py-20 bg-background">
+        <h2 className="text-4xl font-bold text-center text-blue-200 mb-16">The AgentForge Advantage for Your Enterprise</h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 max-w-7xl mx-auto px-6">
+          <BenefitCard title="Maximize ROI" desc="Automate complex tasks, reduce operational overhead, and accelerate innovation cycles, delivering tangible returns on your AI investment." />
+          <BenefitCard title="Future-Proof Scalability" desc="Built for growth, AgentForge scales seamlessly across multiple clouds and tenants, adapting to your evolving business demands." />
+          <BenefitCard title="Uncompromised Security" desc="Benefit from enterprise-grade security, robust multi-tenancy, and adherence to stringent compliance standards (SOC2, ISO, GDPR)." />
+          <BenefitCard title="Unified Control Plane" desc="Manage all your agents, tenants, and cloud resources from a single, intuitive interface. Simplify complexity and enhance visibility." />
+          <BenefitCard title="Drive Innovation" desc="Empower your teams with specialized AI tools to tackle challenges in software development, DevOps, data analytics, and beyond." />
+          <BenefitCard title="Strategic Partnership" desc="Gain a dedicated partner in your AI transformation journey, with expert support and continuous platform enhancements." />
         </div>
       </section>
 
-      {/* Call to Action */}
-      <section className="py-16 flex flex-col items-center bg-blue-950">
-        <h2 className="text-3xl font-bold text-blue-200 mb-4">Ready to transform your organization?</h2>
-        <p className="text-lg text-blue-100 mb-8">Schedule a demo or start your enterprise trial today.</p>
-        <div className="flex gap-4">
-          <Link href="/app">
-            <button className="px-8 py-3 rounded-lg bg-blue-700 text-white font-bold text-lg shadow-lg hover:bg-blue-800 transition">Start Trial</button>
+      {/* Call to Action - Enhanced */}
+      <section id="contact" className="py-24 flex flex-col items-center bg-blue-900 text-center">
+        <h2 className="text-4xl sm:text-5xl font-bold text-white mb-6">Ready to Elevate Your Enterprise with AI?</h2>
+        <p className="text-xl text-blue-100/90 mb-10 max-w-3xl">
+          Discover how AgentForge's multi-cloud, multi-tenant, and multi-agent platform can drive transformative results for your business.
+          Let's discuss your unique challenges and tailor a solution.
+        </p>
+        <div className="flex flex-col sm:flex-row gap-6">
+          <a href="mailto:sales@agentforge.ai?subject=AgentForge Enterprise Demo Request" className="px-10 py-4 rounded-lg bg-blue-600 text-white font-bold text-xl shadow-xl hover:bg-blue-700 transition-transform hover:scale-105">
+            Schedule Your Personalized Demo
+          </a>
+          <Link href="/docs/enterprise-overview">
+            <Button size="lg" variant="outline" className="border-blue-400 text-blue-200 hover:bg-blue-800 hover:text-white font-bold text-xl px-10 py-4 transition-transform hover:scale-105">
+              Read Enterprise Docs
+            </Button>
           </Link>
-          <a href="mailto:enterprise@agentforge.ai" className="px-8 py-3 rounded-lg border border-blue-700 text-blue-300 font-bold text-lg hover:bg-blue-900 transition">Request Demo</a>
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="py-8 text-center text-blue-200/70 bg-background border-t mt-8">
-        <div className="mb-2 font-semibold">AgentForge &copy; {new Date().getFullYear()}</div>
-        <div className="flex justify-center gap-6 text-sm">
-          <a href="https://github.com/thefullstackagent" target="_blank" rel="noopener" className="hover:underline">GitHub</a>
-          <a href="/docs" className="hover:underline">Documentation</a>
-          <a href="/enterprise" className="hover:underline">Enterprise</a>
-          <a href="mailto:enterprise@agentforge.ai" className="hover:underline">Contact</a>
+      {/* Footer - Minor update to contact email */}
+      <footer className="py-10 text-center text-blue-200/70 bg-background border-t border-gray-700 mt-auto">
+        <div className="mb-3 font-semibold text-lg">AgentForge &copy; {new Date().getFullYear()}</div>
+        <div className="flex justify-center gap-x-8 gap-y-2 flex-wrap text-md">
+          <a href="https://github.com/thefullstackagent" target="_blank" rel="noopener noreferrer" className="hover:text-blue-400 transition-colors">GitHub</a>
+          <a href="/docs" className="hover:text-blue-400 transition-colors">Documentation</a>
+          <Link href="/app/dashboard" className="hover:text-blue-400 transition-colors">Platform Login</Link>
+          <a href="mailto:sales@agentforge.ai" className="hover:text-blue-400 transition-colors">Contact Sales</a>
+          <a href="/privacy-policy" className="hover:text-blue-400 transition-colors">Privacy Policy</a>
+          <a href="/terms-of-service" className="hover:text-blue-400 transition-colors">Terms of Service</a>
         </div>
       </footer>
     </div>
   );
 }
 
+// FeatureCard, StepCard, BenefitCard styling might need minor adjustments for new text lengths or emphasis
+// For example, increasing padding or ensuring text alignment remains good.
+
 function FeatureCard({ icon, title, desc }: { icon: React.ReactNode; title: string; desc: string }) {
   return (
-    <div className="flex flex-col items-center bg-background rounded-xl shadow p-6 hover:shadow-lg transition">
-      <div className="mb-3">{icon}</div>
-      <div className="font-bold text-lg mb-1 text-blue-200">{title}</div>
-      <div className="text-blue-100/80 text-sm">{desc}</div>
+    <div className="flex flex-col items-start bg-blue-950/30 rounded-xl shadow-lg p-8 hover:shadow-blue-500/30 transition-shadow duration-300 border border-blue-800/50">
+      <div className="mb-5 p-3 rounded-full bg-blue-700/30">{icon}</div>
+      <h3 className="font-bold text-2xl mb-3 text-blue-200">{title}</h3>
+      <p className="text-blue-100/80 text-md leading-relaxed">{desc}</p>
     </div>
   );
 }
 
 function StepCard({ step, title, desc }: { step: string; title: string; desc: string }) {
   return (
-    <div className="flex flex-col items-center bg-background rounded-xl shadow p-6 w-full max-w-xs mx-auto">
-      <div className="w-12 h-12 flex items-center justify-center rounded-full bg-blue-700 text-white text-2xl font-bold mb-3">{step}</div>
-      <div className="font-bold text-lg mb-1 text-blue-200">{title}</div>
-      <div className="text-blue-100/80 text-sm text-center">{desc}</div>
+    <div className="flex flex-col items-start bg-background/50 rounded-xl shadow-lg p-8 w-full hover:shadow-blue-600/30 transition-shadow duration-300 border border-blue-700/50 flex-1">
+      <div className="w-14 h-14 flex items-center justify-center rounded-full bg-blue-600 text-white text-2xl font-bold mb-5 shadow-md">{step}</div>
+      <h3 className="font-bold text-2xl mb-3 text-blue-200">{title}</h3>
+      <p className="text-blue-100/80 text-md leading-relaxed">{desc}</p>
     </div>
   );
 }
 
 function BenefitCard({ title, desc }: { title: string; desc: string }) {
   return (
-    <div className="flex flex-col items-center bg-blue-950 rounded-xl shadow p-6">
-      <div className="font-bold text-lg mb-1 text-blue-200">{title}</div>
-      <div className="text-blue-100/80 text-sm text-center">{desc}</div>
+    <div className="flex flex-col items-start bg-blue-950/30 rounded-xl shadow-lg p-8 hover:shadow-blue-500/30 transition-shadow duration-300 border border-blue-800/50">
+      <h3 className="font-bold text-2xl mb-3 text-blue-200">{title}</h3>
+      <p className="text-blue-100/80 text-md leading-relaxed">{desc}</p>
     </div>
   );
 }
