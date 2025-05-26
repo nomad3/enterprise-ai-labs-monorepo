@@ -9,7 +9,7 @@ from sqlalchemy import Column, DateTime, Integer, String, Boolean, JSON, Foreign
 from sqlalchemy.orm import relationship
 import enum
 
-from devagent.core.database import Base
+from devagent.core.base import Base
 
 
 class AgentType(enum.Enum):

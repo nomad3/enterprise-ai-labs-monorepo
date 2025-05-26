@@ -15,6 +15,7 @@ import asyncio
 import logging
 
 from devagent.core.config import get_settings # Added import for get_settings
+from devagent.core.base import Base
 
 # Import models to ensure tables are created
 from devagent.core.models.tenant_model import Tenant

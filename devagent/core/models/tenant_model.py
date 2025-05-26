@@ -8,7 +8,7 @@ from typing import Optional
 from sqlalchemy import Column, DateTime, Integer, String, Boolean, JSON
 from sqlalchemy.orm import relationship
 
-from devagent.core.database import Base
+from devagent.core.base import Base
 
 
 class Tenant(Base):
