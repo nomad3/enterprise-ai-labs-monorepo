@@ -138,7 +138,7 @@ class AgentLog(Base):
     agent_id = Column(Integer, ForeignKey("agents.id"), nullable=False)
     level = Column(String, nullable=False)  # INFO, WARNING, ERROR, DEBUG
     message = Column(String, nullable=False)
-    metadata = Column(JSON, nullable=True)
+    log_metadata = Column(JSON, nullable=True) # Renamed from metadata
     created_at = Column(DateTime, default=datetime.utcnow)
 
     # Relationships
@@ -146,4 +146,4 @@ class AgentLog(Base):
 
     def __repr__(self):
         """String representation of the log."""
-        return f"<AgentLog {self.id} ({self.level})>" 
+        return f"<AgentLog {self.id} ({self.level})>"
