@@ -1,7 +1,5 @@
-// Trigger CI build
-import React from 'react';
-
 'use client';
+// Trigger CI build
 
 import { useState } from 'react';
 import { useAuth } from './contexts/AuthContext';
