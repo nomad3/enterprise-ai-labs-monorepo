@@ -1,5 +1,5 @@
 import React from 'react';
-import { InfrastructureSetup } from '../services/devAgentService';
+import { InfrastructureSetup } from '../../services/devAgentService';
 import './InfrastructureSetupView.css';
 
 interface InfrastructureSetupViewProps {
