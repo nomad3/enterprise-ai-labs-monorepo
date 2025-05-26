@@ -77,7 +77,7 @@ devagentApi:
 "devagent-ui":
   # This enables the subchart itself if it had an enabled flag at its root
   # enabled: true # Assuming this is for the subchart deployment, not ingress specifically.
-              # The subchart's own values.yaml has replicaCount > 0 so it's deployed.
+                # The subchart's own values.yaml has replicaCount > 0 so it's deployed.
 
   # Configuration for the ingress object within the devagent-ui subchart
   ingress:
@@ -94,10 +94,12 @@ devagentApi:
     #         pathType: Prefix
     # tls: []
   # Other devagent-ui specific overrides if needed, e.g.:
-  # image:
-  #   repository: gcr.io/aremko-e51ae/devagent-ui
-  #   tag: latest
-  # replicaCount: 1
+  image:
+    repository: gcr.io/aremko-e51ae/devagent-ui
+    tag: latest # This will be overridden by CI/CD pipeline with git sha
+  replicaCount: 1 # Start with 1, can be scaled later
+  env:
+    NEXT_PUBLIC_API_URL: "/api"
 
 # devagent-ui can be configured similarly if it needs cloud-specific settings
 # devagent-ui:

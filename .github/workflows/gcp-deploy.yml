@@ -90,7 +90,7 @@ jobs:
 
       - name: Build and push UI image (SHA tag)
         run: |
-          docker build -t ${{ env.GCR_HOSTNAME }}/${{ env.GCP_PROJECT_ID }}/${{ env.IMAGE_UI }}:${{ needs.check_paths.outputs.commit_sha }} -f ./devagent-ui/Dockerfile ./devagent-ui
+          docker build --build-arg NEXT_PUBLIC_API_URL=/api -t ${{ env.GCR_HOSTNAME }}/${{ env.GCP_PROJECT_ID }}/${{ env.IMAGE_UI }}:${{ needs.check_paths.outputs.commit_sha }} -f ./devagent-ui/Dockerfile ./devagent-ui
           docker push ${{ env.GCR_HOSTNAME }}/${{ env.GCP_PROJECT_ID }}/${{ env.IMAGE_UI }}:${{ needs.check_paths.outputs.commit_sha }}
 
       - name: Tag and push UI image (latest tag)
