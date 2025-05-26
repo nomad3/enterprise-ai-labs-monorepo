@@ -18,7 +18,7 @@ from devagent.core.database import get_session
 from devagent.core.models.user_model import (LoginRequest, Token, TokenData,
                                              User, UserCreate, UserResponse)
 
-router = APIRouter(prefix="/auth", tags=["authentication"])
+router = APIRouter(prefix="/api/auth", tags=["authentication"])
 settings = get_settings()
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
