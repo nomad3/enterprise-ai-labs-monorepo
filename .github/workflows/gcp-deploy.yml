@@ -3,23 +3,27 @@ name: Deploy to GKE
 on:
   push:
     branches:
-      - main # Or your default branch
-  workflow_dispatch: # Allows manual triggering
+      - main
+  workflow_dispatch:
     inputs:
-      logLevel: # Example input, not used yet but shows structure
-        description: 'Log level'
+      force_rebuild:
+        description: 'Force rebuild of images even if no app code changed'
         required: false
-        default: 'warning'
+        type: boolean
+        default: false
+      image_tag_override:
+        description: 'Specify an exact image tag to deploy (overrides build)'
+        required: false
+        type: string
+        default: ''
 
 env:
   GCP_PROJECT_ID: aremko-e51ae
   GCP_REGION: southamerica-west1
   GKE_CLUSTER_NAME: devagent-gke
-  GCR_HOSTNAME: gcr.io # Or your Artifact Registry hostname e.g. southamerica-west1-docker.pkg.dev
-  GAR_REPOSITORY_API: devagent-api # If using GAR, this is the repo name, not part of the image name
-  GAR_REPOSITORY_UI: devagent-ui   # If using GAR
-  IMAGE_API: devagent-api # This is the image name, not the directory name
-  IMAGE_UI: devagent-ui   # This is the image name, not the directory name
+  GCR_HOSTNAME: gcr.io
+  IMAGE_API: devagent-api
+  IMAGE_UI: devagent-ui
   HELM_RELEASE_NAME: devagent
   HELM_NAMESPACE: devagent
 
@@ -28,10 +32,11 @@ permissions:
   id-token: 'write'
 
 jobs:
-  build_images:
-    name: Build and Push Docker Images
+  check_paths:
+    name: Check For Application Code Changes
     runs-on: ubuntu-latest
     outputs:
+      app_code_changed: ${{ steps.filter.outputs.app_code_changed }}
       commit_sha: ${{ steps.set_sha.outputs.sha }}
     steps:
       - name: Checkout code
@@ -40,6 +45,29 @@ jobs:
       - name: Set Commit SHA
         id: set_sha
         run: echo "::set-output name=sha::${{ github.sha }}"
+
+      - name: Path Filter
+        id: filter
+        uses: dorny/paths-filter@v2
+        with:
+          filters: |
+            app_code_changed:
+              - 'devagent/**'
+              - 'devagent-ui/**'
+              - '.github/workflows/gcp-deploy.yml' # Rebuild if workflow itself changes
+
+  build_images:
+    name: Build and Push Docker Images
+    runs-on: ubuntu-latest
+    needs: check_paths
+    # Run if app code changed OR if manually triggered with force_rebuild=true
+    # Do NOT run if an image_tag_override is provided (implies using existing image)
+    if: (needs.check_paths.outputs.app_code_changed == 'true' || github.event.inputs.force_rebuild == 'true') && github.event.inputs.image_tag_override == ''
+    outputs:
+      image_tag_built: ${{ needs.check_paths.outputs.commit_sha }} # Always output the SHA of the current commit
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
 
       - name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v1
@@ -50,23 +78,56 @@ jobs:
       - name: Login to GCR
         run: gcloud auth configure-docker ${{ env.GCR_HOSTNAME }} --quiet
 
-      - name: Build and push API image
+      - name: Build and push API image (SHA tag)
         run: |
-          docker build -t ${{ env.GCR_HOSTNAME }}/${{ env.GCP_PROJECT_ID }}/${{ env.IMAGE_API }}:${{ steps.set_sha.outputs.sha }} -f ./devagent/Dockerfile ./devagent
-          docker push ${{ env.GCR_HOSTNAME }}/${{ env.GCP_PROJECT_ID }}/${{ env.IMAGE_API }}:${{ steps.set_sha.outputs.sha }}
+          docker build -t ${{ env.GCR_HOSTNAME }}/${{ env.GCP_PROJECT_ID }}/${{ env.IMAGE_API }}:${{ needs.check_paths.outputs.commit_sha }} -f ./devagent/Dockerfile ./devagent
+          docker push ${{ env.GCR_HOSTNAME }}/${{ env.GCP_PROJECT_ID }}/${{ env.IMAGE_API }}:${{ needs.check_paths.outputs.commit_sha }}
 
-      - name: Build and push UI image
+      - name: Tag and push API image (latest tag)
         run: |
-          docker build -t ${{ env.GCR_HOSTNAME }}/${{ env.GCP_PROJECT_ID }}/${{ env.IMAGE_UI }}:${{ steps.set_sha.outputs.sha }} -f ./devagent-ui/Dockerfile ./devagent-ui
-          docker push ${{ env.GCR_HOSTNAME }}/${{ env.GCP_PROJECT_ID }}/${{ env.IMAGE_UI }}:${{ steps.set_sha.outputs.sha }}
+          docker tag ${{ env.GCR_HOSTNAME }}/${{ env.GCP_PROJECT_ID }}/${{ env.IMAGE_API }}:${{ needs.check_paths.outputs.commit_sha }} ${{ env.GCR_HOSTNAME }}/${{ env.GCP_PROJECT_ID }}/${{ env.IMAGE_API }}:latest
+          docker push ${{ env.GCR_HOSTNAME }}/${{ env.GCP_PROJECT_ID }}/${{ env.IMAGE_API }}:latest
+
+      - name: Build and push UI image (SHA tag)
+        run: |
+          docker build -t ${{ env.GCR_HOSTNAME }}/${{ env.GCP_PROJECT_ID }}/${{ env.IMAGE_UI }}:${{ needs.check_paths.outputs.commit_sha }} -f ./devagent-ui/Dockerfile ./devagent-ui
+          docker push ${{ env.GCR_HOSTNAME }}/${{ env.GCP_PROJECT_ID }}/${{ env.IMAGE_UI }}:${{ needs.check_paths.outputs.commit_sha }}
+
+      - name: Tag and push UI image (latest tag)
+        run: |
+          docker tag ${{ env.GCR_HOSTNAME }}/${{ env.GCP_PROJECT_ID }}/${{ env.IMAGE_UI }}:${{ needs.check_paths.outputs.commit_sha }} ${{ env.GCR_HOSTNAME }}/${{ env.GCP_PROJECT_ID }}/${{ env.IMAGE_UI }}:latest
+          docker push ${{ env.GCR_HOSTNAME }}/${{ env.GCP_PROJECT_ID }}/${{ env.IMAGE_UI }}:latest
 
   deploy_to_gke:
     name: Deploy to GKE
     runs-on: ubuntu-latest
-    needs: build_images # Depends on the build_images job
+    needs: [check_paths, build_images] # build_images is now an optional dependency due to its 'if' condition
+    # Always run deploy step if triggered by push or manual (build_images might be skipped)
+    if: ${{ always() }} 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+
+      - name: Determine Image Tag for Deployment
+        id: determine_tag
+        run: |
+          tag_override="${{ github.event.inputs.image_tag_override }}"
+          app_code_changed="${{ needs.check_paths.outputs.app_code_changed }}"
+          built_tag="${{ needs.build_images.outputs.image_tag_built }}" # This will be empty if build_images was skipped
+          commit_sha="${{ needs.check_paths.outputs.commit_sha }}"
+          
+          final_tag=""
+          if [ -n "$tag_override" ]; then
+            final_tag="$tag_override"
+            echo "Using image_tag_override: $final_tag"
+          elif [ "$app_code_changed" == "true" ] && [ -n "$built_tag" ]; then
+            final_tag="$built_tag"
+            echo "App code changed and images built. Using built tag: $final_tag"
+          else
+            final_tag="latest" # Default if no app code change, no override, or build skipped unexpectedly
+            echo "No app code change or build skipped. Defaulting to 'latest' tag."
+          fi
+          echo "::set-output name=tag_to_deploy::$final_tag"
 
       - name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v1
@@ -90,5 +151,5 @@ jobs:
             -f ./helm/thefullstackagent/values-gcp.yaml \
             --set devagentApi.image.repository=${{ env.GCR_HOSTNAME }}/${{ env.GCP_PROJECT_ID }}/${{ env.IMAGE_API }} \
             --set devagent-ui.image.repository=${{ env.GCR_HOSTNAME }}/${{ env.GCP_PROJECT_ID }}/${{ env.IMAGE_UI }} \
-            --set devagentApi.image.tag=${{ needs.build_images.outputs.commit_sha }} \
-            --set devagent-ui.image.tag=${{ needs.build_images.outputs.commit_sha }} 
+            --set devagentApi.image.tag=${{ steps.determine_tag.outputs.tag_to_deploy }} \
+            --set devagent-ui.image.tag=${{ steps.determine_tag.outputs.tag_to_deploy }} 
