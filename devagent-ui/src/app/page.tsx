@@ -54,7 +54,7 @@ export default function LandingPage() {
           <h1 className="text-5xl sm:text-7xl font-extrabold text-white mb-6 leading-tight">
             Unlock Strategic Agility & Drive Growth with <span className="text-blue-400">Intelligent Automation</span>
           </h1>
-          <p className="text-xl sm:text-2xl text-blue-100/90 mb-10 max-w-4xl">
+          <p className="text-xl sm:text-2xl text-blue-100/90 mb-10 max-w-4xl mx-auto">
             AgentForge empowers your enterprise to streamline complex workflows, accelerate innovation, and optimize resource allocation across your multi-cloud landscape – all with robust security and governance.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
@@ -65,7 +65,7 @@ export default function LandingPage() {
               <Button size="lg" variant="outline" className="border-blue-500 text-blue-300 hover:bg-blue-800 hover:text-white font-bold text-lg px-10 py-6">Explore Platform</Button>
             </Link>
           </div>
-          <div className="flex flex-wrap gap-x-6 gap-y-3 justify-center mt-10">
+          <div className="flex flex-wrap gap-x-6 gap-y-3 justify-center items-center mt-10">
             <span className="inline-flex items-center gap-2 px-4 py-2 bg-blue-800/70 text-blue-200 rounded-full text-md font-medium"><CloudCog className="w-5 h-5 text-blue-400" /> Multi-Cloud Flexibility</span>
             <span className="inline-flex items-center gap-2 px-4 py-2 bg-blue-800/70 text-blue-200 rounded-full text-md font-medium"><Network className="w-5 h-5 text-blue-400" /> Secure Multi-Tenancy</span>
             <span className="inline-flex items-center gap-2 px-4 py-2 bg-blue-800/70 text-blue-200 rounded-full text-md font-medium"><Zap className="w-5 h-5 text-blue-400" /> Diverse Agent Ecosystem</span>
