@@ -12,8 +12,8 @@ env:
   GCR_HOSTNAME: gcr.io # Or your Artifact Registry hostname e.g. southamerica-west1-docker.pkg.dev
   GAR_REPOSITORY_API: devagent-api # If using GAR, this is the repo name, not part of the image name
   GAR_REPOSITORY_UI: devagent-ui   # If using GAR
-  IMAGE_API: devagent-api
-  IMAGE_UI: devagent-ui
+  IMAGE_API: devagent-api # This is the image name, not the directory name
+  IMAGE_UI: devagent-ui   # This is the image name, not the directory name
   HELM_RELEASE_NAME: devagent
   HELM_NAMESPACE: devagent
 
@@ -66,15 +66,13 @@ jobs:
 
       - name: Build and push API image
         run: |-
-          docker build -t ${{ env.GCR_HOSTNAME }}/${{ env.GCP_PROJECT_ID }}/${{ env.IMAGE_API }}:${{ github.sha }} -f ./devagent-api/Dockerfile ./devagent-api
+          docker build -t ${{ env.GCR_HOSTNAME }}/${{ env.GCP_PROJECT_ID }}/${{ env.IMAGE_API }}:${{ github.sha }} -f ./devagent/Dockerfile ./devagent
           docker push ${{ env.GCR_HOSTNAME }}/${{ env.GCP_PROJECT_ID }}/${{ env.IMAGE_API }}:${{ github.sha }}
-        # working-directory: ${{ github.workspace }} # Assumes Dockerfile is in ./devagent-api relative to root
 
       - name: Build and push UI image
         run: |-
           docker build -t ${{ env.GCR_HOSTNAME }}/${{ env.GCP_PROJECT_ID }}/${{ env.IMAGE_UI }}:${{ github.sha }} -f ./devagent-ui/Dockerfile ./devagent-ui
           docker push ${{ env.GCR_HOSTNAME }}/${{ env.GCP_PROJECT_ID }}/${{ env.IMAGE_UI }}:${{ github.sha }}
-        # working-directory: ${{ github.workspace }} # Assumes Dockerfile is in ./devagent-ui relative to root
 
       - name: Deploy Helm chart
         run: |-
