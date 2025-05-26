@@ -1,5 +1,5 @@
 import React from 'react';
-import { SolutionPlan } from '../services/devAgentService';
+import { SolutionPlan } from '../../services/devAgentService';
 import './SolutionPlanView.css';
 
 interface SolutionPlanViewProps {

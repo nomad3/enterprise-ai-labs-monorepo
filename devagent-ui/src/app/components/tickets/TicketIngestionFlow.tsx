@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import TicketIngestionForm from './TicketIngestionForm';
-import { ticketService, TicketResponse, TicketError } from '../services/ticketService';
+import { ticketService, TicketResponse, TicketError } from '../../services/ticketService';
 import './TicketIngestionFlow.css';
 
 const TicketIngestionFlow: React.FC = () => {

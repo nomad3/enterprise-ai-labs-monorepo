@@ -1,5 +1,5 @@
 import React from 'react';
-import { TestPlan } from '../services/devAgentService';
+import { TestPlan } from '../../services/devAgentService';
 import './TestPlanView.css';
 
 interface TestPlanViewProps {
