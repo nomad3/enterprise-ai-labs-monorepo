@@ -43,8 +43,8 @@ export default function LandingPage() {
       <section className="relative flex flex-col items-center justify-center flex-1 text-center px-4 py-20 overflow-hidden">
         <div className="absolute inset-0 z-0">
           <Image
-            src="https://images.unsplash.com/photo-1507697471319-a7779castef?q=80&w=1600&auto=format&fit=crop"
-            alt="Futuristic AI Background"
+            src="https://storage.googleapis.com/devagent-assets/landing-page/hero_multi_agent_step2.jpg"
+            alt="AI and Technology Background"
             fill
             className="object-cover opacity-30"
             priority
@@ -52,7 +52,7 @@ export default function LandingPage() {
         </div>
         <div className="relative z-10">
           <h1 className="text-5xl sm:text-7xl font-extrabold text-white mb-6 leading-tight">
-            Future-Proof Your Enterprise: <span className="text-lime-400">AI-Powered Operations for Market Leadership</span>
+            Rewire Your Enterprise: <span className="text-lime-400">AI-Powered Operations for Market Leadership</span>
           </h1>
           <p className="text-xl sm:text-2xl text-gray-300 mb-10 max-w-4xl mx-auto">
             AgentForge delivers a unified AI orchestration platform to master multi-cloud complexity, accelerate go-to-market, and drive significant ROI—securely and at scale.
@@ -82,31 +82,37 @@ export default function LandingPage() {
             icon={<CloudCog className="w-10 h-10 text-lime-400" />} 
             title="Optimize Multi-Cloud Investments" 
             desc="Gain unified control over your entire cloud estate (AWS, Azure, GCP, private). Drive substantial cost savings, enhance workload performance, and eliminate vendor lock-in to maximize strategic flexibility."
+            image="https://storage.googleapis.com/devagent-assets/landing-page/feature_multi_cloud.jpg"
           />
           <FeatureCard 
             icon={<Network className="w-10 h-10 text-lime-400" />} 
             title="Enterprise-Wide Scalability & Governance" 
             desc="Securely scale AI initiatives across all business units and client engagements. Ensure strict data isolation, maintain regulatory compliance (e.g., GDPR, SOC2), and enforce granular control with a robust, auditable framework."
+            image="https://storage.googleapis.com/devagent-assets/landing-page/feature_multi_tenant_devops_howitworks_step1.jpg"
           />
           <FeatureCard 
             icon={<Zap className="w-10 h-10 text-lime-400" />} 
             title="Unlock Cross-Functional Synergies" 
             desc="Empower specialized AI agents to collaborate seamlessly across departmental silos—from R&D and operations to GRC and customer success. Transform complex challenges into strategic growth opportunities."
+            image="https://storage.googleapis.com/devagent-assets/landing-page/hero_multi_agent_step2.jpg"
           />
           <FeatureCard 
             icon={<Code2 className="w-10 h-10 text-lime-400" />} 
             title="Drastically Reduce Time-to-Market" 
             desc="Automate and intelligently optimize your entire software development lifecycle. Deliver innovative products and services faster, respond rapidly to market changes, and secure a decisive competitive advantage."
+            image="https://storage.googleapis.com/devagent-assets/landing-page/feature_software_delivery.jpg"
           />
           <FeatureCard 
             icon={<GitBranch className="w-10 h-10 text-lime-400" />} 
             title="Enhance Operational Resilience & Efficiency" 
             desc="Automate infrastructure provisioning, optimize CI/CD pipelines, and proactively manage cloud resources with AI-driven insights. Significantly improve uptime, reduce operational risk, and optimize total cost of ownership (TCO)."
+            image="https://storage.googleapis.com/devagent-assets/landing-page/feature_multi_tenant_devops_howitworks_step1.jpg"
           />
           <FeatureCard 
             icon={<Briefcase className="w-10 h-10 text-lime-400" />} 
             title="Tailored AI for Your Unique Strategy" 
             desc="Adapt AgentForge to your precise business objectives and integrate flawlessly with existing enterprise systems. Leverage bespoke AI solutions to maximize ROI from current investments and conquer unique market challenges."
+            image="https://storage.googleapis.com/devagent-assets/landing-page/feature_custom_solutions_step3.jpg"
           />
         </div>
       </section>
@@ -128,16 +134,19 @@ export default function LandingPage() {
               step="1" 
               title="Phase 1: Strategic Architectural Alignment" 
               desc="We partner with your leadership to align AgentForge with your overarching multi-cloud vision. Our experts ensure seamless integration, maximizing existing infrastructure investments while optimizing for peak performance, cost governance, and data sovereignty."
+              image="https://storage.googleapis.com/devagent-assets/landing-page/feature_multi_tenant_devops_howitworks_step1.jpg"
             />
             <StepCard 
               step="2" 
               title="Phase 2: Tailored Implementation & Empowerment" 
               desc="AgentForge is configured to mirror your precise organizational structure. We empower your teams by deploying bespoke AI agents and intelligent workflows, fully customized for your specific business units, client engagements, and strategic objectives, ensuring rapid adoption and value realization."
+              image="https://storage.googleapis.com/devagent-assets/landing-page/hero_multi_agent_step2.jpg"
             />
             <StepCard 
               step="3" 
               title="Phase 3: Continuous Strategic Oversight & Evolution" 
               desc="Maintain complete executive oversight with real-time dashboards tracking AI performance, resource allocation, and enterprise-wide compliance. AgentForge provides the critical insights needed to continuously optimize operations, mitigate risk, and strategically scale your AI capabilities for sustained competitive advantage."
+              image="https://storage.googleapis.com/devagent-assets/landing-page/feature_custom_solutions_step3.jpg"
             />
           </div>
         </div>
@@ -211,22 +220,44 @@ export default function LandingPage() {
 // FeatureCard, StepCard, BenefitCard styling might need minor adjustments for new text lengths or emphasis
 // For example, increasing padding or ensuring text alignment remains good.
 
-function FeatureCard({ icon, title, desc }: { icon: React.ReactNode; title: string; desc: string }) {
+function FeatureCard({ icon, title, desc, image }: { icon: React.ReactNode; title: string; desc: string; image: string }) {
   return (
-    <div className="group flex flex-col items-center bg-gray-900/70 rounded-xl shadow-lg overflow-hidden hover:shadow-lime-600/30 transition-shadow duration-300 border border-lime-800/40 p-8">
-      <div className="mb-5 p-3 rounded-full bg-lime-900/50">{icon}</div>
-      <h3 className="font-bold text-2xl mb-3 text-lime-300 text-center">{title}</h3>
-      <p className="text-gray-400 text-md leading-relaxed text-center">{desc}</p>
+    <div className="group flex flex-col items-center bg-gray-900/70 rounded-xl shadow-lg overflow-hidden hover:shadow-lime-600/30 transition-shadow duration-300 border border-lime-800/40">
+      <div className="relative w-full h-48">
+        <Image
+          src={image}
+          alt={title}
+          fill
+          className="object-cover group-hover:scale-105 transition-transform duration-300"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 to-transparent" />
+      </div>
+      <div className="p-8 flex flex-col items-center w-full">
+        <div className="mb-5 p-3 rounded-full bg-lime-900/50">{icon}</div>
+        <h3 className="font-bold text-2xl mb-3 text-lime-300 text-center">{title}</h3>
+        <p className="text-gray-400 text-md leading-relaxed text-center">{desc}</p>
+      </div>
     </div>
   );
 }
 
-function StepCard({ step, title, desc }: { step: string; title: string; desc: string }) {
+function StepCard({ step, title, desc, image }: { step: string; title: string; desc: string; image: string }) {
   return (
-    <div className="group flex flex-col items-center bg-gray-900/70 rounded-xl shadow-lg overflow-hidden hover:shadow-lime-600/30 transition-shadow duration-300 border border-lime-800/40 p-8 flex-1">
-      <div className="w-14 h-14 flex items-center justify-center rounded-full bg-lime-600 text-gray-950 text-2xl font-bold mb-5 shadow-md">{step}</div>
-      <h3 className="font-bold text-2xl mb-3 text-lime-300 text-center">{title}</h3>
-      <p className="text-gray-400 text-md leading-relaxed text-center">{desc}</p>
+    <div className="group flex flex-col items-center bg-gray-900/70 rounded-xl shadow-lg overflow-hidden hover:shadow-lime-600/30 transition-shadow duration-300 border border-lime-800/40 flex-1">
+      <div className="relative w-full h-48">
+        <Image
+          src={image}
+          alt={title}
+          fill
+          className="object-cover group-hover:scale-105 transition-transform duration-300"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-gray-900/80 to-transparent" />
+      </div>
+      <div className="p-8 flex flex-col items-center w-full">
+        <div className="w-14 h-14 flex items-center justify-center rounded-full bg-lime-600 text-gray-950 text-2xl font-bold mb-5 shadow-md">{step}</div>
+        <h3 className="font-bold text-2xl mb-3 text-lime-300 text-center">{title}</h3>
+        <p className="text-gray-400 text-md leading-relaxed text-center">{desc}</p>
+      </div>
     </div>
   );
 }
