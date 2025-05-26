@@ -2,7 +2,9 @@
 
 import { useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
-import styles from './Register.module.css';
+// import styles from './Register.module.css'; // Remove CSS Modules
+import { Button } from '@/components/ui/button'; // Use Shadcn Button
+import { Input } from '@/components/ui/input'; // Use Shadcn Input
 
 export default function Register() {
   const { register, error: authError } = useAuth();
@@ -10,95 +12,114 @@ export default function Register() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [error, setError] = useState<string | null>(null);
+  const [componentError, setComponentError] = useState<string | null>(null); // Renamed for clarity
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setComponentError(null); // Clear previous errors
     
     if (password !== confirmPassword) {
-      setError('Passwords do not match');
+      setComponentError('Passwords do not match. Please re-enter.');
+      return;
+    }
+    if (password.length < 8) {
+      setComponentError('Password must be at least 8 characters long.');
       return;
     }
 
     try {
       setLoading(true);
-      setError(null);
       await register({ name, email, password });
-    } catch (err) {
-      setError('Registration failed. Please try again.');
+      // Register success is handled by AuthContext redirecting or updating user state
+    } catch (err: any) {
+      setComponentError(err.message || 'Registration failed. Please try again.');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className={styles.container}>
-      <div className={styles.formContainer}>
-        <h2>Create an Account</h2>
-        
-        {(error || authError) && (
-          <div className={styles.error}>
-            {error || authError}
-          </div>
-        )}
+    <div className="w-full">
+      {/* Title is in AppPage */}
 
-        <form onSubmit={handleSubmit} className={styles.form}>
-          <div className={styles.formGroup}>
-            <label htmlFor="name">Full Name</label>
-            <input
-              type="text"
-              id="name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
-              placeholder="Enter your full name"
-            />
-          </div>
+      {(componentError || authError) && (
+        <div className="mb-4 p-3 rounded-md bg-red-900/50 border border-red-700 text-red-300 text-sm">
+          {componentError || authError}
+        </div>
+      )}
 
-          <div className={styles.formGroup}>
-            <label htmlFor="email">Email</label>
-            <input
-              type="email"
-              id="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              placeholder="Enter your email"
-            />
-          </div>
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div>
+          <label htmlFor="name" className="block text-sm font-medium text-lime-300 mb-1">
+            Full Name
+          </label>
+          <Input
+            type="text"
+            id="name"
+            value={name}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setName(e.target.value)}
+            required
+            placeholder="Your Name"
+            className="bg-gray-800 border-gray-700 text-gray-200 focus:ring-lime-500 focus:border-lime-500"
+          />
+        </div>
 
-          <div className={styles.formGroup}>
-            <label htmlFor="password">Password</label>
-            <input
-              type="password"
-              id="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              placeholder="Create a password"
-              minLength={8}
-            />
-          </div>
+        <div>
+          <label htmlFor="email" className="block text-sm font-medium text-lime-300 mb-1">
+            Email Address
+          </label>
+          <Input
+            type="email"
+            id="email"
+            value={email}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
+            required
+            placeholder="you@example.com"
+            className="bg-gray-800 border-gray-700 text-gray-200 focus:ring-lime-500 focus:border-lime-500"
+          />
+        </div>
 
-          <div className={styles.formGroup}>
-            <label htmlFor="confirmPassword">Confirm Password</label>
-            <input
-              type="password"
-              id="confirmPassword"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              required
-              placeholder="Confirm your password"
-              minLength={8}
-            />
-          </div>
+        <div>
+          <label htmlFor="password" className="block text-sm font-medium text-lime-300 mb-1">
+            Password
+          </label>
+          <Input
+            type="password"
+            id="password"
+            value={password}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
+            required
+            placeholder="Create a password (min. 8 characters)"
+            minLength={8}
+            className="bg-gray-800 border-gray-700 text-gray-200 focus:ring-lime-500 focus:border-lime-500"
+          />
+        </div>
 
-          <button type="submit" className={styles.submitButton} disabled={loading}>
-            {loading ? 'Creating Account...' : 'Create Account'}
-          </button>
-        </form>
-      </div>
+        <div>
+          <label htmlFor="confirmPassword" className="block text-sm font-medium text-lime-300 mb-1">
+            Confirm Password
+          </label>
+          <Input
+            type="password"
+            id="confirmPassword"
+            value={confirmPassword}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setConfirmPassword(e.target.value)}
+            required
+            placeholder="Confirm your password"
+            minLength={8}
+            className="bg-gray-800 border-gray-700 text-gray-200 focus:ring-lime-500 focus:border-lime-500"
+          />
+        </div>
+
+        <Button 
+          type="submit" 
+          disabled={loading}
+          className="w-full bg-lime-600 hover:bg-lime-700 text-gray-950 font-semibold py-3 rounded-md transition duration-150 ease-in-out shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-lime-500 focus:ring-opacity-50 mt-2"
+        >
+          {loading ? 'Creating Account...' : 'Create AgentForge Account'}
+        </Button>
+      </form>
     </div>
   );
 } 

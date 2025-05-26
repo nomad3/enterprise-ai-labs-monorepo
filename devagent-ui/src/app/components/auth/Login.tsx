@@ -2,69 +2,82 @@
 
 import { useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
-import styles from './Login.module.css';
+// import styles from './Login.module.css'; // Remove CSS Modules
+import { Button } from '@/components/ui/button'; // Use Shadcn Button for consistency
+import { Input } from '@/components/ui/input'; // Use Shadcn Input for consistency
 
 export default function Login() {
   const { login, error: authError } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState<string | null>(null);
+  const [componentError, setComponentError] = useState<string | null>(null); // Renamed to avoid conflict with authError
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       setLoading(true);
-      setError(null);
+      setComponentError(null);
       await login({ email, password });
-    } catch (err) {
-      setError('Login failed. Please check your credentials.');
+      // Login success is handled by AuthContext redirecting, no specific action here
+    } catch (err: any) {
+      // Use err.message if available, otherwise generic message
+      setComponentError(err.message || 'Login failed. Please check your credentials.');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className={styles.container}>
-      <div className={styles.formContainer}>
-        <h2>Login to DevAgent</h2>
-        
-        {(error || authError) && (
-          <div className={styles.error}>
-            {error || authError}
-          </div>
-        )}
+    // Removed Login.module.css styles, using Tailwind throughout
+    <div className="w-full">
+      {/* The title "Login to DevAgent" or "AgentForge Access" is already in AppPage, so not repeated here */}
+      
+      {(componentError || authError) && (
+        <div className="mb-4 p-3 rounded-md bg-red-900/50 border border-red-700 text-red-300 text-sm">
+          {componentError || authError}
+        </div>
+      )}
 
-        <form onSubmit={handleSubmit} className={styles.form}>
-          <div className={styles.formGroup}>
-            <label htmlFor="email">Email</label>
-            <input
-              type="email"
-              id="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              placeholder="Enter your email"
-            />
-          </div>
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <div>
+          <label htmlFor="email" className="block text-sm font-medium text-lime-300 mb-1">
+            Email Address
+          </label>
+          <Input // Using Shadcn Input component
+            type="email"
+            id="email"
+            value={email}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
+            required
+            placeholder="you@example.com"
+            className="bg-gray-800 border-gray-700 text-gray-200 focus:ring-lime-500 focus:border-lime-500"
+          />
+        </div>
 
-          <div className={styles.formGroup}>
-            <label htmlFor="password">Password</label>
-            <input
-              type="password"
-              id="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              placeholder="Enter your password"
-            />
-          </div>
+        <div>
+          <label htmlFor="password" className="block text-sm font-medium text-lime-300 mb-1">
+            Password
+          </label>
+          <Input // Using Shadcn Input component
+            type="password"
+            id="password"
+            value={password}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
+            required
+            placeholder="••••••••"
+            className="bg-gray-800 border-gray-700 text-gray-200 focus:ring-lime-500 focus:border-lime-500"
+          />
+        </div>
 
-          <button type="submit" className={styles.submitButton} disabled={loading}>
-            {loading ? 'Logging in...' : 'Login'}
-          </button>
-        </form>
-      </div>
+        <Button 
+          type="submit" 
+          disabled={loading}
+          className="w-full bg-lime-600 hover:bg-lime-700 text-gray-950 font-semibold py-3 rounded-md transition duration-150 ease-in-out shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-lime-500 focus:ring-opacity-50"
+        >
+          {loading ? 'Logging in...' : 'Login to AgentForge'}
+        </Button>
+      </form>
     </div>
   );
 } 
