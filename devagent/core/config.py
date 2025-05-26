@@ -3,9 +3,9 @@ Configuration settings for the AgentForge application.
 """
 
 from functools import lru_cache
-from typing import List, Optional
+from typing import List, Optional, Dict, Any
 
-from pydantic import BaseSettings, Field # Changed from pydantic_settings to pydantic and added Field
+from pydantic import BaseSettings, root_validator
 
 
 class Settings(BaseSettings):
@@ -42,9 +42,25 @@ class Settings(BaseSettings):
     DEFAULT_TENANT: str = "default"
     TENANT_ISOLATION_LEVEL: str = "strict"  # strict, relaxed, none
 
-    # CORS settings
-    BACKEND_CORS_ORIGINS: List[str] = ["http://localhost:3000", "http://localhost:3002"]
-    ALLOWED_ORIGINS: List[str] = ["http://localhost:3000", "http://localhost:3002"]
+    # CORS settings - Environment variables should be comma-separated strings
+    BACKEND_CORS_ORIGINS_ENV: Optional[str] = None
+    ALLOWED_ORIGINS_ENV: Optional[str] = None
+    
+    # These will be populated by the root_validator based on _ENV vars or use these defaults
+    BACKEND_CORS_ORIGINS: List[str] = ["http://localhost:3000", "http://localhost:3002", "http://127.0.0.1:3000", "http://127.0.0.1:3002"]
+    ALLOWED_ORIGINS: List[str] = ["http://localhost:3000", "http://localhost:3002", "http://127.0.0.1:3000", "http://127.0.0.1:3002"]
+
+    @root_validator(pre=False) # Using pre=False to run after initial field population
+    def assemble_cors_settings(cls, values: Dict[str, Any]) -> Dict[str, Any]:
+        backend_cors_env = values.get("BACKEND_CORS_ORIGINS_ENV")
+        if isinstance(backend_cors_env, str) and backend_cors_env:
+            values["BACKEND_CORS_ORIGINS"] = [item.strip() for item in backend_cors_env.split(",") if item.strip()]
+        
+        allowed_origins_env = values.get("ALLOWED_ORIGINS_ENV")
+        if isinstance(allowed_origins_env, str) and allowed_origins_env:
+            values["ALLOWED_ORIGINS"] = [item.strip() for item in allowed_origins_env.split(",") if item.strip()]
+        
+        return values
 
     # Monitoring settings
     PROMETHEUS_URL: str = "http://localhost:9090"
@@ -93,6 +109,7 @@ class Settings(BaseSettings):
         """Pydantic config."""
         case_sensitive = True
         env_file = ".env"
+        env_file_encoding = 'utf-8' # Added for robustness
 
 
 @lru_cache()
