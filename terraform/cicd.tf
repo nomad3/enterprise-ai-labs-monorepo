@@ -26,6 +26,13 @@ resource "google_project_iam_member" "cicd_sa_artifactregistry_repo_admin" {
   member  = "serviceAccount:${google_service_account.cicd_sa.email}"
 }
 
+# Grant Artifact Registry Create-on-push Writer access for gcr.io compatibility
+resource "google_project_iam_member" "cicd_sa_artifactregistry_create_on_push_writer" {
+  project = var.gcp_project
+  role    = "roles/artifactregistry.createOnPushWriter"
+  member  = "serviceAccount:${google_service_account.cicd_sa.email}"
+}
+
 # Grant GKE cluster access to the CI/CD SA
 resource "google_project_iam_member" "cicd_sa_gke_developer" {
   project = var.gcp_project
