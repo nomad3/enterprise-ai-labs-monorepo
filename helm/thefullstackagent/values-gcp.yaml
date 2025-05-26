@@ -19,7 +19,7 @@ devagentApi:
     REDIS_URL: "redis://10.93.221.219:6379"
     # JWT_SECRET should be a strong, unique secret managed via K8s secrets, not hardcoded here for prod.
     # For now, we'll let it take the default from the main values.yaml or you can override it.
-    # JWT_SECRET: "your-gcp-specific-jwt-secret" 
+    # JWT_SECRET: "your-gcp-specific-jwt-secret"
 
   # Configure to use the existing GKE service account created by Terraform
   serviceAccount:
@@ -46,19 +46,58 @@ devagentApi:
           memory: "128Mi"
           cpu: "100m"
 
-# devagentUi can be configured similarly if it needs cloud-specific settings
+  ingress:
+    enabled: true
+    # className: "" # Default GKE Ingress controller will be used
+    annotations:
+      # If you have a reserved global static IP, specify its name here.
+      # Otherwise, remove this line or GKE will try to find/create an IP with this name.
+      kubernetes.io/ingress.global-static-ip-name: "devagent-static-ip"
+      # This annotation tells GKE to provision and manage an SSL certificate.
+      # 'devagent-managed-cert' is just a name for this managed certificate resource.
+      networking.gke.io/managed-certificates: "devagent-managed-cert"
+      # kubernetes.io/ingress.class: "gce" # Optional: explicitly use GKE Ingress
+    hosts:
+      - host: "agents.datamatic.app"
+        paths:
+          - path: /api
+            pathType: Prefix # Requests to agents.datamatic.app/api/* go to devagentApi
+    tls: [] # TLS is handled by the Google-managed certificate
+
 devagentUi:
   enabled: true # Assuming we still want to deploy the UI
   image:
     repository: gcr.io/aremko-e51ae/devagent-ui # Ensure this image exists
     tag: latest
-  # ingress:
-  #   hosts:
-  #     - host: devagent.your-gcp-domain.com # Update with your actual domain
-  #       paths:
-  #         - path: /
-  #           pathType: ImplementationSpecific
-  #   tls:
-  #     - secretName: devagent-ui-tls-gcp
-  #       hosts:
-  #         - devagent.your-gcp-domain.com 
+
+  ingress:
+    enabled: true
+    # className: "" # Default GKE Ingress controller will be used
+    annotations:
+      # If you have a reserved global static IP, specify its name here (should be the same as for the API if sharing the IP).
+      kubernetes.io/ingress.global-static-ip-name: "devagent-static-ip"
+      networking.gke.io/managed-certificates: "devagent-managed-cert" # Use the same managed certificate resource name
+      # kubernetes.io/ingress.class: "gce" # Optional: explicitly use GKE Ingress
+    hosts:
+      - host: "agents.datamatic.app"
+        paths:
+          - path: /
+            pathType: Prefix # Requests to agents.datamatic.app/* go to devagentUi
+    tls: [] # TLS is handled by the Google-managed certificate
+
+# devagentUi can be configured similarly if it needs cloud-specific settings
+# devagentUi:
+#   enabled: true # Assuming we still want to deploy the UI
+#   image:
+#     repository: gcr.io/aremko-e51ae/devagent-ui # Ensure this image exists
+#     tag: latest
+#   # ingress:
+#   #   hosts:
+#   #     - host: devagent.your-gcp-domain.com # Update with your actual domain
+#   #       paths:
+#   #         - path: /
+#   #           pathType: ImplementationSpecific
+#   #   tls:
+#   #     - secretName: devagent-ui-tls-gcp
+#   #       hosts:
+#   #         - devagent.your-gcp-domain.com 
