@@ -52,10 +52,10 @@ export default function LandingPage() {
         </div>
         <div className="relative z-10">
           <h1 className="text-5xl sm:text-7xl font-extrabold text-white mb-6 leading-tight">
-            Rewire Your Enterprise: <span className="text-lime-400">AI-Powered Operations for Market Leadership</span>
+            Forge Your AI-Powered Future: <span className="text-lime-400">Autonomous Orchestration with AgentForge</span>
           </h1>
           <p className="text-xl sm:text-2xl text-gray-300 mb-10 max-w-4xl mx-auto">
-            AgentForge delivers a unified AI orchestration platform to master multi-cloud complexity, accelerate go-to-market, and drive significant ROI—securely and at scale.
+            AgentForge empowers your enterprise to design, deploy, and manage fleets of intelligent AI agents. Seamlessly integrate disparate systems across your multi-cloud landscape, automate end-to-end workflows, and unlock transformative operational efficiency—all governed by a secure, scalable, and developer-centric platform.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
             <Link href="#contact">
@@ -158,27 +158,27 @@ export default function LandingPage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10 max-w-7xl mx-auto px-6">
           <BenefitCard 
             title="Maximize ROI with Intelligent Automation" 
-            desc="Slash operational overhead and boost revenue by automating complex workflows with our multi-agent orchestration engine and extensible plugin architecture, ensuring measurable returns on your AI investment."
+            desc="Leverage our multi-agent orchestration engine to automate complex IT and business processes. Utilize an extensible plugin architecture to integrate with existing tools, cutting overhead and speeding up innovation cycles for measurable ROI."
           />
           <BenefitCard 
             title="Achieve True Scalability & Agility" 
-            desc="Dynamically scale AI operations across your global enterprise with our Kubernetes-native architecture and elastic resource management, adapting swiftly to evolving market demands and strategic imperatives."
+            desc="Built on a Kubernetes-native foundation, AgentForge provides elastic resource management and horizontal scaling. Seamlessly manage workloads across multiple cloud providers (AWS, Azure, GCP) and on-premise environments."
           />
           <BenefitCard 
             title="Ensure Ironclad Security & Governance" 
-            desc="Maintain the highest standards with robust multi-tenancy, role-based access control (RBAC), and end-to-end data encryption. AgentForge ensures data integrity and adherence to global compliance mandates (SOC2, ISO, GDPR)."
+            desc="Implement secure multi-tenancy with granular role-based access control (RBAC). Enforce compliance (SOC2, ISO, GDPR) with end-to-end data encryption, comprehensive audit trails, and policy-as-code capabilities."
           />
           <BenefitCard 
             title="Unified Multi-Cloud & Agent Control" 
-            desc="Gain a single pane of glass for all AI agents, tenants, and multi-cloud resources (AWS, Azure, GCP). Our intuitive dashboard offers real-time monitoring, comprehensive audit logs, and resource optimization tools."
+            desc="Gain a centralized dashboard for real-time monitoring and management of all AI agents, tenant environments, and deployed cloud resources. Utilize integrated observability tools for performance tracking and cost optimization."
           />
           <BenefitCard 
             title="Accelerate Cross-Functional Innovation" 
-            desc="Equip all departments with a diverse ecosystem of specialized AI agents (DevOps, QA, Data Analytics, etc.). Foster seamless agent collaboration and skill chaining to solve critical challenges and drive market expansion."
+            desc="Deploy a diverse ecosystem of pre-built and custom AI agents for DevOps, MLOps, QA, data analysis, and more. Facilitate complex task automation through agent skill-chaining and collaborative workflows across departments."
           />
           <BenefitCard 
             title="Dedicated Partner in Your AI Evolution" 
-            desc="Beyond a powerful platform, gain a strategic ally. We offer C-suite advisory, proactive roadmap alignment, continuous innovation, and expert support to ensure your AI transformation is a definitive success."
+            desc="Beyond a cutting-edge platform, gain a strategic ally. We provide C-suite advisory, proactive roadmap alignment, continuous feature innovation, and expert technical support to ensure your AI transformation is a success."
           />
         </div>
       </section>
