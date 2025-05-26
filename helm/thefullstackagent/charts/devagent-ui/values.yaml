@@ -62,7 +62,7 @@ resources:
     cpu: "1"    # 1 full vCPU
     memory: 2Gi # Increased memory limit
   requests:
-    cpu: 500m   # Increased CPU request
+    cpu: 250m   # Reduced CPU request from 500m
     memory: 1Gi   # Increased memory request
 
 autoscaling:
