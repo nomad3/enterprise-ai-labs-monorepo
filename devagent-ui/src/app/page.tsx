@@ -157,28 +157,28 @@ export default function LandingPage() {
         <h2 className="text-4xl font-bold text-center text-lime-300 mb-16">The AgentForge Advantage for Your Enterprise</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10 max-w-7xl mx-auto px-6">
           <BenefitCard 
-            title="Deliver Demonstrable Shareholder Value" 
-            desc="Directly impact your bottom line. AgentForge automates complex operations, drastically cuts overhead, and accelerates revenue-generating innovation, delivering measurable and significant returns on your AI investment."
+            title="Maximize ROI with Intelligent Automation" 
+            desc="Slash operational overhead and boost revenue by automating complex workflows with our multi-agent orchestration engine and extensible plugin architecture, ensuring measurable returns on your AI investment."
           />
           <BenefitCard 
-            title="Build Enduring Business Agility" 
-            desc="Navigate market volatility with confidence. AgentForge is architected for dynamic growth, scaling effortlessly across your global operations and adapting to your evolving strategic imperatives."
+            title="Achieve True Scalability & Agility" 
+            desc="Dynamically scale AI operations across your global enterprise with our Kubernetes-native architecture and elastic resource management, adapting swiftly to evolving market demands and strategic imperatives."
           />
           <BenefitCard 
-            title="Fortify Enterprise Trust & Compliance" 
-            desc="Operate with confidence. AgentForge embeds enterprise-grade security, guarantees data integrity across tenants, and ensures adherence to the most stringent global compliance mandates (SOC2, ISO, GDPR, etc.)."
+            title="Ensure Ironclad Security & Governance" 
+            desc="Maintain the highest standards with robust multi-tenancy, role-based access control (RBAC), and end-to-end data encryption. AgentForge ensures data integrity and adherence to global compliance mandates (SOC2, ISO, GDPR)."
           />
           <BenefitCard 
-            title="Achieve True Operational Command" 
-            desc="Gain a single source of truth. Oversee all AI agents, organizational tenants, and multi-cloud resources from an intuitive executive dashboard, simplifying complexity and amplifying strategic visibility."
+            title="Unified Multi-Cloud & Agent Control" 
+            desc="Gain a single pane of glass for all AI agents, tenants, and multi-cloud resources (AWS, Azure, GCP). Our intuitive dashboard offers real-time monitoring, comprehensive audit logs, and resource optimization tools."
           />
           <BenefitCard 
-            title="Cultivate Sustained Competitive Dominance" 
-            desc="Empower your organization to not just compete, but to lead. Equip every department with transformative AI tools to solve critical challenges in product development, operational excellence, and market expansion."
+            title="Accelerate Cross-Functional Innovation" 
+            desc="Equip all departments with a diverse ecosystem of specialized AI agents (DevOps, QA, Data Analytics, etc.). Foster seamless agent collaboration and skill chaining to solve critical challenges and drive market expansion."
           />
           <BenefitCard 
-            title="Your Committed Partner in AI Transformation" 
-            desc="Beyond technology, gain a dedicated strategic ally. We provide C-suite level advisory, continuous platform innovation, and expert support to ensure your AI transformation journey is a resounding success."
+            title="Dedicated Partner in Your AI Evolution" 
+            desc="Beyond a powerful platform, gain a strategic ally. We offer C-suite advisory, proactive roadmap alignment, continuous innovation, and expert support to ensure your AI transformation is a definitive success."
           />
         </div>
       </section>
