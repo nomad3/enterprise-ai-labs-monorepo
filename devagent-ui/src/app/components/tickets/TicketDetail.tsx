@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { coreService } from '../services/coreService';
-import type { Ticket, AgentInteraction, AgentResponse } from '../services/coreService';
+import { coreService } from '../../services/coreService';
+import type { Ticket, AgentInteraction, AgentResponse } from '../../services/coreService';
 import './TicketDetail.css';
 
 interface TicketDetailProps {
