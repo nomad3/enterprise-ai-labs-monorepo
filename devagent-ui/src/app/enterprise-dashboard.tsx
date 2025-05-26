@@ -16,16 +16,16 @@ const features = [
 
 export default function EnterpriseDashboard() {
   return (
-    <div className="min-h-screen flex bg-gradient-to-br from-blue-50 to-white">
+    <div className="min-h-screen flex bg-background">
       {/* Sidebar */}
-      <aside className="w-64 bg-white border-r shadow-sm flex flex-col py-8 px-4">
-        <div className="flex items-center gap-2 text-2xl font-bold text-blue-700 mb-10">
-          <Rocket className="w-7 h-7 text-blue-500" />
+      <aside className="w-64 bg-background border-r border-border shadow-sm flex flex-col py-8 px-4">
+        <div className="flex items-center gap-2 text-2xl font-bold text-blue-400 mb-10">
+          <Rocket className="w-7 h-7 text-blue-300" />
           AgentForge
         </div>
         <nav className="flex flex-col gap-2">
           {features.map((f) => (
-            <Link key={f.name} href={f.route} className="flex items-center gap-3 px-3 py-2 rounded-md text-blue-800 hover:bg-blue-100 font-medium transition">
+            <Link key={f.name} href={f.route} className="flex items-center gap-3 px-3 py-2 rounded-md text-blue-200 hover:bg-blue-900 font-medium transition">
               {f.icon}
               {f.name}
             </Link>
@@ -34,16 +34,16 @@ export default function EnterpriseDashboard() {
       </aside>
       {/* Main Content */}
       <main className="flex-1 p-10">
-        <h1 className="text-3xl font-bold text-blue-800 mb-8">Enterprise Dashboard</h1>
+        <h1 className="text-3xl font-bold text-blue-200 mb-8">Enterprise Dashboard</h1>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {features.map((f) => (
-            <Link key={f.name} href={f.route} className="block bg-white rounded-xl shadow p-6 hover:shadow-lg transition border border-blue-100">
+            <Link key={f.name} href={f.route} className="block bg-blue-900 rounded-xl shadow p-6 hover:shadow-lg transition border border-border">
               <div className="flex items-center gap-3 mb-2">
                 {f.icon}
-                <span className="font-bold text-lg text-blue-800">{f.name}</span>
+                <span className="font-bold text-lg text-blue-200">{f.name}</span>
               </div>
-              <div className="text-2xl font-extrabold text-blue-600 mb-1">{f.metric}</div>
-              <div className="text-blue-900/80 text-sm">{f.description}</div>
+              <div className="text-2xl font-extrabold text-blue-400 mb-1">{f.metric}</div>
+              <div className="text-blue-100/80 text-sm">{f.description}</div>
             </Link>
           ))}
         </div>
