@@ -51,6 +51,12 @@ TERRAFORM_BEST_PRACTICES = [
     "Implement proper IAM and security controls",
     "Use workspaces for environment separation",
     "Implement proper error handling and validation",
+    "GKE: Manage default node pool settings (initial_node_count, node_config) in cluster resource to prevent perpetual diffs.",
+    "GKE: For Workload Identity, annotate KSA and grant GSA 'roles/iam.workloadIdentityUser' for KSA principal (e.g., project.svc.id.goog[namespace/ksa-name]).",
+    "GKE: Pod SAs using Cloud SQL Proxy need GSA with 'roles/cloudsql.client'.",
+    "CI/CD (GitHub Actions WIF to GCP): Define 'attribute_condition' on the OIDC provider resource (google_iam_workload_identity_pool_provider).",
+    "CI/CD (GitHub Actions WIF to GCP): Ensure IAM binding for 'roles/iam.workloadIdentityUser' on CI/CD GSA uses a 'member' principalSet matching OIDC token claims (e.g., attribute.repository/OWNER/REPO).",
+    "CI/CD (GCR/Artifact Registry): Grant CI/CD GSA 'roles/artifactregistry.writer' and 'roles/artifactregistry.repoAdmin' for image push and repo creation.",
 ]
 
 TERRAFORM_TEMPLATES = {
