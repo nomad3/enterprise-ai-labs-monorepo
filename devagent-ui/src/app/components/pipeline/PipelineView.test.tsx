@@ -2,10 +2,10 @@ import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import PipelineView from './PipelineView';
-import { coreService } from '../services/coreService';
+import { coreService } from '../../services/coreService';
 
 // Mock the coreService
-jest.mock('../services/coreService', () => ({
+jest.mock('../../services/coreService', () => ({
   coreService: {
     runPipeline: jest.fn(),
   },

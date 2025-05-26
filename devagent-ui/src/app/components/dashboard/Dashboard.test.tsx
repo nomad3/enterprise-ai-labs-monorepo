@@ -3,10 +3,10 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import Dashboard from './Dashboard';
-import { coreService } from '../services/coreService';
+import { coreService } from '../../services/coreService';
 
 // Mock the coreService
-jest.mock('../services/coreService', () => ({
+jest.mock('../../services/coreService', () => ({
   coreService: {
     processTicket: jest.fn(),
     runPipeline: jest.fn(),

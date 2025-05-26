@@ -2,10 +2,10 @@ import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import CodeGenerationView from './CodeGenerationView';
-import { coreService } from '../services/coreService';
+import { coreService } from '../../services/coreService';
 
 // Mock the coreService
-jest.mock('../services/coreService', () => ({
+jest.mock('../../services/coreService', () => ({
   coreService: {
     generateCode: jest.fn(),
     generateTests: jest.fn(),

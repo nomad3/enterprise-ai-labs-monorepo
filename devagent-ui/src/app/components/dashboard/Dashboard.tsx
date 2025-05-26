@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import TicketIngestionFlow from '../tickets/TicketIngestionFlow';
-import PipelineView from '../pipeline/PipelineView';
-import VersionControlView from '../version-control/VersionControlView';
-import FileBrowser from '../file-browser/FileBrowser';
+import TicketIngestionFlow from '../../tickets/TicketIngestionFlow';
+import PipelineView from '../../pipeline/PipelineView';
+import VersionControlView from '../../version-control/VersionControlView';
+import FileBrowser from '../../file-browser/FileBrowser';
 import './Dashboard.css';
 
 const Dashboard: React.FC = () => {

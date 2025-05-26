@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import TestPlanView from './TestPlanView';
-import { TestPlan } from '../services/devAgentService';
+import { TestPlan } from '../../services/devAgentService';
 
 const mockTestPlan: TestPlan = {
   coverage: 85,

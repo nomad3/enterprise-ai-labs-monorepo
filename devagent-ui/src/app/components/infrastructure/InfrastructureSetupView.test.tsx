@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import InfrastructureSetupView from './InfrastructureSetupView';
-import { InfrastructureSetup } from '../services/devAgentService';
+import { InfrastructureSetup } from '../../services/devAgentService';
 
 const mockInfrastructureSetup: InfrastructureSetup = {
   status: 'COMPLETED',

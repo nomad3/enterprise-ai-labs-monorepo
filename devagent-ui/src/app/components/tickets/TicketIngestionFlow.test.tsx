@@ -2,10 +2,10 @@ import '@testing-library/jest-dom';
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import TicketIngestionFlow from './TicketIngestionFlow';
-import { ticketService } from '../services/ticketService';
+import { ticketService } from '../../services/ticketService';
 
 // Mock the ticketService
-jest.mock('../services/ticketService');
+jest.mock('../../services/ticketService');
 
 describe('TicketIngestionFlow', () => {
   const mockTicketResponse = {

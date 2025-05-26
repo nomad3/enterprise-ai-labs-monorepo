@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { coreService } from '../services/coreService';
-import type { GitOperation } from '../services/coreService';
+import { coreService } from '../../services/coreService';
+import type { GitOperation } from '../../services/coreService';
 
 const VersionControlView: React.FC = () => {
   const [branchName, setBranchName] = useState('');
