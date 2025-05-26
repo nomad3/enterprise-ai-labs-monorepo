@@ -16,6 +16,10 @@ import logging
 
 from devagent.core.config import get_settings # Added import for get_settings
 
+# Import models to ensure tables are created
+from devagent.core.models.tenant_model import Tenant
+from devagent.core.models.agent_model import Agent
+
 # Configure a logger for this module
 logger = logging.getLogger(__name__)
 
