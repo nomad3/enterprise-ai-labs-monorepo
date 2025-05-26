@@ -5,7 +5,7 @@
     "signUp": "Solicitar Acceso"
   },
   "hero": {
-    "title": "AgentForge: Orquestación de IA de Nivel Empresarial para Automatización Estratégica",
+    "title": "AgentForge: Orquestación de IA de Nivel Empresarial para <1>Automatización Estratégica</1>",
     "description": "AgentForge proporciona una plataforma SaaS B2B segura, escalable y extensible para orquestar diversos agentes de IA en toda su empresa. Construida sobre una arquitectura de microservicios nativa de la nube, ofrece una robusta multi-tenencia, capacidades de integración completas y gobernanza de nivel empresarial para desplegar y gestionar estratégicamente su fuerza de trabajo de IA.",
     "ctaDemo": "Solicitar Reunión Técnica",
     "ctaExplore": "Ver Documentos de Arquitectura",

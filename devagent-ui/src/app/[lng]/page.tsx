@@ -73,9 +73,11 @@ export default function LandingPage({ params }: { params: { lng: string } }) {
         </div>
         <div className="relative z-10">
           <h1 className="text-5xl sm:text-7xl font-extrabold text-slate-900 mb-6 leading-tight">
-            <Trans t={t} i18nKey="hero.title">
-              Forge Your AI-Powered Future: <span className="text-blue-600">Autonomous Orchestration with AgentForge</span>
-            </Trans>
+            {t('hero.title', {
+              components: {
+                1: <span className="text-blue-600" />
+              }
+            })}
           </h1>
           <p className="text-xl sm:text-2xl text-slate-600 mb-10 max-w-4xl mx-auto">
             {t('hero.description')}

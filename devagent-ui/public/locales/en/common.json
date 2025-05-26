@@ -5,7 +5,7 @@
     "productName": "AgentForge"
   },
   "hero": {
-    "title": "AgentForge: Enterprise-Grade AI Orchestration for Strategic Automation",
+    "title": "AgentForge: Enterprise-Grade AI Orchestration for <1>Strategic Automation</1>",
     "description": "AgentForge provides a secure, scalable, and extensible B2B SaaS platform for orchestrating diverse AI agents across your enterprise. Built on a cloud-native, microservices architecture, it offers robust multi-tenancy, comprehensive integration capabilities, and enterprise-grade governance to strategically deploy and manage your AI workforce.",
     "ctaDemo": "Request Technical Briefing",
     "ctaExplore": "View Architecture Docs",
