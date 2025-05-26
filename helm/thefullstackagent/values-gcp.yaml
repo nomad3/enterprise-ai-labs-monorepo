@@ -29,6 +29,11 @@ devagentApi:
                         # This assumes K8s SA with the same name exists or is linked via Workload Identity.
                         # For Cloud SQL Proxy, the POD needs to run with an SA that has cloudsql.client perm.
 
+  resources:
+    requests:
+      cpu: "75m"
+    # Limits will also be inherited (cpu: 500m, memory: 512Mi)
+
   sidecars:
     - name: cloud-sql-proxy
       image: "gcr.io/cloud-sql-connectors/cloud-sql-proxy:2.8.0" # Use a specific version tag
