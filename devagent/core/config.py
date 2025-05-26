@@ -5,7 +5,7 @@ Configuration settings for the AgentForge application.
 from functools import lru_cache
 from typing import List, Optional
 
-from pydantic_settings import BaseSettings
+from pydantic import BaseSettings # Changed from pydantic_settings to pydantic
 
 
 class Settings(BaseSettings):
