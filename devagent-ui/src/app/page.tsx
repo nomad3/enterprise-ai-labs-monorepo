@@ -53,6 +53,9 @@ export default function LandingPage() {
             <button className="px-8 py-3 rounded-lg bg-blue-600 text-white font-bold text-lg shadow-lg hover:bg-blue-700 transition">Get Started</button>
           </Link>
           <a href="#features" className="px-8 py-3 rounded-lg border border-blue-600 text-blue-700 font-bold text-lg hover:bg-blue-50 transition">Explore Features</a>
+          <Link href="/enterprise">
+            <button className="px-8 py-3 rounded-lg bg-blue-900 text-white font-bold text-lg shadow-lg hover:bg-blue-800 transition">Enterprise Dashboard</button>
+          </Link>
         </div>
         <div className="flex flex-wrap gap-4 justify-center mt-8">
           <span className="inline-flex items-center gap-2 px-4 py-2 bg-blue-100 text-blue-700 rounded-full text-sm font-medium"><Zap className="w-4 h-4" /> Multi-Agent</span>
