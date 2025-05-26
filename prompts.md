@@ -8,7 +8,7 @@ AgentForge will serve as a centralized platform for enterprises to deploy, manag
 - Data Analysis & Science Agents
 - Business Intelligence Agents
 - Security & Compliance Agents
-- Documentation & Technical Writing Agents
+- Documentation & Technical Writing Agentsr
 
 Each agent will be capable of autonomous operation while maintaining context awareness of the organization's specific needs, security requirements, and operational constraints.
 
