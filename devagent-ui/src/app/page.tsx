@@ -16,7 +16,7 @@ import DevOps from './components/DevOps';
 import { Toaster } from '@/components/ui/toaster';
 import { Rocket, ShieldCheck, Code2, GitBranch, ServerCog, Activity, Users, Cloud, Zap } from 'lucide-react';
 import Link from 'next/link';
-import AgentCard from './components/AgentCard';
+// import AgentCard from './components/AgentCard'; // Removed as it's not used and file is missing
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 
