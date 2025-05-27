@@ -3,8 +3,6 @@ FROM python:3.11-slim
 WORKDIR /app
 
 # Install build tools and Python/Postgres headers
-# Since the build context is 'devagent/', 'requirements.txt' is at the root of the context.
-COPY requirements.txt ./requirements.txt
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     gcc \
@@ -12,17 +10,21 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libffi-dev \
     libpq-dev \
     && rm -rf /var/lib/apt/lists/* \
-    && pip install --upgrade pip setuptools wheel \
-    && pip install --no-cache-dir -r requirements.txt
+    && pip install --upgrade pip setuptools wheel
 
+# Copy only the requirements.txt file first to leverage Docker cache
+COPY requirements.txt /app/requirements.txt
+RUN pip install --no-cache-dir -r /app/requirements.txt
+
+# Copy the devagent application code into /app
+# This assumes the Docker build context is the project root,
+# and we are copying the 'devagent' subdirectory from the project root into /app.
+COPY ./devagent /app/devagent
+
+# Set PYTHONPATH to include the /app directory, so 'import devagent.xxx' works
 ENV PYTHONPATH=/app
 
-# Add a cache-busting argument (optional, but can help ensure freshness)
-ARG CACHEBUST=1
-
-# Copy the application code specifically
-# Create a 'devagent' subdirectory in /app and copy the build context there
-COPY . /app/devagent
-
+# The CMD should refer to devagent.api.main:app, which will be found
+# at /app/devagent/api/main.py thanks to PYTHONPATH.
 CMD ["uvicorn", "devagent.api.main:app", "--host", "0.0.0.0", "--port", "8000"]
 # CMD ["tail", "-f", "/dev/null"] 
