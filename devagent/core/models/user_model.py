@@ -4,13 +4,14 @@ SQLAlchemy and Pydantic models for User and Authentication.
 
 import uuid
 from datetime import datetime
+from typing import Optional
 
-from pydantic import BaseModel, EmailStr, Field
-from sqlalchemy import Boolean, Column, DateTime, String
+from pydantic import BaseModel, EmailStr, Field, ConfigDict
+from sqlalchemy import Boolean, Column, DateTime, String, Integer, ForeignKey
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 
-from devagent.core.database import Base
+from devagent.core.base import Base
 
 
 # SQLAlchemy User Model
@@ -23,17 +24,20 @@ class User(Base):
     full_name = Column(String, index=True)
     is_active = Column(Boolean, default=True)
     is_superuser = Column(Boolean, default=False)
+    tenant_id = Column(Integer, ForeignKey("tenants.id"), nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
-    # Add relationships if needed, e.g., tickets created by user
-    # tickets = relationship("Ticket", back_populates="owner")
+    # Relationships
+    tenant = relationship("Tenant", back_populates="users")
 
 
 # Pydantic models
 class UserBase(BaseModel):
+    model_config = ConfigDict(extra="allow")
+    
     email: EmailStr = Field(..., example="user@example.com")
-    full_name: str | None = Field(None, example="John Doe")
+    full_name: Optional[str] = Field(None, example="John Doe")
 
 
 class UserCreate(UserBase):
@@ -41,20 +45,20 @@ class UserCreate(UserBase):
 
 
 class UserUpdate(UserBase):
-    password: str | None = Field(None, min_length=8, example="newstrongpassword123")
-    is_active: bool | None = None
-    is_superuser: bool | None = None
+    password: Optional[str] = Field(None, min_length=8, example="newstrongpassword123")
+    is_active: Optional[bool] = None
+    is_superuser: Optional[bool] = None
 
 
 class UserInDBBase(UserBase):
+    model_config = ConfigDict(from_attributes=True, extra="allow")
+    
     id: uuid.UUID
     is_active: bool
     is_superuser: bool
+    tenant_id: Optional[int] = None
     created_at: datetime
     updated_at: datetime
-
-    class Config:
-        from_attributes = True
 
 
 class UserResponse(UserInDBBase):  # For sending user data to client (without password)
@@ -62,14 +66,20 @@ class UserResponse(UserInDBBase):  # For sending user data to client (without pa
 
 
 class Token(BaseModel):
+    model_config = ConfigDict(extra="allow")
+    
     access_token: str
     token_type: str
 
 
 class TokenData(BaseModel):
-    email: EmailStr | None = None
+    model_config = ConfigDict(extra="allow")
+    
+    email: Optional[EmailStr] = None
 
 
 class LoginRequest(BaseModel):
+    model_config = ConfigDict(extra="allow")
+    
     email: EmailStr
     password: str

@@ -6,11 +6,18 @@ from functools import lru_cache
 from typing import List, Optional, Dict, Any
 
 from pydantic_settings import BaseSettings
-from pydantic import model_validator
+from pydantic import model_validator, ConfigDict
 
 
 class Settings(BaseSettings):
     """Application settings."""
+    
+    model_config = ConfigDict(
+        case_sensitive=True,
+        env_file=".env",
+        env_file_encoding="utf-8",
+        extra="allow"  # Allow extra fields for environment variables
+    )
 
     # Application settings
     PROJECT_NAME: str = "AgentForge"
@@ -104,11 +111,7 @@ class Settings(BaseSettings):
     LOGIN_BLOCK_DURATION_MINUTES: int = 15
     PASSWORD_RESET_TIMEOUT_MINUTES: int = 30
 
-    class Config:
-        """Pydantic config."""
-        case_sensitive = True
-        env_file = ".env"
-        env_file_encoding = 'utf-8' # Added for robustness
+
 
 
 @lru_cache()

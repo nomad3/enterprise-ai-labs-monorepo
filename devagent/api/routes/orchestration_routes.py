@@ -15,11 +15,12 @@ from devagent.core.services.agent_orchestrator import (
     TaskPriority,
     TaskStatus
 )
-from devagent.core.auth import get_current_user
+from devagent.api.auth import get_current_user_dependency
 from devagent.core.models.user_model import User
 from devagent.core.models.tenant_model import Tenant
-from devagent.core.database import get_db
-from sqlalchemy.orm import Session
+from devagent.core.database import get_session
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import select
 from pydantic import BaseModel, Field
 
 router = APIRouter()
@@ -67,14 +68,15 @@ class WorkflowResponse(BaseModel):
 @router.post("/orchestration/tasks", response_model=TaskResponse)
 async def submit_task(
     request: TaskSubmissionRequest,
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(get_current_user_dependency),
     orchestrator: AgentOrchestrator = Depends(get_orchestrator),
-    db: Session = Depends(get_db)
+    db: AsyncSession = Depends(get_session)
 ):
     """Submit a new task for execution."""
     try:
         # Get user's tenant
-        tenant = db.query(Tenant).filter(Tenant.id == current_user.tenant_id).first()
+        result = await db.execute(select(Tenant).where(Tenant.id == current_user.tenant_id))
+        tenant = result.scalars().first()
         if not tenant:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
@@ -113,14 +115,15 @@ async def submit_task(
 @router.post("/orchestration/workflows", response_model=WorkflowResponse)
 async def submit_workflow(
     request: WorkflowSubmissionRequest,
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(get_current_user_dependency),
     orchestrator: AgentOrchestrator = Depends(get_orchestrator),
-    db: Session = Depends(get_db)
+    db: AsyncSession = Depends(get_session)
 ):
     """Submit a new workflow for execution."""
     try:
         # Get user's tenant
-        tenant = db.query(Tenant).filter(Tenant.id == current_user.tenant_id).first()
+        result = await db.execute(select(Tenant).where(Tenant.id == current_user.tenant_id))
+        tenant = result.scalars().first()
         if not tenant:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
@@ -155,7 +158,7 @@ async def submit_workflow(
 @router.get("/orchestration/tasks/{task_id}")
 async def get_task_status(
     task_id: UUID,
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(get_current_user_dependency),
     orchestrator: AgentOrchestrator = Depends(get_orchestrator)
 ):
     """Get status of a specific task."""
@@ -182,7 +185,7 @@ async def get_task_status(
 @router.delete("/orchestration/tasks/{task_id}")
 async def cancel_task(
     task_id: UUID,
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(get_current_user_dependency),
     orchestrator: AgentOrchestrator = Depends(get_orchestrator)
 ):
     """Cancel a task."""
@@ -208,14 +211,15 @@ async def cancel_task(
 
 @router.get("/orchestration/agents")
 async def get_tenant_agents(
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(get_current_user_dependency),
     orchestrator: AgentOrchestrator = Depends(get_orchestrator),
-    db: Session = Depends(get_db)
+    db: AsyncSession = Depends(get_session)
 ):
     """Get all agents for the current tenant with their status."""
     try:
         # Get user's tenant
-        tenant = db.query(Tenant).filter(Tenant.id == current_user.tenant_id).first()
+        result = await db.execute(select(Tenant).where(Tenant.id == current_user.tenant_id))
+        tenant = result.scalars().first()
         if not tenant:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
@@ -237,7 +241,7 @@ async def get_tenant_agents(
 @router.get("/orchestration/agents/{agent_id}")
 async def get_agent_status(
     agent_id: int,
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(get_current_user_dependency),
     orchestrator: AgentOrchestrator = Depends(get_orchestrator)
 ):
     """Get detailed status of a specific agent."""
@@ -261,7 +265,7 @@ async def get_agent_status(
 async def scale_agent(
     agent_id: int,
     request: AgentScalingRequest,
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(get_current_user_dependency),
     orchestrator: AgentOrchestrator = Depends(get_orchestrator)
 ):
     """Scale an agent's capacity."""
@@ -290,7 +294,7 @@ async def scale_agent(
 @router.post("/orchestration/agents/{agent_id}/pause")
 async def pause_agent(
     agent_id: int,
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(get_current_user_dependency),
     orchestrator: AgentOrchestrator = Depends(get_orchestrator)
 ):
     """Pause an agent (stop accepting new tasks)."""
@@ -317,7 +321,7 @@ async def pause_agent(
 @router.post("/orchestration/agents/{agent_id}/resume")
 async def resume_agent(
     agent_id: int,
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(get_current_user_dependency),
     orchestrator: AgentOrchestrator = Depends(get_orchestrator)
 ):
     """Resume a paused agent."""
@@ -343,14 +347,15 @@ async def resume_agent(
 
 @router.get("/orchestration/metrics")
 async def get_orchestration_metrics(
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(get_current_user_dependency),
     orchestrator: AgentOrchestrator = Depends(get_orchestrator),
-    db: Session = Depends(get_db)
+    db: AsyncSession = Depends(get_session)
 ):
     """Get orchestration metrics for the current tenant."""
     try:
         # Get user's tenant
-        tenant = db.query(Tenant).filter(Tenant.id == current_user.tenant_id).first()
+        result = await db.execute(select(Tenant).where(Tenant.id == current_user.tenant_id))
+        tenant = result.scalars().first()
         if not tenant:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,

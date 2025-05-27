@@ -3,7 +3,8 @@ Agent model for multi-agent support.
 """
 
 from datetime import datetime
-from typing import Optional
+from typing import Optional, Dict, Any
+from pydantic import BaseModel, Field, ConfigDict
 
 from sqlalchemy import Column, DateTime, Integer, String, Boolean, JSON, ForeignKey, Enum
 from sqlalchemy.orm import relationship
@@ -27,11 +28,47 @@ class AgentType(enum.Enum):
 class AgentStatus(enum.Enum):
     """Status of an agent."""
 
-    ACTIVE = "active"
-    INACTIVE = "inactive"
+    IDLE = "idle"
+    RUNNING = "running"
+    PAUSED = "paused"
     ERROR = "error"
     UPDATING = "updating"
     MAINTENANCE = "maintenance"
+
+
+class AgentResources(BaseModel):
+    """Pydantic model for agent resource allocation."""
+    model_config = ConfigDict(extra="allow")
+    
+    cpu_cores: float = Field(default=1.0, description="CPU cores allocated")
+    memory_mb: int = Field(default=512, description="Memory in MB")
+    max_concurrent_tasks: int = Field(default=5, description="Maximum concurrent tasks")
+
+
+class AgentResponse(BaseModel):
+    """Pydantic model for API responses."""
+    model_config = ConfigDict(from_attributes=True, extra="allow")
+    
+    id: int
+    name: str
+    agent_type: str
+    description: Optional[str] = None
+    is_active: bool = True
+    status: str = "idle"
+    created_at: datetime
+    updated_at: datetime
+    version: str = "1.0.0"
+    tenant_id: int
+
+
+class AgentCreate(BaseModel):
+    """Pydantic model for creating agents."""
+    model_config = ConfigDict(extra="allow")
+    
+    name: str = Field(..., description="Name of the agent")
+    agent_type: str = Field(..., description="Type of the agent")
+    description: Optional[str] = Field(None, description="Description of the agent")
+    config: Optional[Dict[str, Any]] = Field(None, description="Agent configuration")
 
 
 class Agent(Base):
@@ -50,7 +87,16 @@ class Agent(Base):
     version = Column(String, default="1.0.0")
     status = Column(String, default="idle")  # idle, running, error, etc.
     last_run_at = Column(DateTime, nullable=True)
+    last_active = Column(DateTime, nullable=True)
     tenant_id = Column(Integer, ForeignKey("tenants.id"), nullable=False)
+    
+    # Performance metrics
+    success_count = Column(Integer, default=0)
+    error_count = Column(Integer, default=0)
+    total_execution_time = Column(Integer, default=0)  # milliseconds
+    average_response_time = Column(Integer, default=0)  # milliseconds
+    last_error = Column(String, nullable=True)
+    last_error_at = Column(DateTime, nullable=True)
 
     # Relationships
     tenant = relationship("Tenant", back_populates="agents")
@@ -63,7 +109,7 @@ class Agent(Base):
         """Check if the agent is healthy."""
         if not self.is_active:
             return False
-        if self.status == AgentStatus.ERROR:
+        if self.status == AgentStatus.ERROR.value:
             return False
         if self.error_count > 100:  # Arbitrary threshold
             return False
@@ -90,7 +136,7 @@ class Agent(Base):
         self.last_error = error_message
         self.last_error_at = datetime.utcnow()
         if self.error_count > 100:  # Arbitrary threshold
-            self.status = AgentStatus.ERROR
+            self.status = AgentStatus.ERROR.value
 
     def increment_success(self, execution_time: int):
         """Increment success count and update metrics."""
@@ -122,7 +168,7 @@ class AgentTask(Base):
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     # Relationships
-    agent = relationship("Agent", back_populates="tasks")
+    agent = relationship("Agent")
 
     def __repr__(self):
         """String representation of the task."""
@@ -142,7 +188,7 @@ class AgentLog(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
 
     # Relationships
-    agent = relationship("Agent", back_populates="logs")
+    agent = relationship("Agent")
 
     def __repr__(self):
         """String representation of the log."""

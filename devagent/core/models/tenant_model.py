@@ -4,7 +4,7 @@ Tenant model for multi-tenant support.
 
 from datetime import datetime
 from typing import Optional, List
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 from uuid import UUID, uuid4
 
 from sqlalchemy import Column, DateTime, Integer, String, Boolean, JSON
@@ -14,42 +14,42 @@ from devagent.core.base import Base
 
 
 class ResourceQuota(BaseModel):
+    """Resource quota configuration for tenants."""
+    model_config = ConfigDict(extra="allow")
+    
     cpu_cores: int = Field(default=2, description="Number of CPU cores allocated")
     memory_gb: int = Field(default=4, description="Memory allocation in GB")
     storage_gb: int = Field(default=50, description="Storage allocation in GB")
     max_users: int = Field(default=100, description="Maximum number of users allowed")
 
 
-class Tenant(BaseModel):
-    id: UUID = Field(default_factory=uuid4)
-    name: str = Field(..., description="Name of the tenant")
-    status: str = Field(default="active", description="Tenant status (active, suspended, etc.)")
-    created_at: datetime = Field(default_factory=datetime.utcnow)
-    updated_at: datetime = Field(default_factory=datetime.utcnow)
-    resource_quota: ResourceQuota = Field(default_factory=ResourceQuota)
-    admin_users: List[UUID] = Field(default_factory=list, description="List of admin user IDs")
-    api_keys: List[dict] = Field(default_factory=list, description="List of API keys")
-    compliance_status: dict = Field(
-        default_factory=lambda: {
-            "soc2": "pending",
-            "iso27001": "pending",
-            "gdpr": "pending"
-        }
-    )
+class TenantResponse(BaseModel):
+    """Pydantic model for API responses."""
+    model_config = ConfigDict(from_attributes=True, extra="allow")
+    
+    id: int
+    name: str
+    slug: str
+    description: Optional[str] = None
+    is_active: bool = True
+    created_at: datetime
+    updated_at: datetime
+    max_agents: int = 100
+    max_users: int = 100
+    subscription_tier: str = "basic"
+    subscription_status: str = "active"
 
-    class Config:
-        json_schema_extra = {
-            "example": {
-                "name": "Acme Corp",
-                "status": "active",
-                "resource_quota": {
-                    "cpu_cores": 4,
-                    "memory_gb": 8,
-                    "storage_gb": 100,
-                    "max_users": 250
-                }
-            }
-        }
+
+class TenantCreate(BaseModel):
+    """Pydantic model for creating tenants."""
+    model_config = ConfigDict(extra="allow")
+    
+    name: str = Field(..., description="Name of the tenant")
+    slug: str = Field(..., description="Unique slug for the tenant")
+    description: Optional[str] = Field(None, description="Description of the tenant")
+    max_agents: int = Field(default=100, description="Maximum number of agents")
+    max_users: int = Field(default=100, description="Maximum number of users")
+    subscription_tier: str = Field(default="basic", description="Subscription tier")
 
 
 class Tenant(Base):
