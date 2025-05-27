@@ -38,7 +38,9 @@ const mockInfrastructureSetup = {
 };
 
 const ManageTenants = () => <div className="p-8 bg-white rounded-xl shadow-lg border border-slate-200"><h1 className="text-2xl font-bold text-blue-600 mb-4">Manage Tenants</h1><p className="text-slate-700">Multi-tenant management dashboard (coming soon).</p></div>;
-const OrchestrateAgents = () => <div className="p-8 bg-white rounded-xl shadow-lg border border-slate-200"><h1 className="text-2xl font-bold text-blue-600 mb-4">Orchestrate Agents</h1><p className="text-slate-700">Multi-agent orchestration dashboard (coming soon).</p></div>;
+import AgentOrchestration from '../../components/orchestration/AgentOrchestration';
+
+const OrchestrateAgents = () => <AgentOrchestration />;
 const AgentAnalytics = () => <div className="p-8 bg-white rounded-xl shadow-lg border border-slate-200"><h1 className="text-2xl font-bold text-blue-600 mb-4">Agent Analytics</h1><p className="text-slate-700">Agent analytics and metrics (coming soon).</p></div>;
 const Integrations = () => <div className="p-8 bg-white rounded-xl shadow-lg border border-slate-200"><h1 className="text-2xl font-bold text-blue-600 mb-4">Integrations</h1><p className="text-slate-700">Integrations hub for enterprise tools (coming soon).</p></div>;
 

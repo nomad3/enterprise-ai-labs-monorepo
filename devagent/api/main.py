@@ -27,6 +27,7 @@ from devagent.core.database import get_session, init_db
 from devagent.core.models.user_model import User  # noqa: F401 -> Ensures User table is created by init_db
 from devagent.api.routers.tenant import router as tenant_router
 from devagent.api.routers.agent import router as agent_router
+from devagent.api.routes.orchestration_routes import router as orchestration_router
 
 # Initialize OpenTelemetry
 trace.set_tracer_provider(TracerProvider())
@@ -72,12 +73,23 @@ app.include_router(files_router, prefix="/api/v1/agents/files", tags=["File Mana
 app.include_router(devops_router, prefix="/api/v1/agents/devops", tags=["DevOps"])
 app.include_router(tenant_router, prefix="/api/v1")
 app.include_router(agent_router, prefix="/api/v1")
+app.include_router(orchestration_router, prefix="/api/v1", tags=["Orchestration"])
 
 
 @app.on_event("startup")
 async def startup_event():
     """Initialize services on startup."""
     await init_db()
+    
+    # Start core services
+    from devagent.core.services.agent_orchestrator import get_orchestrator
+    from devagent.core.services.integration_hub import get_integration_hub
+    
+    orchestrator = await get_orchestrator()
+    await orchestrator.start_orchestrator()
+    
+    integration_hub = await get_integration_hub()
+    await integration_hub.start_hub()
 
 
 @app.get("/")
