@@ -14,6 +14,7 @@ import {
   Bar,
 } from 'recharts';
 import { useToast } from '@/components/ui/use-toast';
+import { useTenant } from '../../contexts/TenantContext';
 
 interface SystemMetrics {
   memory_usage: number;
@@ -54,15 +55,17 @@ export default function DevOps() {
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
   const [tab, setTab] = useState('overview');
+  const { tenant } = useTenant();
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+        const q = `?tenantId=${tenant.id}`;
         const [systemRes, appRes, alertsRes, incidentsRes] = await Promise.all([
-          fetch('/api/v1/devops/metrics/system'),
-          fetch('/api/v1/devops/metrics/application'),
-          fetch('/api/v1/devops/alerts'),
-          fetch('/api/v1/devops/incidents'),
+          fetch(`/api/v1/devops/metrics/system${q}`),
+          fetch(`/api/v1/devops/metrics/application${q}`),
+          fetch(`/api/v1/devops/alerts${q}`),
+          fetch(`/api/v1/devops/incidents${q}`),
         ]);
 
         const systemData = await systemRes.json();
@@ -89,7 +92,7 @@ export default function DevOps() {
     const interval = setInterval(fetchData, 30000); // Refresh every 30 seconds
 
     return () => clearInterval(interval);
-  }, [toast]);
+  }, [toast, tenant.id]);
 
   const getSeverityColor = (severity: string) => {
     switch (severity.toLowerCase()) {
