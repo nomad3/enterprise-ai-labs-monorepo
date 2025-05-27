@@ -59,10 +59,10 @@ export default function DevOps() {
     const fetchData = async () => {
       try {
         const [systemRes, appRes, alertsRes, incidentsRes] = await Promise.all([
-          fetch('/api/devops/metrics/system'),
-          fetch('/api/devops/metrics/application'),
-          fetch('/api/devops/alerts'),
-          fetch('/api/devops/incidents'),
+          fetch('/api/v1/devops/metrics/system'),
+          fetch('/api/v1/devops/metrics/application'),
+          fetch('/api/v1/devops/alerts'),
+          fetch('/api/v1/devops/incidents'),
         ]);
 
         const systemData = await systemRes.json();
@@ -152,6 +152,31 @@ export default function DevOps() {
                 </LineChart>
               </ResponsiveContainer>
             </div>
+          </div>
+
+          <div className="card">
+            <h2>Database Performance</h2>
+            <div>Query performance, connection pool, cache hit rate, replication lag (mock data or coming soon)</div>
+          </div>
+
+          <div className="card">
+            <h2>Infrastructure Health</h2>
+            <div>Node status, container health, network/storage metrics (mock data or coming soon)</div>
+          </div>
+
+          <div className="card">
+            <h2>Security & Compliance</h2>
+            <div>Security events, compliance status, audit logs (mock data or coming soon)</div>
+          </div>
+
+          <div className="card">
+            <h2>Business Intelligence & Analytics</h2>
+            <div>Analytics, BI, data science insights (mock data or coming soon)</div>
+          </div>
+
+          <div className="card">
+            <h2>Documentation & Technical Writing</h2>
+            <div>Documentation status, agent output (mock data or coming soon)</div>
           </div>
         </div>
       )}
