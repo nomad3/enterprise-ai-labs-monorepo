@@ -18,8 +18,22 @@ import { Button } from '@/components/ui/button';
 import { LayoutDashboard, Ticket, Bot, Lightbulb, GitMerge, CloudCog, LogOut, Settings } from 'lucide-react';
 import { ToastProvider } from '@/components/ui/toast';
 
+// Add placeholder components for new agent types
+const FullStackDev = () => <div className="p-6">Full-Stack Development Agent (coming soon)</div>;
+const DataScience = () => <div className="p-6">Data Analysis & Science Agent (coming soon)</div>;
+const BusinessIntelligence = () => <div className="p-6">Business Intelligence Agent (coming soon)</div>;
+const SecurityCompliance = () => <div className="p-6">Security & Compliance Agent (coming soon)</div>;
+const Documentation = () => <div className="p-6">Documentation & Technical Writing Agent (coming soon)</div>;
+const QATesting = () => <div className="p-6">QA & Testing Agent (coming soon)</div>;
+
 const TABS = [
-  { id: 'devops', label: 'DevOps Dashboard', icon: <LayoutDashboard className="mr-2 h-4 w-4" />, component: <DevOps /> },
+  { id: 'fullstack', label: 'Full-Stack Development', icon: <LayoutDashboard className="mr-2 h-4 w-4" />, component: <FullStackDev /> },
+  { id: 'devops', label: 'DevOps & Infrastructure', icon: <CloudCog className="mr-2 h-4 w-4" />, component: <DevOps /> },
+  { id: 'qa', label: 'QA & Testing', icon: <Bot className="mr-2 h-4 w-4" />, component: <QATesting /> },
+  { id: 'data', label: 'Data Analysis & Science', icon: <Lightbulb className="mr-2 h-4 w-4" />, component: <DataScience /> },
+  { id: 'bi', label: 'Business Intelligence', icon: <Ticket className="mr-2 h-4 w-4" />, component: <BusinessIntelligence /> },
+  { id: 'security', label: 'Security & Compliance', icon: <Settings className="mr-2 h-4 w-4" />, component: <SecurityCompliance /> },
+  { id: 'docs', label: 'Documentation & Technical Writing', icon: <GitMerge className="mr-2 h-4 w-4" />, component: <Documentation /> },
   { id: 'tickets', label: 'Tickets', icon: <Ticket className="mr-2 h-4 w-4" />, component: <Tickets /> },
   { id: 'plans', label: 'Solution Plans', icon: <Lightbulb className="mr-2 h-4 w-4" />, component: <Plans /> },
   { id: 'codegen', label: 'Code Generation', icon: <Bot className="mr-2 h-4 w-4" />, component: <CodeGeneration /> },
