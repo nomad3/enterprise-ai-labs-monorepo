@@ -1,10 +1,16 @@
+{{- $componentName := "ui" -}}
+{{- $fullname := printf "%s-%s-%s" .Release.Name .Chart.Name $componentName | trunc 63 | trimSuffix "-" -}}
+{{- $backendConfigName := printf "%s-backendconfig" $fullname -}}
 apiVersion: cloud.google.com/v1
 kind: BackendConfig
 metadata:
-  name: {{ include "thefullstackagent.component.fullname" (dict "Chart" .Chart "Release" .Release "componentName" "ui" "componentValues" .Values) }}-backendconfig
+  name: {{ $backendConfigName }}
   namespace: {{ .Release.Namespace }}
   labels:
-    {{- include "thefullstackagent.component.labels" (dict "Chart" .Chart "Release" .Release "componentName" "ui" "componentValues" .Values) | nindent 4 }}
+    app.kubernetes.io/name: {{ $fullname }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    helm.sh/chart: {{ printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
 spec:
   healthCheck:
     checkIntervalSec: 15

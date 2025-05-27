@@ -1,22 +1,19 @@
-{{/* Call the common service template from the parent chart for the UI component */}}
-{{- include "thefullstackagent.component.service" (dict 
-    "Chart" .Chart 
-    "Release" .Release 
-    "Values" .Values 
-    "componentName" "ui" 
-    "componentValues" .Values 
-  ) | nindent 0 }} 
-
+{{- $componentName := "ui" -}}
+{{- $fullname := printf "%s-%s-%s" .Release.Name .Chart.Name $componentName | trunc 63 | trimSuffix "-" -}}
+{{- $backendConfigName := printf "%s-backendconfig" $fullname -}}
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "thefullstackagent.component.fullname" (dict "Chart" .Chart "Release" .Release "componentName" "ui" "componentValues" .Values) }}
+  name: {{ $fullname }}
   namespace: {{ .Release.Namespace }}
   labels:
-    {{- include "thefullstackagent.component.labels" (dict "Chart" .Chart "Release" .Release "componentName" "ui" "componentValues" .Values) | nindent 4 }}
+    app.kubernetes.io/name: {{ $fullname }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    helm.sh/chart: {{ printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
   annotations:
     cloud.google.com/neg: '{"ingress": true}'
-    cloud.google.com/backend-config: '{"ports": {"{{ .Values.service.port }}":"{{ include "thefullstackagent.component.fullname" (dict "Chart" .Chart "Release" .Release "componentName" "ui" "componentValues" .Values) }}-backendconfig"}}'
+    cloud.google.com/backend-config: '{"ports": {"{{ .Values.service.port }}":"{{ $backendConfigName }}"}}'
     {{- with .Values.service.annotations }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
@@ -26,6 +23,9 @@ spec:
     - port: {{ .Values.service.port }}
       targetPort: {{ .Values.service.targetPort }}
       protocol: TCP
-      name: http # Ensure this port name matches what Ingress uses
+      name: http
   selector:
-    {{- include "thefullstackagent.component.selectorLabels" (dict "Chart" .Chart "Release" .Release "componentName" "ui" "componentValues" .Values) | nindent 4 }} 
+    # This needs to match the actual pod labels set by the deployment template
+    # Assuming the deployment uses a similar fullname for its app.kubernetes.io/name selector label
+    app.kubernetes.io/name: {{ $fullname }}
+    app.kubernetes.io/instance: {{ .Release.Name }} 
