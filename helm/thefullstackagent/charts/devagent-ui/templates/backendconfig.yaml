@@ -14,9 +14,9 @@ metadata:
 spec:
   healthCheck:
     checkIntervalSec: 15
-    timeoutSec: 15
     healthyThreshold: 1
-    unhealthyThreshold: 2
+    port: 3000
+    requestPath: /en
+    timeoutSec: 15
     type: HTTP
-    requestPath: /en/
-    port: 3000 # This should be the container targetPort for the UI 
+    unhealthyThreshold: 2
