@@ -1,21 +1,20 @@
 'use client';
 
 import React from 'react';
-
 import { useState } from 'react';
-import { useAuth } from '../../contexts/AuthContext'; // Adjusted import path
-import styles from '../../page.module.css'; // Adjusted import path
-import Tickets from '../../components/tickets/Tickets'; // Adjusted import path
-import CodeGeneration from '../../components/code/CodeGeneration'; // Adjusted import path
-import Plans from '../../components/plans/Plans'; // Adjusted import path
-import TestGeneration from '../../components/test-generation/TestGeneration'; // Adjusted import path
-import VersionControl from '../../components/version-control/VersionControl'; // Adjusted import path
-import CICD from '@/app/components/CICD'; // Adjusted import path
-import Login from '../../components/auth/Login'; // Adjusted import path
-import Register from '../../components/auth/Register'; // Adjusted import path
-import DevOps from '@/app/components/DevOps'; // Adjusted import path
-import { ToastViewport } from '@/components/ui/toast'; // Adjusted import path
-import { Button } from '@/components/ui/button'; // Assuming @ is a path alias
+import { useAuth } from '../../contexts/AuthContext';
+import styles from '../../page.module.css';
+import Tickets from '../../components/tickets/Tickets';
+import CodeGeneration from '../../components/code/CodeGeneration';
+import Plans from '../../components/plans/Plans';
+import TestGeneration from '../../components/test-generation/TestGeneration';
+import VersionControl from '../../components/version-control/VersionControl';
+import CICD from '../../components/devops/CICD';
+import Login from '../../components/auth/Login';
+import Register from '../../components/auth/Register';
+import DevOps from '../../components/devops/DevOps';
+import { ToastViewport } from '@/components/ui/toast';
+import { Button } from '@/components/ui/button';
 import { LayoutDashboard, Ticket, Bot, Lightbulb, GitMerge, CloudCog, LogOut, Settings } from 'lucide-react';
 
 const TABS = [
@@ -28,7 +27,7 @@ const TABS = [
   { id: 'cicd', label: 'CI/CD', icon: <CloudCog className="mr-2 h-4 w-4" />, component: <CICD /> },
 ];
 
-export default function AppPage() {
+export default function AppPage({ params }: { params: { lng: string } }) {
   const { user, loading, logout } = useAuth();
   const [selectedTab, setSelectedTab] = useState('devops');
   const [authMode, setAuthMode] = useState<'login' | 'register'>('login');
