@@ -52,16 +52,14 @@ class Settings(BaseSettings):
     ALLOWED_ORIGINS: List[str] = ["http://localhost:3000", "http://localhost:3002", "http://127.0.0.1:3000", "http://127.0.0.1:3002"]
 
     @model_validator(mode='after')
-    def assemble_cors_settings(cls, values: Dict[str, Any]) -> Dict[str, Any]:
-        backend_cors_env = values.get("BACKEND_CORS_ORIGINS_ENV")
-        if isinstance(backend_cors_env, str) and backend_cors_env:
-            values["BACKEND_CORS_ORIGINS"] = [item.strip() for item in backend_cors_env.split(",") if item.strip()]
+    def assemble_cors_settings(self):
+        if isinstance(self.BACKEND_CORS_ORIGINS_ENV, str) and self.BACKEND_CORS_ORIGINS_ENV:
+            self.BACKEND_CORS_ORIGINS = [item.strip() for item in self.BACKEND_CORS_ORIGINS_ENV.split(",") if item.strip()]
         
-        allowed_origins_env = values.get("ALLOWED_ORIGINS_ENV")
-        if isinstance(allowed_origins_env, str) and allowed_origins_env:
-            values["ALLOWED_ORIGINS"] = [item.strip() for item in allowed_origins_env.split(",") if item.strip()]
+        if isinstance(self.ALLOWED_ORIGINS_ENV, str) and self.ALLOWED_ORIGINS_ENV:
+            self.ALLOWED_ORIGINS = [item.strip() for item in self.ALLOWED_ORIGINS_ENV.split(",") if item.strip()]
         
-        return values
+        return self
 
     # Monitoring settings
     PROMETHEUS_URL: str = "http://localhost:9090"
