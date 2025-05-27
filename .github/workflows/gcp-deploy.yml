@@ -80,7 +80,7 @@ jobs:
 
       - name: Build and push API image (SHA tag)
         run: |
-          docker build -t ${{ env.GCR_HOSTNAME }}/${{ env.GCP_PROJECT_ID }}/${{ env.IMAGE_API }}:${{ needs.check_paths.outputs.commit_sha }} -f ./devagent/Dockerfile ./devagent
+          docker build --no-cache -t ${{ env.GCR_HOSTNAME }}/${{ env.GCP_PROJECT_ID }}/${{ env.IMAGE_API }}:${{ needs.check_paths.outputs.commit_sha }} -f ./devagent/Dockerfile ./devagent
           docker push ${{ env.GCR_HOSTNAME }}/${{ env.GCP_PROJECT_ID }}/${{ env.IMAGE_API }}:${{ needs.check_paths.outputs.commit_sha }}
 
       - name: Tag and push API image (latest tag)
