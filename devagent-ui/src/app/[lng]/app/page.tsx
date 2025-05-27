@@ -20,6 +20,7 @@ import { ToastProvider } from '@/components/ui/toast';
 import Dashboard from '../../components/dashboard/Dashboard';
 import InfrastructureSetupView from '../../components/infrastructure/InfrastructureSetupView';
 import PipelineView from '../../components/pipeline/PipelineView';
+import { TenantProvider, useTenant } from '../../contexts/TenantContext';
 
 // Placeholder components for agent types
 const FullStackDev = () => <div className="p-6">Full-Stack Development Agent (coming soon)</div>;
@@ -100,6 +101,24 @@ const AGENT_GROUPS = [
   },
 ];
 
+function SidebarTenantSwitcher() {
+  const { tenant, setTenant, tenants } = useTenant();
+  return (
+    <div className="mb-8">
+      <label className="block text-xs text-slate-500 font-semibold mb-1 pl-1">Tenant</label>
+      <select
+        className="w-full px-3 py-2 rounded-lg border border-slate-200 bg-slate-50 text-slate-800 font-medium focus:outline-none focus:ring-2 focus:ring-blue-500"
+        value={tenant.id}
+        onChange={e => setTenant(tenants.find(t => t.id === e.target.value) || tenants[0])}
+      >
+        {tenants.map(t => (
+          <option key={t.id} value={t.id}>{t.name}</option>
+        ))}
+      </select>
+    </div>
+  );
+}
+
 export default function AppPage({ params }: { params: { lng: string } }) {
   const { user, loading, logout } = useAuth();
   const [selectedTab, setSelectedTab] = useState('dashboard');
@@ -153,54 +172,57 @@ export default function AppPage({ params }: { params: { lng: string } }) {
   const ActiveComponent = allTabs.find(tab => tab.id === selectedTab)?.component || <Dashboard />;
 
   return (
-    <ToastProvider>
-      <div className="flex min-h-screen bg-slate-50 text-slate-800 flex-row">
-        <aside className="hidden md:flex w-72 bg-white text-slate-800 p-6 flex-col border-r border-slate-200 shadow-lg order-1">
-          <div className="text-2xl font-bold mb-10 flex items-center text-blue-600 pt-2">
-             <Settings className="mr-3 h-7 w-7 text-blue-600" /> AgentForge
-          </div>
-          <nav className="flex-grow space-y-6">
-            {AGENT_GROUPS.map(group => (
-              <div key={group.label}>
-                <div className="uppercase text-xs text-blue-600 font-bold mb-3 tracking-wider pl-2">{group.label}</div>
-                <div className="space-y-1">
-                  {group.tabs.map(tab => (
-                    <Button
-                      key={tab.id}
-                      variant={selectedTab === tab.id ? "default" : "ghost"}
-                      className={`w-full justify-start text-left px-4 py-3 rounded-lg transition-all duration-150 ease-in-out font-medium text-base
-                        ${selectedTab === tab.id 
-                          ? 'bg-blue-600 text-white shadow-md hover:bg-blue-700' 
-                          : 'text-slate-700 hover:bg-blue-50 hover:text-blue-700'
-                        }`
-                      }
-                      onClick={() => setSelectedTab(tab.id)}
-                    >
-                      {React.cloneElement(tab.icon, { className: `mr-3 h-5 w-5 ${selectedTab === tab.id ? 'text-white' : 'text-blue-600 group-hover:text-blue-700'}` })} 
-                      {tab.label}
-                    </Button>
-                  ))}
+    <TenantProvider>
+      <ToastProvider>
+        <div className="flex min-h-screen bg-slate-50 text-slate-800 flex-row">
+          <aside className="hidden md:flex w-72 bg-white text-slate-800 p-6 flex-col border-r border-slate-200 shadow-lg order-1">
+            <div className="text-2xl font-bold flex items-center text-blue-600 pt-2 mb-6">
+              <Settings className="mr-3 h-7 w-7 text-blue-600" /> AgentForge
+            </div>
+            <SidebarTenantSwitcher />
+            <nav className="flex-grow space-y-6">
+              {AGENT_GROUPS.map(group => (
+                <div key={group.label}>
+                  <div className="uppercase text-xs text-blue-600 font-bold mb-3 tracking-wider pl-2">{group.label}</div>
+                  <div className="space-y-1">
+                    {group.tabs.map(tab => (
+                      <Button
+                        key={tab.id}
+                        variant={selectedTab === tab.id ? "default" : "ghost"}
+                        className={`w-full justify-start text-left px-4 py-3 rounded-lg transition-all duration-150 ease-in-out font-medium text-base
+                          ${selectedTab === tab.id 
+                            ? 'bg-blue-600 text-white shadow-md hover:bg-blue-700' 
+                            : 'text-slate-700 hover:bg-blue-50 hover:text-blue-700'
+                          }`
+                        }
+                        onClick={() => setSelectedTab(tab.id)}
+                      >
+                        {React.cloneElement(tab.icon, { className: `mr-3 h-5 w-5 ${selectedTab === tab.id ? 'text-white' : 'text-blue-600 group-hover:text-blue-700'}` })} 
+                        {tab.label}
+                      </Button>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            ))}
-          </nav>
-          <div className="mt-auto pt-8">
-            <Button 
-              variant="ghost" 
-              className="w-full justify-start text-slate-500 hover:bg-blue-100 hover:text-blue-700 px-4 py-3 rounded-lg transition-all duration-150 ease-in-out group font-medium text-base" 
-              onClick={logout}
-            >
-              <LogOut className="mr-3 h-5 w-5 text-blue-600 group-hover:text-blue-700" /> Logout ({user.email})
-            </Button>
-          </div>
-        </aside>
-        <main className="flex-1 p-8 lg:p-12 overflow-auto bg-slate-50 min-h-screen order-2">
-          <div className="max-w-6xl mx-auto">
-            {ActiveComponent}
-          </div>
-        </main>
-        <ToastViewport />
-      </div>
-    </ToastProvider>
+              ))}
+            </nav>
+            <div className="mt-auto pt-8">
+              <Button 
+                variant="ghost" 
+                className="w-full justify-start text-slate-500 hover:bg-blue-100 hover:text-blue-700 px-4 py-3 rounded-lg transition-all duration-150 ease-in-out group font-medium text-base" 
+                onClick={logout}
+              >
+                <LogOut className="mr-3 h-5 w-5 text-blue-600 group-hover:text-blue-700" /> Logout ({user.email})
+              </Button>
+            </div>
+          </aside>
+          <main className="flex-1 p-8 lg:p-12 overflow-auto bg-slate-50 min-h-screen order-2">
+            <div className="max-w-6xl mx-auto">
+              {ActiveComponent}
+            </div>
+          </main>
+          <ToastViewport />
+        </div>
+      </ToastProvider>
+    </TenantProvider>
   );
 }
