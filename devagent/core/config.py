@@ -6,7 +6,7 @@ from functools import lru_cache
 from typing import List, Optional, Dict, Any
 
 from pydantic_settings import BaseSettings
-from pydantic import root_validator
+from pydantic import model_validator
 
 
 class Settings(BaseSettings):
@@ -51,7 +51,7 @@ class Settings(BaseSettings):
     BACKEND_CORS_ORIGINS: List[str] = ["http://localhost:3000", "http://localhost:3002", "http://127.0.0.1:3000", "http://127.0.0.1:3002"]
     ALLOWED_ORIGINS: List[str] = ["http://localhost:3000", "http://localhost:3002", "http://127.0.0.1:3000", "http://127.0.0.1:3002"]
 
-    @root_validator(pre=False) # Using pre=False to run after initial field population
+    @model_validator(mode='after')
     def assemble_cors_settings(cls, values: Dict[str, Any]) -> Dict[str, Any]:
         backend_cors_env = values.get("BACKEND_CORS_ORIGINS_ENV")
         if isinstance(backend_cors_env, str) and backend_cors_env:
