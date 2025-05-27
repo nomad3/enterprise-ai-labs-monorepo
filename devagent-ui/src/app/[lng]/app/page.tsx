@@ -17,34 +17,76 @@ import { ToastViewport } from '@/components/ui/toast';
 import { Button } from '@/components/ui/button';
 import { LayoutDashboard, Ticket, Bot, Lightbulb, GitMerge, CloudCog, LogOut, Settings } from 'lucide-react';
 import { ToastProvider } from '@/components/ui/toast';
+import Dashboard from '../../components/dashboard/Dashboard';
+import InfrastructureSetupView from '../../components/infrastructure/InfrastructureSetupView';
+import PipelineView from '../../components/pipeline/PipelineView';
 
-// Add placeholder components for new agent types
+// Placeholder components for agent types
 const FullStackDev = () => <div className="p-6">Full-Stack Development Agent (coming soon)</div>;
 const DataScience = () => <div className="p-6">Data Analysis & Science Agent (coming soon)</div>;
 const BusinessIntelligence = () => <div className="p-6">Business Intelligence Agent (coming soon)</div>;
 const SecurityCompliance = () => <div className="p-6">Security & Compliance Agent (coming soon)</div>;
 const Documentation = () => <div className="p-6">Documentation & Technical Writing Agent (coming soon)</div>;
-const QATesting = () => <div className="p-6">QA & Testing Agent (coming soon)</div>;
 
-const TABS = [
-  { id: 'fullstack', label: 'Full-Stack Development', icon: <LayoutDashboard className="mr-2 h-4 w-4" />, component: <FullStackDev /> },
-  { id: 'devops', label: 'DevOps & Infrastructure', icon: <CloudCog className="mr-2 h-4 w-4" />, component: <DevOps /> },
-  { id: 'qa', label: 'QA & Testing', icon: <Bot className="mr-2 h-4 w-4" />, component: <QATesting /> },
-  { id: 'data', label: 'Data Analysis & Science', icon: <Lightbulb className="mr-2 h-4 w-4" />, component: <DataScience /> },
-  { id: 'bi', label: 'Business Intelligence', icon: <Ticket className="mr-2 h-4 w-4" />, component: <BusinessIntelligence /> },
-  { id: 'security', label: 'Security & Compliance', icon: <Settings className="mr-2 h-4 w-4" />, component: <SecurityCompliance /> },
-  { id: 'docs', label: 'Documentation & Technical Writing', icon: <GitMerge className="mr-2 h-4 w-4" />, component: <Documentation /> },
-  { id: 'tickets', label: 'Tickets', icon: <Ticket className="mr-2 h-4 w-4" />, component: <Tickets /> },
-  { id: 'plans', label: 'Solution Plans', icon: <Lightbulb className="mr-2 h-4 w-4" />, component: <Plans /> },
-  { id: 'codegen', label: 'Code Generation', icon: <Bot className="mr-2 h-4 w-4" />, component: <CodeGeneration /> },
-  { id: 'testgen', label: 'Test Generation', icon: <Bot className="mr-2 h-4 w-4" />, component: <TestGeneration /> },
-  { id: 'vcs', label: 'Version Control', icon: <GitMerge className="mr-2 h-4 w-4" />, component: <VersionControl /> },
-  { id: 'cicd', label: 'CI/CD', icon: <CloudCog className="mr-2 h-4 w-4" />, component: <CICD /> },
+const mockInfrastructureSetup = {
+  resources: [
+    { type: 'VM', name: 'web-server-1', configuration: { cpu: 2, memory: '4GB', os: 'Ubuntu 22.04' } },
+    { type: 'DB', name: 'postgres-db', configuration: { version: '14', storage: '100GB' } },
+  ],
+  status: 'Provisioned',
+};
+
+const AGENT_GROUPS = [
+  {
+    label: 'Full-Stack Development',
+    tabs: [
+      { id: 'dashboard', label: 'Dashboard', icon: <LayoutDashboard className="mr-2 h-4 w-4" />, component: <Dashboard /> },
+      { id: 'fullstack', label: 'Full-Stack Dev', icon: <LayoutDashboard className="mr-2 h-4 w-4" />, component: <FullStackDev /> },
+      { id: 'tickets', label: 'Tickets', icon: <Ticket className="mr-2 h-4 w-4" />, component: <Tickets /> },
+      { id: 'plans', label: 'Solution Plans', icon: <Lightbulb className="mr-2 h-4 w-4" />, component: <Plans /> },
+      { id: 'codegen', label: 'Code Generation', icon: <Bot className="mr-2 h-4 w-4" />, component: <CodeGeneration /> },
+      { id: 'vcs', label: 'Version Control', icon: <GitMerge className="mr-2 h-4 w-4" />, component: <VersionControl /> },
+    ],
+  },
+  {
+    label: 'DevOps & Infrastructure',
+    tabs: [
+      { id: 'devops', label: 'DevOps Dashboard', icon: <CloudCog className="mr-2 h-4 w-4" />, component: <DevOps /> },
+      { id: 'cicd', label: 'CI/CD', icon: <CloudCog className="mr-2 h-4 w-4" />, component: <CICD /> },
+      { id: 'infrastructure', label: 'Infrastructure Setup', icon: <Settings className="mr-2 h-4 w-4" />, component: <InfrastructureSetupView setup={mockInfrastructureSetup} /> },
+      { id: 'pipeline', label: 'Pipeline', icon: <CloudCog className="mr-2 h-4 w-4" />, component: <PipelineView /> },
+    ],
+  },
+  {
+    label: 'QA & Testing',
+    tabs: [
+      { id: 'testgen', label: 'Test Generation', icon: <Bot className="mr-2 h-4 w-4" />, component: <TestGeneration /> },
+    ],
+  },
+  {
+    label: 'Data & Business Intelligence',
+    tabs: [
+      { id: 'data', label: 'Data Analysis & Science', icon: <Lightbulb className="mr-2 h-4 w-4" />, component: <DataScience /> },
+      { id: 'bi', label: 'Business Intelligence', icon: <Ticket className="mr-2 h-4 w-4" />, component: <BusinessIntelligence /> },
+    ],
+  },
+  {
+    label: 'Security & Compliance',
+    tabs: [
+      { id: 'security', label: 'Security & Compliance', icon: <Settings className="mr-2 h-4 w-4" />, component: <SecurityCompliance /> },
+    ],
+  },
+  {
+    label: 'Documentation & Technical Writing',
+    tabs: [
+      { id: 'docs', label: 'Documentation & Technical Writing', icon: <GitMerge className="mr-2 h-4 w-4" />, component: <Documentation /> },
+    ],
+  },
 ];
 
 export default function AppPage({ params }: { params: { lng: string } }) {
   const { user, loading, logout } = useAuth();
-  const [selectedTab, setSelectedTab] = useState('devops');
+  const [selectedTab, setSelectedTab] = useState('dashboard');
   const [authMode, setAuthMode] = useState<'login' | 'register'>('login');
 
   if (loading) {
@@ -90,46 +132,57 @@ export default function AppPage({ params }: { params: { lng: string } }) {
     );
   }
 
-  const ActiveComponent = TABS.find(tab => tab.id === selectedTab)?.component || <DevOps />;
+  // Find the active tab component
+  const allTabs = AGENT_GROUPS.flatMap(group => group.tabs);
+  const ActiveComponent = allTabs.find(tab => tab.id === selectedTab)?.component || <Dashboard />;
 
   return (
     <ToastProvider>
-      <div className="flex min-h-screen bg-gray-950 text-gray-300">
-        <aside className="hidden md:flex w-64 bg-gray-900 text-gray-300 p-4 flex-col border-r border-lime-800/50">
-          <div className="text-2xl font-bold mb-8 flex items-center text-lime-400 pt-2">
-             <Settings className="mr-3 h-7 w-7 text-lime-400" /> AgentForge
+      <div className="flex min-h-screen bg-slate-50 text-slate-800">
+        <aside className="hidden md:flex w-72 bg-white text-slate-800 p-6 flex-col border-r border-slate-200 shadow-lg">
+          <div className="text-2xl font-bold mb-10 flex items-center text-blue-600 pt-2">
+             <Settings className="mr-3 h-7 w-7 text-blue-600" /> AgentForge
           </div>
-          <nav className="flex-grow space-y-2">
-            {TABS.map((tab) => (
-              <Button
-                key={tab.id}
-                variant={selectedTab === tab.id ? "default" : "ghost"}
-                className={`w-full justify-start text-left px-3 py-2.5 rounded-md transition-all duration-150 ease-in-out
-                  ${selectedTab === tab.id 
-                    ? 'bg-lime-600 text-gray-950 font-semibold shadow-md hover:bg-lime-500' 
-                    : 'text-gray-400 hover:bg-gray-800 hover:text-lime-300'
-                  }`
-                }
-                onClick={() => setSelectedTab(tab.id)}
-              >
-                {React.cloneElement(tab.icon, { className: `mr-3 h-5 w-5 ${selectedTab === tab.id ? 'text-gray-950' : 'text-lime-500 group-hover:text-lime-400'}` })} 
-                {tab.label}
-              </Button>
+          <nav className="flex-grow space-y-6">
+            {AGENT_GROUPS.map(group => (
+              <div key={group.label}>
+                <div className="uppercase text-xs text-blue-600 font-bold mb-3 tracking-wider pl-2">{group.label}</div>
+                <div className="space-y-1">
+                  {group.tabs.map(tab => (
+                    <Button
+                      key={tab.id}
+                      variant={selectedTab === tab.id ? "default" : "ghost"}
+                      className={`w-full justify-start text-left px-4 py-3 rounded-lg transition-all duration-150 ease-in-out font-medium text-base
+                        ${selectedTab === tab.id 
+                          ? 'bg-blue-600 text-white shadow-md hover:bg-blue-700' 
+                          : 'text-slate-700 hover:bg-blue-50 hover:text-blue-700'
+                        }`
+                      }
+                      onClick={() => setSelectedTab(tab.id)}
+                    >
+                      {React.cloneElement(tab.icon, { className: `mr-3 h-5 w-5 ${selectedTab === tab.id ? 'text-white' : 'text-blue-600 group-hover:text-blue-700'}` })} 
+                      {tab.label}
+                    </Button>
+                  ))}
+                </div>
+              </div>
             ))}
           </nav>
-          <div className="mt-auto pb-2">
+          <div className="mt-auto pt-8">
             <Button 
               variant="ghost" 
-              className="w-full justify-start text-gray-400 hover:bg-red-700/80 hover:text-white px-3 py-2.5 rounded-md transition-all duration-150 ease-in-out group" 
+              className="w-full justify-start text-slate-500 hover:bg-blue-100 hover:text-blue-700 px-4 py-3 rounded-lg transition-all duration-150 ease-in-out group font-medium text-base" 
               onClick={logout}
             >
-              <LogOut className="mr-3 h-5 w-5 text-red-500 group-hover:text-white" /> Logout ({user.email})
+              <LogOut className="mr-3 h-5 w-5 text-blue-600 group-hover:text-blue-700" /> Logout ({user.email})
             </Button>
           </div>
         </aside>
 
-        <main className="flex-1 p-6 lg:p-8 overflow-auto">
-          {ActiveComponent}
+        <main className="flex-1 p-8 lg:p-12 overflow-auto bg-slate-50 min-h-screen">
+          <div className="max-w-6xl mx-auto">
+            {ActiveComponent}
+          </div>
         </main>
 
         <ToastViewport />
