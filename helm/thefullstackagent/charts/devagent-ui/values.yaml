@@ -80,12 +80,12 @@ affinity: {}
 
 livenessProbe:
   enabled: true
-  path: / # Next.js serves the app from root
+  path: /en/ # Next.js serves the app from root
   initialDelaySeconds: 15
   periodSeconds: 20
 
 readinessProbe:
   enabled: true
-  path: / # Next.js serves the app from root
+  path: /en/ # Next.js serves the app from root
   initialDelaySeconds: 5
   periodSeconds: 10 
