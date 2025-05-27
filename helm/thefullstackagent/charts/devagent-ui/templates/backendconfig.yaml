@@ -1,0 +1,16 @@
+apiVersion: cloud.google.com/v1
+kind: BackendConfig
+metadata:
+  name: {{ include "thefullstackagent.component.fullname" (dict "Chart" .Chart "Release" .Release "componentName" "ui" "componentValues" .Values) }}-backendconfig
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "thefullstackagent.component.labels" (dict "Chart" .Chart "Release" .Release "componentName" "ui" "componentValues" .Values) | nindent 4 }}
+spec:
+  healthCheck:
+    checkIntervalSec: 15
+    timeoutSec: 15
+    healthyThreshold: 1
+    unhealthyThreshold: 2
+    type: HTTP
+    requestPath: /en/
+    port: 3000 # This should be the container targetPort for the UI 

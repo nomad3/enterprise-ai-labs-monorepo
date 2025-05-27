@@ -6,3 +6,26 @@
     "componentName" "ui" 
     "componentValues" .Values 
   ) | nindent 0 }} 
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "thefullstackagent.component.fullname" (dict "Chart" .Chart "Release" .Release "componentName" "ui" "componentValues" .Values) }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "thefullstackagent.component.labels" (dict "Chart" .Chart "Release" .Release "componentName" "ui" "componentValues" .Values) | nindent 4 }}
+  annotations:
+    cloud.google.com/neg: '{"ingress": true}'
+    cloud.google.com/backend-config: '{"ports": {"{{ .Values.service.port }}":"{{ include "thefullstackagent.component.fullname" (dict "Chart" .Chart "Release" .Release "componentName" "ui" "componentValues" .Values) }}-backendconfig"}}'
+    {{- with .Values.service.annotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: {{ .Values.service.targetPort }}
+      protocol: TCP
+      name: http # Ensure this port name matches what Ingress uses
+  selector:
+    {{- include "thefullstackagent.component.selectorLabels" (dict "Chart" .Chart "Release" .Release "componentName" "ui" "componentValues" .Values) | nindent 4 }} 
