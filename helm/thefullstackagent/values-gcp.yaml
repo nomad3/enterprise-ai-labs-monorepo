@@ -104,7 +104,7 @@ devagentApi:
     # tag: latest # REMOVED to ensure CI/CD --set takes precedence
   replicaCount: 1 # Start with 1, can be scaled later
   env:
-    NEXT_PUBLIC_API_URL: "/api"
+    NEXT_PUBLIC_API_URL: "https://agents.datamatic.app/api/v1"
 
 # devagent-ui can be configured similarly if it needs cloud-specific settings
 # devagent-ui:
