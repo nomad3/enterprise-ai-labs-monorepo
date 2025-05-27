@@ -95,7 +95,7 @@ export default function AppPage({ params }: { params: { lng: string } }) {
   return (
     <ToastProvider>
       <div className="flex min-h-screen bg-gray-950 text-gray-300">
-        <aside className="w-64 bg-gray-900 text-gray-300 p-4 flex flex-col lg:hidden border-r border-lime-800/50">
+        <aside className="hidden md:flex w-64 bg-gray-900 text-gray-300 p-4 flex-col border-r border-lime-800/50">
           <div className="text-2xl font-bold mb-8 flex items-center text-lime-400 pt-2">
              <Settings className="mr-3 h-7 w-7 text-lime-400" /> AgentForge
           </div>
