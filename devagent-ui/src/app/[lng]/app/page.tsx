@@ -36,7 +36,23 @@ const mockInfrastructureSetup = {
   status: 'Provisioned',
 };
 
+const ManageTenants = () => <div className="p-8 bg-white rounded-xl shadow-lg border border-slate-200"><h1 className="text-2xl font-bold text-blue-600 mb-4">Manage Tenants</h1><p className="text-slate-700">Multi-tenant management dashboard (coming soon).</p></div>;
+const OrchestrateAgents = () => <div className="p-8 bg-white rounded-xl shadow-lg border border-slate-200"><h1 className="text-2xl font-bold text-blue-600 mb-4">Orchestrate Agents</h1><p className="text-slate-700">Multi-agent orchestration dashboard (coming soon).</p></div>;
+const AgentAnalytics = () => <div className="p-8 bg-white rounded-xl shadow-lg border border-slate-200"><h1 className="text-2xl font-bold text-blue-600 mb-4">Agent Analytics</h1><p className="text-slate-700">Agent analytics and metrics (coming soon).</p></div>;
+const Integrations = () => <div className="p-8 bg-white rounded-xl shadow-lg border border-slate-200"><h1 className="text-2xl font-bold text-blue-600 mb-4">Integrations</h1><p className="text-slate-700">Integrations hub for enterprise tools (coming soon).</p></div>;
+
+const PLATFORM_GROUP = {
+  label: 'Platform Management',
+  tabs: [
+    { id: 'tenants', label: 'Manage Tenants', icon: <Settings className="mr-2 h-4 w-4" />, component: <ManageTenants /> },
+    { id: 'agents', label: 'Orchestrate Agents', icon: <CloudCog className="mr-2 h-4 w-4" />, component: <OrchestrateAgents /> },
+    { id: 'agent-analytics', label: 'Agent Analytics', icon: <Lightbulb className="mr-2 h-4 w-4" />, component: <AgentAnalytics /> },
+    { id: 'integrations', label: 'Integrations', icon: <GitMerge className="mr-2 h-4 w-4" />, component: <Integrations /> },
+  ],
+};
+
 const AGENT_GROUPS = [
+  PLATFORM_GROUP,
   {
     label: 'Full-Stack Development',
     tabs: [
