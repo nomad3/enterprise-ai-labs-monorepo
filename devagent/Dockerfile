@@ -13,8 +13,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && pip install --upgrade pip setuptools wheel
 
 # The build context is the 'devagent' directory.
-# requirements.txt is one level up from the current build context.
-COPY ../requirements.txt /app/requirements.txt
+# requirements.txt is now located within this build context.
+COPY requirements.txt /app/requirements.txt
 RUN pip install --no-cache-dir -r /app/requirements.txt
 
 # Copy the application code from the current build context (which is the 'devagent' directory)
