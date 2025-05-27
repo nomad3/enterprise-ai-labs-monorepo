@@ -5,7 +5,7 @@ devagentApi:
 
   image:
     repository: gcr.io/aremko-e51ae/devagent-api # Corrected repository
-    tag: "5272243" # Placeholder for the actual full commit SHA tag
+    tag: "latest" # Using "latest" as a placeholder, to be overridden by CI/CD
     pullPolicy: IfNotPresent # Or Never, if image is definitely local
 
   service:
