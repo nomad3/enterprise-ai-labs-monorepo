@@ -1,4 +1,4 @@
-import { AuthProvider } from '../contexts/AuthContext';
+import { AuthProvider } from '../../contexts/AuthContext'; // Adjusted import path
 
 export default function AppLayout({
   children,
