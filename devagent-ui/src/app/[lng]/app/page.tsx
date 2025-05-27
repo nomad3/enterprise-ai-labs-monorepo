@@ -174,7 +174,7 @@ export default function AppPage({ params }: { params: { lng: string } }) {
   return (
     <TenantProvider>
       <ToastProvider>
-        <div className="flex min-h-screen bg-slate-50 text-slate-800 flex-row">
+        <div className="flex min-h-screen bg-slate-50 text-slate-800 flex-row" style={{ flexDirection: 'row' }}>
           <aside className="hidden md:flex w-72 bg-white text-slate-800 p-6 flex-col border-r border-slate-200 shadow-lg">
             <div className="text-2xl font-bold flex items-center text-blue-600 pt-2 mb-6">
               <Settings className="mr-3 h-7 w-7 text-blue-600" /> AgentForge
