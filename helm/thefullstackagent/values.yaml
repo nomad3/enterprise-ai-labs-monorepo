@@ -4,8 +4,8 @@ devagentApi:
   replicaCount: 1 # Adjusted from 3 for local testing initially
 
   image:
-    repository: devagent # Assuming local image 'devagent:latest'
-    tag: "1748117771"
+    repository: gcr.io/aremko-e51ae/devagent-api # Corrected repository
+    tag: "5272243" # Placeholder for the actual full commit SHA tag
     pullPolicy: IfNotPresent # Or Never, if image is definitely local
 
   service:
