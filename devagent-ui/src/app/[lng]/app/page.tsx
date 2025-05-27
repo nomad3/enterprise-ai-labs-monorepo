@@ -174,8 +174,8 @@ export default function AppPage({ params }: { params: { lng: string } }) {
   return (
     <TenantProvider>
       <ToastProvider>
-        <div className="flex min-h-screen bg-slate-50 text-slate-800 flex-row" style={{ flexDirection: 'row' }}>
-          <aside className="hidden md:flex w-72 bg-white text-slate-800 p-6 flex-col border-r border-slate-200 shadow-lg">
+        <div className="min-h-screen bg-slate-50 text-slate-800" style={{ display: 'flex', flexDirection: 'row' }}>
+          <aside className="hidden md:flex bg-white text-slate-800 p-6 flex-col border-r border-slate-200 shadow-lg" style={{ width: '288px', order: -1, flexShrink: 0 }}>
             <div className="text-2xl font-bold flex items-center text-blue-600 pt-2 mb-6">
               <Settings className="mr-3 h-7 w-7 text-blue-600" /> AgentForge
             </div>
@@ -215,7 +215,7 @@ export default function AppPage({ params }: { params: { lng: string } }) {
               </Button>
             </div>
           </aside>
-          <main className="flex-1 p-8 lg:p-12 overflow-auto bg-slate-50 min-h-screen">
+          <main className="p-8 lg:p-12 overflow-auto bg-slate-50 min-h-screen" style={{ flex: 1, order: 1 }}>
             <div className="max-w-6xl mx-auto">
               {ActiveComponent}
             </div>
