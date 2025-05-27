@@ -1,13 +1,13 @@
-{{- $componentName := "ui" -}}
-{{- $fullname := printf "%s-%s-%s" .Release.Name .Chart.Name $componentName | trunc 63 | trimSuffix "-" -}}
-{{- $backendConfigName := printf "%s-backendconfig" $fullname -}}
+{{- $serviceName := printf "%s-%s-%s" .Release.Name .Chart.Name "ui" | trunc 63 | trimSuffix "-" -}}
+{{- $podSelectorName := printf "%s-%s" .Chart.Name "ui" | trunc 63 | trimSuffix "-" -}}
+{{- $backendConfigName := printf "%s-backendconfig" $serviceName -}}
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ $fullname }}
+  name: {{ $serviceName }}
   namespace: {{ .Release.Namespace }}
   labels:
-    app.kubernetes.io/name: {{ $fullname }}
+    app.kubernetes.io/name: {{ $serviceName }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     helm.sh/chart: {{ printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
@@ -25,7 +25,5 @@ spec:
       protocol: TCP
       name: http
   selector:
-    # This needs to match the actual pod labels set by the deployment template
-    # Assuming the deployment uses a similar fullname for its app.kubernetes.io/name selector label
-    app.kubernetes.io/name: {{ $fullname }}
+    app.kubernetes.io/name: {{ $podSelectorName }}
     app.kubernetes.io/instance: {{ .Release.Name }} 

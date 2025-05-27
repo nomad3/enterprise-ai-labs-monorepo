@@ -1,13 +1,13 @@
-{{- $componentName := "ui" -}}
-{{- $fullname := printf "%s-%s-%s" .Release.Name .Chart.Name $componentName | trunc 63 | trimSuffix "-" -}}
-{{- $backendConfigName := printf "%s-backendconfig" $fullname -}}
+{{- $serviceName := printf "%s-%s-%s" .Release.Name .Chart.Name "ui" | trunc 63 | trimSuffix "-" -}}
+{{- $podSelectorName := printf "%s-%s" .Chart.Name "ui" | trunc 63 | trimSuffix "-" -}}
+{{- $backendConfigName := printf "%s-backendconfig" $serviceName -}}
 apiVersion: cloud.google.com/v1
 kind: BackendConfig
 metadata:
   name: {{ $backendConfigName }}
   namespace: {{ .Release.Namespace }}
   labels:
-    app.kubernetes.io/name: {{ $fullname }}
+    app.kubernetes.io/name: {{ $serviceName }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     helm.sh/chart: {{ printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
