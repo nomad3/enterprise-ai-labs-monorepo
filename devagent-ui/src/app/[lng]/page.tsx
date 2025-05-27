@@ -74,11 +74,7 @@ export default function LandingPage({ params }: { params: { lng: string } }) {
           </div>
           <div className="relative z-10">
             <h1 className="text-5xl sm:text-7xl font-extrabold text-slate-900 mb-6 leading-tight">
-              {t('hero.title', {
-                components: {
-                  1: <span className="text-blue-600" />
-                }
-              })}
+              AgentForge: Enterprise-Grade AI Orchestration for <span className="text-blue-600">Strategic Automation</span>
             </h1>
             <p className="text-xl sm:text-2xl text-slate-600 mb-10 max-w-4xl mx-auto">
               {t('hero.description')}
