@@ -27,8 +27,8 @@ class Settings(BaseSettings):
 
     # Database settings
     DATABASE_URL: str = "postgresql://postgres:postgres@localhost:5432/agentforge"
-    DATABASE_POOL_SIZE: int = 20
-    DATABASE_MAX_OVERFLOW: int = 10
+    DATABASE_POOL_SIZE: int = 10
+    DATABASE_MAX_OVERFLOW: int = 5
     DATABASE_ECHO: bool = False
 
     # Redis settings

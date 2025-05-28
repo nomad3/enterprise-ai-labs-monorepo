@@ -38,7 +38,12 @@ async def get_session() -> AsyncGenerator[AsyncSession, None]:
     settings = get_settings()
     # Construct async URL from settings
     async_db_url = settings.DATABASE_URL.replace("postgresql://", "postgresql+asyncpg://")
-    engine = create_async_engine(async_db_url, echo=False) # Using async_db_url
+    engine = create_async_engine(
+        async_db_url, 
+        echo=settings.DATABASE_ECHO, 
+        pool_size=settings.DATABASE_POOL_SIZE,
+        max_overflow=settings.DATABASE_MAX_OVERFLOW
+    )
     AsyncSessionLocal = sessionmaker(
         bind=engine,
         class_=AsyncSession,
@@ -63,7 +68,12 @@ async def init_db():
     # Construct async URL from settings
     async_db_url = settings.DATABASE_URL.replace("postgresql://", "postgresql+asyncpg://")
     logger.info(f"Attempting to connect to database with URL: {async_db_url}") # Log the URL
-    engine = create_async_engine(async_db_url, echo=False) # Using async_db_url
+    engine = create_async_engine(
+        async_db_url, 
+        echo=settings.DATABASE_ECHO,
+        pool_size=settings.DATABASE_POOL_SIZE,
+        max_overflow=settings.DATABASE_MAX_OVERFLOW
+    )
 
     max_retries = 5
     retry_delay = 5  # seconds
