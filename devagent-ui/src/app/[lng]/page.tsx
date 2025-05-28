@@ -224,16 +224,16 @@ export default function LandingPage({ params }: { params: { lng: string } }) {
           </div>
         </section>
 
-        {/* Footer - Minor update to contact email */}
-        <footer className="py-10 text-center text-slate-500 bg-slate-800 border-t border-slate-700 mt-auto">
-          <div className="mb-3 font-semibold text-lg text-slate-300">{t('footer.copyright', { year: currentYear })}</div>
+        {/* Footer - Updated to full light theme */}
+        <footer className="py-10 text-center text-slate-600 bg-slate-50 border-t border-slate-200 mt-auto">
+          <div className="mb-3 font-semibold text-lg text-slate-700">{t('footer.copyright', { year: currentYear })}</div>
           <div className="flex justify-center gap-x-8 gap-y-2 flex-wrap text-md">
-            <a href="https://github.com/thefullstackagent" target="_blank" rel="noopener noreferrer" className="hover:text-blue-400 transition-colors">{t('footer.github')}</a>
-            <a href={`/${params.lng}/docs`} className="hover:text-blue-400 transition-colors">{t('footer.documentation')}</a>
-            <Link href={`/${params.lng}/app/dashboard`} className="hover:text-blue-400 transition-colors">{t('footer.platformLogin')}</Link>
-            <a href={`mailto:sales@agentforge.ai?subject=${encodeURIComponent(t('navbar.productName') + ' ' + t('footer.contactSales'))}`} className="hover:text-blue-400 transition-colors">{t('footer.contactSales')}</a>
-            <a href={`/${params.lng}/privacy-policy`} className="hover:text-blue-400 transition-colors">{t('footer.privacyPolicy')}</a>
-            <a href={`/${params.lng}/terms-of-service`} className="hover:text-blue-400 transition-colors">{t('footer.terms')}</a>
+            <a href="https://github.com/thefullstackagent" target="_blank" rel="noopener noreferrer" className="text-slate-600 hover:text-blue-600 transition-colors">{t('footer.github')}</a>
+            <a href={`/${params.lng}/docs`} className="text-slate-600 hover:text-blue-600 transition-colors">{t('footer.documentation')}</a>
+            <Link href={`/${params.lng}/app/dashboard`} className="text-slate-600 hover:text-blue-600 transition-colors">{t('footer.platformLogin')}</Link>
+            <a href={`mailto:sales@agentforge.ai?subject=${encodeURIComponent(t('navbar.productName') + ' ' + t('footer.contactSales'))}`} className="text-slate-600 hover:text-blue-600 transition-colors">{t('footer.contactSales')}</a>
+            <a href={`/${params.lng}/privacy-policy`} className="text-slate-600 hover:text-blue-600 transition-colors">{t('footer.privacyPolicy')}</a>
+            <a href={`/${params.lng}/terms-of-service`} className="text-slate-600 hover:text-blue-600 transition-colors">{t('footer.terms')}</a>
           </div>
         </footer>
       </div>
