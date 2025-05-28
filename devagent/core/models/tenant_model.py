@@ -11,6 +11,7 @@ from sqlalchemy import Column, DateTime, Integer, String, Boolean, JSON
 from sqlalchemy.orm import relationship
 
 from devagent.core.base import Base
+from .audit_log_model import AuditLog
 
 
 class ResourceQuota(BaseModel):

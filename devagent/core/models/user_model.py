@@ -30,6 +30,7 @@ class User(Base):
 
     # Relationships
     tenant = relationship("Tenant", back_populates="users")
+    audit_logs = relationship("AuditLog", back_populates="user")
 
 
 # Pydantic models
