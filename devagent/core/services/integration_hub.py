@@ -27,7 +27,7 @@ from pydantic import BaseModel, Field, HttpUrl
 from sqlalchemy.orm import Session
 
 from devagent.core.models.tenant_model import Tenant
-from devagent.core.database import get_db
+from devagent.core.database import get_session
 from devagent.core.config import get_settings
 
 logger = logging.getLogger(__name__)
