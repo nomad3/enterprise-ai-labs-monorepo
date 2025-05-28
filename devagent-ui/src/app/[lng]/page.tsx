@@ -3,8 +3,8 @@
 
 // All existing imports should be here, ensure these are complete and correct:
 import { useState } from 'react'; // Keep if used, though currentYear doesn't need it directly for LandingPage
-import { ToastProvider } from '@/components/ui/toast';
-import { Rocket, ShieldCheck, Code2, GitBranch, Zap, Briefcase, CloudCog, Network, Globe } from 'lucide-react';
+import { Toaster } from '@/app/components/ui/toaster';
+import { Rocket, ShieldCheck, Code2, GitBranch, Zap, Briefcase, CloudCog, Network } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
@@ -42,7 +42,8 @@ export default function LandingPage({ params }: { params: { lng: string } }) {
   const currentYear = new Date().getFullYear();
 
   return (
-    <ToastProvider>
+    <>
+      <Toaster />
       <div className="min-h-screen flex flex-col bg-white text-slate-800">
         {/* Navbar */}
         <nav className="flex items-center justify-between px-8 py-6 bg-white/90 shadow-md sticky top-0 z-50 border-b border-slate-200">
@@ -236,7 +237,7 @@ export default function LandingPage({ params }: { params: { lng: string } }) {
           </div>
         </footer>
       </div>
-    </ToastProvider>
+    </>
   );
 }
 
