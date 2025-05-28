@@ -45,6 +45,51 @@ export default function LandingPage({ params }: { params: { lng: string } }) {
   const { t, i18n } = useTranslation('common');
   const currentYear = new Date().getFullYear();
 
+  const featuresData = [
+    {
+      icon: <CloudCog className="w-10 h-10 text-blue-600" />,
+      title: "Seamless Multi-Cloud Operations",
+      desc: "Deploy and manage agents across AWS, Azure, GCP, and private clouds with a unified control plane. Optimize costs and avoid vendor lock-in.",
+      image: "https://storage.googleapis.com/devagent-assets/landing-page/feature_multi_cloud_light.jpg",
+      name: "feature1" // key for t()
+    },
+    {
+      icon: <Network className="w-10 h-10 text-blue-600" />,
+      title: "Secure Multi-Tenant Architecture",
+      desc: "Isolate data and operations for different departments or clients within a single platform. Ensure data privacy and granular access control.",
+      image: "https://storage.googleapis.com/devagent-assets/landing-page/feature_multi_tenant_light.jpg",
+      name: "feature2"
+    },
+    {
+      icon: <Zap className="w-10 h-10 text-blue-600" />,
+      title: "Powerful Multi-Agent Collaboration",
+      desc: "Orchestrate diverse AI agents specializing in development, DevOps, QA, data analysis, and more. Foster synergy for complex problem-solving.",
+      image: "https://storage.googleapis.com/devagent-assets/landing-page/feature_multi_agent_light.jpg",
+      name: "feature3"
+    },
+    {
+      icon: <Code2 className="w-10 h-10 text-blue-600" />,
+      title: "Accelerated Software Delivery",
+      desc: "Automate coding, testing, and deployment pipelines. Reduce development cycles and improve code quality with AI-powered assistance.",
+      image: "https://storage.googleapis.com/devagent-assets/landing-page/feature_dev_light.jpg",
+      name: "feature4"
+    },
+    {
+      icon: <GitBranch className="w-10 h-10 text-blue-600" />,
+      title: "Intelligent DevOps & IaC",
+      desc: "Streamline infrastructure management, CI/CD, and GitOps workflows. Proactively manage your cloud resources with AI-driven insights.",
+      image: "https://storage.googleapis.com/devagent-assets/landing-page/feature_devops_light.jpg",
+      name: "feature5"
+    },
+    {
+      icon: <Briefcase className="w-10 h-10 text-blue-600" />,
+      title: "Custom Enterprise Solutions",
+      desc: "Tailor agent capabilities and workflows to your specific business needs. Integrate seamlessly with your existing enterprise ecosystem.",
+      image: "https://storage.googleapis.com/devagent-assets/landing-page/feature_enterprise_light.jpg",
+      name: "feature6"
+    }
+  ];
+
   return (
     <>
       <Toaster />
@@ -118,42 +163,15 @@ export default function LandingPage({ params }: { params: { lng: string } }) {
         <section id="features" className="py-16 sm:py-24 bg-white">
           <h2 className="text-3xl sm:text-4xl font-bold text-center text-slate-800 mb-12 sm:mb-16 px-4">Unlock Unprecedented Efficiency with AgentForge</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto px-6">
-            <FeatureCard 
-              icon={<CloudCog className="w-10 h-10 text-blue-600" />} 
-              title="Seamless Multi-Cloud Operations" 
-              desc="Deploy and manage agents across AWS, Azure, GCP, and private clouds with a unified control plane. Optimize costs and avoid vendor lock-in."
-              image="https://storage.googleapis.com/devagent-assets/landing-page/feature_multi_cloud_light.jpg"
-            />
-            <FeatureCard 
-              icon={<Network className="w-10 h-10 text-blue-600" />} 
-              title="Secure Multi-Tenant Architecture" 
-              desc="Isolate data and operations for different departments or clients within a single platform. Ensure data privacy and granular access control."
-              image="https://storage.googleapis.com/devagent-assets/landing-page/feature_multi_tenant_light.jpg"
-            />
-            <FeatureCard 
-              icon={<Zap className="w-10 h-10 text-blue-600" />} 
-              title="Powerful Multi-Agent Collaboration" 
-              desc="Orchestrate diverse AI agents specializing in development, DevOps, QA, data analysis, and more. Foster synergy for complex problem-solving."
-              image="https://storage.googleapis.com/devagent-assets/landing-page/feature_multi_agent_light.jpg"
-            />
-            <FeatureCard 
-              icon={<Code2 className="w-10 h-10 text-blue-600" />} 
-              title="Accelerated Software Delivery" 
-              desc="Automate coding, testing, and deployment pipelines. Reduce development cycles and improve code quality with AI-powered assistance."
-              image="https://storage.googleapis.com/devagent-assets/landing-page/feature_dev_light.jpg"
-            />
-            <FeatureCard 
-              icon={<GitBranch className="w-10 h-10 text-blue-600" />} 
-              title="Intelligent DevOps & IaC" 
-              desc="Streamline infrastructure management, CI/CD, and GitOps workflows. Proactively manage your cloud resources with AI-driven insights."
-              image="https://storage.googleapis.com/devagent-assets/landing-page/feature_devops_light.jpg"
-            />
-            <FeatureCard 
-              icon={<Briefcase className="w-10 h-10 text-blue-600" />} 
-              title="Custom Enterprise Solutions" 
-              desc="Tailor agent capabilities and workflows to your specific business needs. Integrate seamlessly with your existing enterprise ecosystem."
-              image="https://storage.googleapis.com/devagent-assets/landing-page/feature_enterprise_light.jpg"
-            />
+            {featuresData.map((feature) => (
+              <FeatureCard
+                key={feature.name}
+                icon={feature.icon}
+                title={t(`features.${feature.name}.title`, feature.title)}
+                desc={t(`features.${feature.name}.desc`, feature.desc)}
+                image={feature.image}
+              />
+            ))}
           </div>
         </section>
 
@@ -248,12 +266,12 @@ function FeatureCard({ icon, title, desc, image }: { icon: React.ReactNode; titl
         {/* Optional subtle gradient overlay if images are too busy */}
         {/* <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-transparent"></div> */}
       </div>
-      <div className="p-6 flex-grow flex flex-col items-start">
+      <div className="p-6 flex-grow flex flex-col items-center">
         <div className="mb-4 p-3 rounded-full bg-sky-100 text-blue-600">
           {icon}
         </div>
-        <h3 className="font-bold text-xl sm:text-2xl mb-2 text-slate-800">{title}</h3>
-        <p className="text-slate-600 text-sm sm:text-md leading-relaxed flex-grow">{desc}</p>
+        <h3 className="font-bold text-xl sm:text-2xl mb-2 text-slate-800 text-center">{title}</h3>
+        <p className="text-slate-600 text-sm sm:text-md leading-relaxed flex-grow text-center">{desc}</p>
       </div>
     </div>
   );
