@@ -50,42 +50,42 @@ export default function LandingPage({ params }: { params: { lng: string } }) {
       icon: <CloudCog className="w-10 h-10 text-blue-600" />,
       title: "Seamless Multi-Cloud Operations",
       desc: "Deploy and manage agents across AWS, Azure, GCP, and private clouds with a unified control plane. Optimize costs and avoid vendor lock-in.",
-      image: "https://storage.googleapis.com/devagent-assets/landing-page/feature_multi_cloud_light.jpg",
+      image: "https://storage.googleapis.com/devagent-assets/landing-page/feature_multi_cloud.jpg",
       name: "feature1" // key for t()
     },
     {
       icon: <Network className="w-10 h-10 text-blue-600" />,
       title: "Secure Multi-Tenant Architecture",
       desc: "Isolate data and operations for different departments or clients within a single platform. Ensure data privacy and granular access control.",
-      image: "https://storage.googleapis.com/devagent-assets/landing-page/feature_multi_tenant_light.jpg",
+      image: "https://storage.googleapis.com/devagent-assets/landing-page/feature_multi_tenant.jpg",
       name: "feature2"
     },
     {
       icon: <Zap className="w-10 h-10 text-blue-600" />,
       title: "Powerful Multi-Agent Collaboration",
       desc: "Orchestrate diverse AI agents specializing in development, DevOps, QA, data analysis, and more. Foster synergy for complex problem-solving.",
-      image: "https://storage.googleapis.com/devagent-assets/landing-page/feature_multi_agent_light.jpg",
+      image: "https://storage.googleapis.com/devagent-assets/landing-page/feature_multi_agent.jpg",
       name: "feature3"
     },
     {
       icon: <Code2 className="w-10 h-10 text-blue-600" />,
       title: "Accelerated Software Delivery",
       desc: "Automate coding, testing, and deployment pipelines. Reduce development cycles and improve code quality with AI-powered assistance.",
-      image: "https://storage.googleapis.com/devagent-assets/landing-page/feature_dev_light.jpg",
+      image: "https://storage.googleapis.com/devagent-assets/landing-page/feature_dev.jpg",
       name: "feature4"
     },
     {
       icon: <GitBranch className="w-10 h-10 text-blue-600" />,
       title: "Intelligent DevOps & IaC",
       desc: "Streamline infrastructure management, CI/CD, and GitOps workflows. Proactively manage your cloud resources with AI-driven insights.",
-      image: "https://storage.googleapis.com/devagent-assets/landing-page/feature_devops_light.jpg",
+      image: "https://storage.googleapis.com/devagent-assets/landing-page/feature_devops.jpg",
       name: "feature5"
     },
     {
       icon: <Briefcase className="w-10 h-10 text-blue-600" />,
       title: "Custom Enterprise Solutions",
       desc: "Tailor agent capabilities and workflows to your specific business needs. Integrate seamlessly with your existing enterprise ecosystem.",
-      image: "https://storage.googleapis.com/devagent-assets/landing-page/feature_enterprise_light.jpg",
+      image: "https://storage.googleapis.com/devagent-assets/landing-page/feature_enterprise.jpg",
       name: "feature6"
     }
   ];
@@ -183,19 +183,19 @@ export default function LandingPage({ params }: { params: { lng: string } }) {
               step="1" 
               title="Strategic Cloud Setup" 
               desc="Define your multi-cloud strategy. AgentForge integrates with your existing infrastructure, ensuring optimal performance and data sovereignty."
-              image="https://storage.googleapis.com/devagent-assets/landing-page/step_cloud_setup_light.jpg"
+              image="https://storage.googleapis.com/devagent-assets/landing-page/step_cloud_setup.jpg"
             />
             <StepCard 
               step="2" 
               title="Tenant & Agent Configuration" 
               desc="Easily onboard tenants and deploy specialized AI agents. Customize roles, permissions, and workflows to match your organizational structure."
-              image="https://storage.googleapis.com/devagent-assets/landing-page/step_config_light.jpg"
+              image="https://storage.googleapis.com/devagent-assets/landing-page/step_config.jpg"
             />
             <StepCard 
               step="3" 
               title="Govern, Monitor & Optimize" 
               desc="Leverage comprehensive dashboards for real-time insights into agent performance, resource utilization, and compliance. Scale with confidence."
-              image="https://storage.googleapis.com/devagent-assets/landing-page/step_monitor_light.jpg"
+              image="https://storage.googleapis.com/devagent-assets/landing-page/step_monitor.jpg"
             />
           </div>
         </section>
