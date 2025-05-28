@@ -15,8 +15,8 @@ services:
 
   devagent:
     build:
-      context: .
-      dockerfile: devagent/Dockerfile
+      context: ./devagent
+      dockerfile: Dockerfile
     ports:
       - "8000:8000"
     volumes:
