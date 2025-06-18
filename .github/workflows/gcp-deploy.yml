@@ -44,7 +44,7 @@ jobs:
 
       - name: Set Commit SHA
         id: set_sha
-        run: echo "::set-output name=sha::${{ github.sha }}"
+        run: echo "sha=${{ github.sha }}" >> $GITHUB_OUTPUT
 
       - name: Path Filter
         id: filter
@@ -127,7 +127,7 @@ jobs:
             final_tag="latest" # Default if no app code change, no override, or build skipped unexpectedly
             echo "No app code change or build skipped. Defaulting to 'latest' tag."
           fi
-          echo "::set-output name=tag_to_deploy::$final_tag"
+          echo "tag_to_deploy=$final_tag" >> $GITHUB_OUTPUT
 
       - name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v1
