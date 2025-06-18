@@ -118,7 +118,7 @@ spec:
         - name: {{ .componentName }}
           securityContext:
             {{- toYaml .componentValues.securityContext | nindent 12 }}
-          image: "{{ .componentValues.image.repository }}:{{ .componentValues.image.tag | default .Chart.AppVersion }}"
+          image: "{{ .componentValues.image.repository }}:{{ .componentValues.image.tag }}"
           imagePullPolicy: {{ .componentValues.image.pullPolicy }}
           ports:
             - name: http
