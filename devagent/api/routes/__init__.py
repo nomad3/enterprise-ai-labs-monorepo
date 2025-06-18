@@ -8,5 +8,5 @@ router = APIRouter()
 
 router.include_router(tenant_router)
 router.include_router(agent_router)
-router.include_router(monitoring_router)
+router.include_router(monitoring_router) 
 router.include_router(orchestration_router) 

@@ -61,17 +61,17 @@ const AGENT_GROUPS = [
     tabs: [
       { id: 'dashboard', label: 'Dashboard', icon: <LayoutDashboard className="mr-2 h-4 w-4" />, component: <Dashboard /> },
       { id: 'fullstack', label: 'Full-Stack Dev', icon: <LayoutDashboard className="mr-2 h-4 w-4" />, component: <FullStackDev /> },
-      { id: 'tickets', label: 'Tickets', icon: <Ticket className="mr-2 h-4 w-4" />, component: <Tickets /> },
-      { id: 'plans', label: 'Solution Plans', icon: <Lightbulb className="mr-2 h-4 w-4" />, component: <Plans /> },
-      { id: 'codegen', label: 'Code Generation', icon: <Bot className="mr-2 h-4 w-4" />, component: <CodeGeneration /> },
-      { id: 'vcs', label: 'Version Control', icon: <GitMerge className="mr-2 h-4 w-4" />, component: <VersionControl /> },
+  { id: 'tickets', label: 'Tickets', icon: <Ticket className="mr-2 h-4 w-4" />, component: <Tickets /> },
+  { id: 'plans', label: 'Solution Plans', icon: <Lightbulb className="mr-2 h-4 w-4" />, component: <Plans /> },
+  { id: 'codegen', label: 'Code Generation', icon: <Bot className="mr-2 h-4 w-4" />, component: <CodeGeneration /> },
+  { id: 'vcs', label: 'Version Control', icon: <GitMerge className="mr-2 h-4 w-4" />, component: <VersionControl /> },
     ],
   },
   {
     label: 'DevOps & Infrastructure',
     tabs: [
       { id: 'devops', label: 'DevOps Dashboard', icon: <CloudCog className="mr-2 h-4 w-4" />, component: <DevOps /> },
-      { id: 'cicd', label: 'CI/CD', icon: <CloudCog className="mr-2 h-4 w-4" />, component: <CICD /> },
+  { id: 'cicd', label: 'CI/CD', icon: <CloudCog className="mr-2 h-4 w-4" />, component: <CICD /> },
       { id: 'infrastructure', label: 'Infrastructure Setup', icon: <Settings className="mr-2 h-4 w-4" />, component: <InfrastructureSetupView setup={mockInfrastructureSetup} /> },
       { id: 'pipeline', label: 'Pipeline', icon: <CloudCog className="mr-2 h-4 w-4" />, component: <PipelineView /> },
     ],
@@ -180,7 +180,7 @@ export default function AppPage({ params }: { params: { lng: string } }) {
           <aside className="hidden md:flex bg-white text-slate-800 p-6 flex-col border-r border-slate-200 shadow-lg" style={{ width: '288px', order: -1, flexShrink: 0 }}>
             <div className="text-2xl font-bold flex items-center text-blue-600 pt-2 mb-6">
               <Settings className="mr-3 h-7 w-7 text-blue-600" /> AgentForge
-            </div>
+        </div>
             <SidebarTenantSwitcher />
             <nav className="flex-grow space-y-6">
               {AGENT_GROUPS.map(group => (
@@ -188,42 +188,42 @@ export default function AppPage({ params }: { params: { lng: string } }) {
                   <div className="uppercase text-xs text-blue-600 font-bold mb-3 tracking-wider pl-2">{group.label}</div>
                   <div className="space-y-1">
                     {group.tabs.map(tab => (
-                      <Button
-                        key={tab.id}
-                        variant={selectedTab === tab.id ? "default" : "ghost"}
+            <Button
+              key={tab.id}
+              variant={selectedTab === tab.id ? "default" : "ghost"}
                         className={`w-full justify-start text-left px-4 py-3 rounded-lg transition-all duration-150 ease-in-out font-medium text-base
-                          ${selectedTab === tab.id 
+                ${selectedTab === tab.id 
                             ? 'bg-blue-600 text-white shadow-md hover:bg-blue-700' 
                             : 'text-slate-700 hover:bg-blue-50 hover:text-blue-700'
-                          }`
-                        }
-                        onClick={() => setSelectedTab(tab.id)}
-                      >
+                }`
+              }
+              onClick={() => setSelectedTab(tab.id)}
+            >
                         {React.cloneElement(tab.icon, { className: `mr-3 h-5 w-5 ${selectedTab === tab.id ? 'text-white' : 'text-blue-600 group-hover:text-blue-700'}` })} 
-                        {tab.label}
-                      </Button>
+              {tab.label}
+            </Button>
                     ))}
                   </div>
                 </div>
-              ))}
-            </nav>
+          ))}
+        </nav>
             <div className="mt-auto pt-8">
-              <Button 
-                variant="ghost" 
+          <Button 
+            variant="ghost" 
                 className="w-full justify-start text-slate-500 hover:bg-blue-100 hover:text-blue-700 px-4 py-3 rounded-lg transition-all duration-150 ease-in-out group font-medium text-base" 
-                onClick={logout}
-              >
+            onClick={logout}
+          >
                 <LogOut className="mr-3 h-5 w-5 text-blue-600 group-hover:text-blue-700" /> Logout ({user.email})
-              </Button>
-            </div>
-          </aside>
+          </Button>
+        </div>
+      </aside>
           <main className="p-8 lg:p-12 overflow-auto bg-slate-50 min-h-screen" style={{ flex: 1, order: 1 }}>
             <div className="max-w-6xl mx-auto">
-              {ActiveComponent}
+        {ActiveComponent}
             </div>
-          </main>
-          <ToastViewport />
-        </div>
+      </main>
+      <ToastViewport />
+    </div>
       </ToastProvider>
     </TenantProvider>
   );

@@ -94,54 +94,54 @@ export default function LandingPage({ params }: { params: { lng: string } }) {
     <>
       <Toaster />
       <div className="min-h-screen flex flex-col bg-white">
-        {/* Navbar */}
+      {/* Navbar */}
         <nav className="sticky top-0 z-50 flex items-center justify-between px-6 sm:px-8 py-4 bg-white/80 backdrop-blur-md shadow-sm border-b border-slate-200">
           <Link href={`/${params.lng}`} className="flex items-center gap-2 text-2xl font-bold text-blue-600">
             <Rocket className="w-7 h-7" />
             <span>AgentForge</span>
           </Link>
           <div className="flex items-center gap-3 sm:gap-4">
-            <LanguageSwitcher />
-            <Link href={`/${params.lng}/app`}>
+          <LanguageSwitcher />
+          <Link href={`/${params.lng}/app`}>
               <Button variant="ghost" className="text-slate-700 hover:bg-sky-100 hover:text-blue-700 px-3 sm:px-4">Login</Button>
-            </Link>
-            <Link href={`/${params.lng}/app`}>
+          </Link>
+          <Link href={`/${params.lng}/app`}>
               <Button className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-3 sm:px-4 py-2">Sign Up</Button>
-            </Link>
-          </div>
-        </nav>
+          </Link>
+        </div>
+      </nav>
 
-        {/* Hero Section */}
+      {/* Hero Section */}
         <section className="relative flex flex-col items-center justify-center text-center px-4 py-20 sm:py-28 bg-sky-50 overflow-hidden">
-          <div className="absolute inset-0 z-0">
-            <Image
+        <div className="absolute inset-0 z-0">
+          <Image
               src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b"
               alt="AI and Technology Background"
-              fill
+            fill
               className="object-cover opacity-10"
-              priority
-            />
-          </div>
+            priority
+          />
+        </div>
           <div className="relative z-10 max-w-4xl mx-auto">
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-800 mb-6 leading-tight">
               Revolutionize Your Enterprise with <span className="text-blue-600">Intelligent Agent Orchestration</span>
-            </h1>
+          </h1>
             <p className="text-lg sm:text-xl text-slate-600 mb-10">
               AgentForge empowers your business with a cutting-edge <strong className="font-semibold text-blue-700">Multi-Cloud, Multi-Tenant, and Multi-Agent platform</strong>.
               Drive innovation, enhance productivity, and scale operations with unparalleled security and control.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
               <Link href={`/${params.lng}#contact`}>
                 <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-lg px-8 py-3 shadow-md hover:shadow-lg transition-shadow">
                   Request a Demo
                 </Button>
-              </Link>
-              <Link href={`/${params.lng}/app`}>
+            </Link>
+            <Link href={`/${params.lng}/app`}>
                 <Button size="lg" variant="outline" className="border-blue-600 text-blue-600 hover:bg-blue-50 hover:text-blue-700 font-bold text-lg px-8 py-3 shadow-sm hover:shadow-md transition-shadow">
                   Explore Platform
                 </Button>
-              </Link>
-            </div>
+            </Link>
+          </div>
             <div className="flex flex-wrap gap-x-4 sm:gap-x-6 gap-y-3 justify-center mt-10">
               {[ 
                 { text: 'Multi-Cloud Flexibility', icon: <CloudCog className="w-5 h-5 text-blue-600" /> },
@@ -155,16 +155,16 @@ export default function LandingPage({ params }: { params: { lng: string } }) {
                   {badge.text}
                 </span>
               ))}
-            </div>
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* Features Grid */}
+      {/* Features Grid */}
         <section id="features" className="py-16 sm:py-24 bg-white">
           <h2 className="text-3xl sm:text-4xl font-bold text-center text-slate-800 mb-12 sm:mb-16 px-4">Unlock Unprecedented Efficiency with AgentForge</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto px-6">
             {featuresData.map((feature) => (
-              <FeatureCard
+          <FeatureCard
                 key={feature.name}
                 icon={feature.icon}
                 title={t(`features.${feature.name}.title`, feature.title)}
@@ -172,35 +172,35 @@ export default function LandingPage({ params }: { params: { lng: string } }) {
                 image={feature.image}
               />
             ))}
-          </div>
-        </section>
+        </div>
+      </section>
 
-        {/* How it Works / Enterprise Deployment */}
+      {/* How it Works / Enterprise Deployment */}
         <section className="py-16 sm:py-24 bg-sky-50">
           <h2 className="text-3xl sm:text-4xl font-bold text-center text-slate-800 mb-12 sm:mb-16 px-4">Streamlined Enterprise Integration & Deployment</h2>
           <div className="flex flex-col md:flex-row gap-8 max-w-6xl mx-auto px-6 items-stretch justify-center">
-            <StepCard 
-              step="1" 
+            <StepCard
+              step="1"
               title="Strategic Cloud Setup" 
               desc="Define your multi-cloud strategy. AgentForge integrates with your existing infrastructure, ensuring optimal performance and data sovereignty."
               image="https://storage.googleapis.com/devagent-assets/landing-page/step_cloud_setup.jpg"
             />
-            <StepCard 
-              step="2" 
+            <StepCard
+              step="2"
               title="Tenant & Agent Configuration" 
               desc="Easily onboard tenants and deploy specialized AI agents. Customize roles, permissions, and workflows to match your organizational structure."
               image="https://storage.googleapis.com/devagent-assets/landing-page/step_config.jpg"
             />
-            <StepCard 
-              step="3" 
+            <StepCard
+              step="3"
               title="Govern, Monitor & Optimize" 
               desc="Leverage comprehensive dashboards for real-time insights into agent performance, resource utilization, and compliance. Scale with confidence."
               image="https://storage.googleapis.com/devagent-assets/landing-page/step_monitor.jpg"
             />
-          </div>
-        </section>
+        </div>
+      </section>
 
-        {/* Benefits - Refocused */}
+      {/* Benefits - Refocused */}
         <section className="py-16 sm:py-24 bg-white">
           <h2 className="text-3xl sm:text-4xl font-bold text-center text-slate-800 mb-12 sm:mb-16 px-4">The AgentForge Advantage for Your Enterprise</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto px-6">
@@ -210,30 +210,30 @@ export default function LandingPage({ params }: { params: { lng: string } }) {
             <BenefitCard icon={<CloudCog className="w-8 h-8 text-blue-600" />} title="Unified Control Plane" desc="Manage all your agents, tenants, and cloud resources from a single, intuitive interface. Simplify complexity and enhance visibility." />
             <BenefitCard icon={<Zap className="w-8 h-8 text-blue-600" />} title="Drive Innovation" desc="Empower your teams with specialized AI tools to tackle challenges in software development, DevOps, data analytics, and beyond." />
             <BenefitCard icon={<Briefcase className="w-8 h-8 text-blue-600" />} title="Strategic Partnership" desc="Gain a dedicated partner in your AI transformation journey, with expert support and continuous platform enhancements." />
-          </div>
-        </section>
+        </div>
+      </section>
 
-        {/* Call to Action - Enhanced */}
+      {/* Call to Action - Enhanced */}
         <section id="contact" className="py-20 sm:py-28 flex flex-col items-center bg-blue-600 text-center px-4">
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-6">Ready to Elevate Your Enterprise with AI?</h2>
           <p className="text-lg sm:text-xl text-blue-100 mb-10 max-w-3xl mx-auto">
             Discover how AgentForge's multi-cloud, multi-tenant, and multi-agent platform can drive transformative results for your business.
             Let's discuss your unique challenges and tailor a solution.
-          </p>
+        </p>
           <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
             <a 
               href={`mailto:sales@agentforge.ai?subject=AgentForge Enterprise Demo Request`} 
               className="px-8 py-3 rounded-lg bg-white text-blue-600 font-bold text-lg shadow-md hover:bg-slate-100 transition-transform hover:scale-105"
             >
               Schedule Your Personalized Demo
-            </a>
-            <Link href={`/${params.lng}/docs/enterprise-overview`}>
+          </a>
+          <Link href={`/${params.lng}/docs/enterprise-overview`}>
               <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-blue-600 font-bold text-lg px-8 py-3 transition-transform hover:scale-105">
                 Read Enterprise Docs
-              </Button>
-            </Link>
-          </div>
-        </section>
+            </Button>
+          </Link>
+        </div>
+      </section>
 
         {/* Footer */}
         <footer className="py-10 text-center text-slate-600 bg-slate-50 border-t border-slate-200">
@@ -245,9 +245,9 @@ export default function LandingPage({ params }: { params: { lng: string } }) {
             <a href="mailto:sales@agentforge.ai" className="text-slate-600 hover:text-blue-600 hover:underline transition-colors">Contact Sales</a>
             <Link href={`/${params.lng}/privacy-policy`} className="text-slate-600 hover:text-blue-600 hover:underline transition-colors">Privacy Policy</Link>
             <Link href={`/${params.lng}/terms-of-service`} className="text-slate-600 hover:text-blue-600 hover:underline transition-colors">Terms of Service</Link>
-          </div>
-        </footer>
-      </div>
+        </div>
+      </footer>
+    </div>
     </>
   );
 }

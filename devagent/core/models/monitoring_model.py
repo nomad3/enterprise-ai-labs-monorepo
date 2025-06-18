@@ -38,7 +38,7 @@ class CostMetrics(BaseModel):
                 "total_cost": 12450.0,
                 "currency": "USD"
             }
-        }
+        } 
     )
     
     tenant_id: UUID = Field(..., description="ID of the tenant")
