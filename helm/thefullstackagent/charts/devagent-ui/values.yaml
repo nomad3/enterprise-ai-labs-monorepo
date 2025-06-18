@@ -8,7 +8,7 @@ image:
   repository: devagent-ui # To be replaced with actual registry path
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "{{ .Chart.AppVersion }}"
+  tag: ""
 
 imagePullSecrets: []
 nameOverride: ""
