@@ -1,22 +1,27 @@
-import { useState } from "react";
-import { useQuery, useMutation } from "convex/react";
-import { api } from "../../convex/_generated/api";
+import { useState, useEffect } from "react";
+import axios from "axios";
 import { toast } from "sonner";
 
-export function TenantSettings() {
+export function TenantSettings({ overview }: { overview: any }) {
   const [activeTab, setActiveTab] = useState<"general" | "billing" | "security" | "webhooks">("general");
-  const overview = useQuery(api.tenants.getTenantOverview);
-  const updateSettings = useMutation(api.tenants.updateTenantSettings);
-
   const [settings, setSettings] = useState({
     maxAgents: 5,
     allowedAgentTypes: ["dev", "qa", "documentation"],
     features: ["basic_agents", "basic_integrations"],
   });
 
+  useEffect(() => {
+    if (overview?.tenant?.settings) {
+      // Initialize local settings state from the fetched overview data
+      setSettings(overview.tenant.settings);
+    }
+  }, [overview]);
+
   const handleSaveSettings = async () => {
     try {
-      await updateSettings({ settings });
+      const token = "your_jwt_token"; // Replace with real token
+      const headers = { Authorization: `Bearer ${token}` };
+      await axios.patch(`/api/v1/tenants/${overview.tenant.id}`, { settings }, { headers });
       toast.success("Settings updated successfully");
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Failed to update settings");

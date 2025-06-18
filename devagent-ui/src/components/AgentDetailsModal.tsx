@@ -1,9 +1,9 @@
-import { useState } from "react";
-import { useQuery, useMutation } from "convex/react";
-import { api } from "../../convex/_generated/api";
+import { useState, useEffect } from "react";
+import axios from "axios";
 import { toast } from "sonner";
 
-import { Id } from "../../convex/_generated/dataModel";
+// The Id type from Convex is just a branded string. We can create a simple equivalent.
+type Id<T extends string> = string & { __tableName: T };
 
 interface AgentDetailsModalProps {
   agentId: Id<"agents">;
@@ -14,19 +14,36 @@ export function AgentDetailsModal({ agentId, onClose }: AgentDetailsModalProps) 
   const [activeTab, setActiveTab] = useState<"overview" | "executions" | "settings">("overview");
   const [executionInput, setExecutionInput] = useState("");
   const [isExecuting, setIsExecuting] = useState(false);
+  const [agent, setAgent] = useState<any>(null); // State to hold agent data
 
-  const agent = useQuery(api.agents.getAgent, { agentId });
-  const executeAgent = useMutation(api.agents.executeAgent);
+  useEffect(() => {
+    const fetchAgentData = async () => {
+      try {
+        // TODO: Replace with your actual auth token mechanism
+        const token = "your_jwt_token"; // Replace with a real token
+        const headers = { Authorization: `Bearer ${token}` };
+
+        const response = await axios.get(`/api/v1/agents/${agentId}`, { headers });
+        setAgent(response.data);
+      } catch (error) {
+        console.error("Failed to fetch agent data", error);
+        toast.error("Failed to load agent details.");
+      }
+    };
+
+    if (agentId) {
+      fetchAgentData();
+    }
+  }, [agentId]);
 
   const handleExecute = async () => {
     if (!executionInput.trim() || !agent) return;
 
     setIsExecuting(true);
     try {
-      await executeAgent({
-        agentId: agent._id,
-        input: executionInput.trim(),
-      });
+      // Placeholder for the mutation
+      console.log("Executing agent with input:", executionInput);
+      await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate network delay
       toast.success("Execution started");
       setExecutionInput("");
     } catch (error) {

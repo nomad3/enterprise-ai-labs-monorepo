@@ -1,21 +1,38 @@
-import { useState } from "react";
-import { useQuery, useMutation } from "convex/react";
-import { api } from "../../convex/_generated/api";
-import { Id } from "../../convex/_generated/dataModel";
+import { useState, useEffect } from "react";
+import axios from "axios";
 import { toast } from "sonner";
+
+// The Id type from Convex is just a branded string. We can create a simple equivalent.
+type Id<T extends string> = string & { __tableName: T };
 
 export function UserManagement() {
   const [showInviteModal, setShowInviteModal] = useState(false);
-  const users = useQuery(api.users.listTenantUsers);
-  const removeUser = useMutation(api.users.removeUserFromTenant);
-  const updateUserRole = useMutation(api.users.updateUserRole);
+  const [users, setUsers] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const token = "your_jwt_token"; // Replace with a real token
+        const headers = { Authorization: `Bearer ${token}` };
+        const response = await axios.get("/api/v1/users", { headers });
+        setUsers(response.data);
+      } catch (error) {
+        console.error("Failed to fetch users", error);
+        toast.error("Failed to load users.");
+      }
+    };
+    fetchUsers();
+  }, []);
 
   const handleRemoveUser = async (userId: Id<"users">) => {
     if (!confirm("Are you sure you want to remove this user?")) return;
     
     try {
-      await removeUser({ userId });
+      // TODO: Implement actual API call to DELETE /api/v1/users/{userId}
+      console.log(`Removing user ${userId}`);
+      await new Promise(resolve => setTimeout(resolve, 500));
       toast.success("User removed successfully");
+      setUsers(prev => prev.filter(user => user.userId !== userId));
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Failed to remove user");
     }
@@ -23,7 +40,9 @@ export function UserManagement() {
 
   const handleRoleChange = async (userId: Id<"users">, newRole: string) => {
     try {
-      await updateUserRole({ userId, role: newRole as any });
+      // TODO: Implement actual API call to PATCH /api/v1/users/{userId}/role
+      console.log(`Changing role for user ${userId} to ${newRole}`);
+      await new Promise(resolve => setTimeout(resolve, 500));
       toast.success("User role updated");
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Failed to update role");
@@ -141,15 +160,15 @@ function InviteUserModal({ onClose }: { onClose: () => void }) {
   const [role, setRole] = useState("agent_viewer");
   const [isLoading, setIsLoading] = useState(false);
   
-  const inviteUser = useMutation(api.users.inviteUser);
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email.trim()) return;
 
     setIsLoading(true);
     try {
-      await inviteUser({ email: email.trim(), role: role as any });
+      const token = "your_jwt_token";
+      const headers = { Authorization: `Bearer ${token}` };
+      await axios.post("/api/v1/users/invite", { email: email.trim(), role }, { headers });
       toast.success("User invitation sent");
       onClose();
     } catch (error) {

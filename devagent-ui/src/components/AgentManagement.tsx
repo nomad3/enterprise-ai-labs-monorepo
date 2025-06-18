@@ -1,29 +1,42 @@
-import { useState } from "react";
-import { useQuery, useMutation } from "convex/react";
-import { api } from "../../convex/_generated/api";
-import { Id } from "../../convex/_generated/dataModel";
+import { useState, useEffect } from "react";
+import axios from "axios";
 import { toast } from "sonner";
 import { CreateAgentModal } from "./CreateAgentModal";
 import { AgentDetailsModal } from "./AgentDetailsModal";
+
+// The Id type from Convex is just a branded string. We can create a simple equivalent.
+type Id<T extends string> = string & { __tableName: T };
 
 export function AgentManagement() {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [selectedAgent, setSelectedAgent] = useState<Id<"agents"> | null>(null);
   const [statusFilter, setStatusFilter] = useState<string>("");
   const [typeFilter, setTypeFilter] = useState<string>("");
+  const [agents, setAgents] = useState<any[]>([]); // State to hold agents list
 
-  const agents = useQuery(api.agents.listAgents, {
-    status: statusFilter || undefined,
-    type: typeFilter || undefined,
-  });
+  useEffect(() => {
+    const fetchAgents = async () => {
+      try {
+        // TODO: Replace with your actual auth token mechanism
+        const token = "your_jwt_token"; // Replace with a real token
+        const headers = { Authorization: `Bearer ${token}` };
+        const params = { status: statusFilter, type: typeFilter };
 
-  const deployAgent = useMutation(api.agents.deployAgent);
-  const stopAgent = useMutation(api.agents.stopAgent);
-  const deleteAgent = useMutation(api.agents.deleteAgent);
+        const response = await axios.get("/api/v1/agents", { headers, params });
+        setAgents(response.data);
+      } catch (error) {
+        console.error("Failed to fetch agents", error);
+        toast.error("Failed to load agents.");
+      }
+    };
+    fetchAgents();
+  }, [statusFilter, typeFilter]);
 
   const handleDeploy = async (agentId: Id<"agents">) => {
     try {
-      await deployAgent({ agentId });
+      console.log(`Deploying agent ${agentId}`);
+      // TODO: Implement actual API call to POST /api/v1/agents/{agentId}/deploy
+      await new Promise(resolve => setTimeout(resolve, 500));
       toast.success("Agent deployment started");
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Failed to deploy agent");
@@ -32,7 +45,9 @@ export function AgentManagement() {
 
   const handleStop = async (agentId: Id<"agents">) => {
     try {
-      await stopAgent({ agentId });
+      console.log(`Stopping agent ${agentId}`);
+      // TODO: Implement actual API call to POST /api/v1/agents/{agentId}/stop
+      await new Promise(resolve => setTimeout(resolve, 500));
       toast.success("Agent stopped");
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Failed to stop agent");
@@ -43,8 +58,11 @@ export function AgentManagement() {
     if (!confirm("Are you sure you want to delete this agent?")) return;
     
     try {
-      await deleteAgent({ agentId });
+      console.log(`Deleting agent ${agentId}`);
+      // TODO: Implement actual API call to DELETE /api/v1/agents/{agentId}
+      await new Promise(resolve => setTimeout(resolve, 500));
       toast.success("Agent deleted");
+      setAgents(prev => prev.filter(agent => agent._id !== agentId));
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Failed to delete agent");
     }

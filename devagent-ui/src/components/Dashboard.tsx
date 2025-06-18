@@ -115,7 +115,7 @@ export function Dashboard() {
         {activeTab === "integrations" && <Integrations />}
         {activeTab === "users" && <UserManagement />}
         {activeTab === "analytics" && <Analytics />}
-        {activeTab === "settings" && <TenantSettings />}
+        {activeTab === "settings" && <TenantSettings overview={overview} />}
       </div>
     </div>
   );

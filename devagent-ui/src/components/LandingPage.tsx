@@ -1,7 +1,5 @@
 import { useState } from "react";
-import { useQuery } from "convex/react";
-import { api } from "../../convex/_generated/api";
-import { SignInForm } from "../SignInForm";
+import { SignInForm } from "./SignInForm";
 
 export function LandingPage() {
   const [email, setEmail] = useState("");
@@ -600,22 +598,15 @@ export function LandingPage() {
 
       {/* Sign In Modal */}
       {showSignIn && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg shadow-xl w-full max-w-md">
-            <div className="p-6 border-b">
-              <div className="flex justify-between items-center">
-                <h2 className="text-xl font-semibold text-gray-900">Sign In to AgentForge</h2>
-                <button
-                  onClick={() => setShowSignIn(false)}
-                  className="text-gray-400 hover:text-gray-600 transition-colors"
-                >
-                  ✕
-                </button>
-              </div>
-            </div>
-            <div className="p-6">
-              <SignInForm />
-            </div>
+        <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50">
+          <div className="bg-white p-10 rounded-xl shadow-2xl max-w-md w-full relative">
+            <button
+              onClick={() => setShowSignIn(false)}
+              className="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
+            >
+              ✕
+            </button>
+            <SignInForm />
           </div>
         </div>
       )}

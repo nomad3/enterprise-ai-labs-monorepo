@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { useMutation } from "convex/react";
-import { api } from "../../convex/_generated/api";
+import axios from "axios";
 import { toast } from "sonner";
 
 interface CreateAgentModalProps {
@@ -22,32 +21,39 @@ export function CreateAgentModal({ onClose }: CreateAgentModalProps) {
   });
   const [isLoading, setIsLoading] = useState(false);
 
-  const createAgent = useMutation(api.agents.createAgent);
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.name.trim()) return;
 
     setIsLoading(true);
     try {
-      await createAgent({
+      // TODO: Replace with your actual auth token mechanism
+      const token = "your_jwt_token";
+      const headers = { Authorization: `Bearer ${token}` };
+
+      // Map form data to the AgentCreate schema
+      const agentData = {
         name: formData.name.trim(),
-        type: formData.type,
-        configuration: {
-          description: formData.description || undefined,
-          resources: {
-            cpu: formData.cpu,
-            memory: formData.memory,
-            storage: formData.storage,
-          },
+        agent_type: formData.type,
+        description: formData.description || undefined,
+        config: {
           llmSettings: {
             primaryModel: formData.primaryModel,
             temperature: formData.temperature,
             maxTokens: formData.maxTokens,
             customInstructions: formData.customInstructions || undefined,
           },
+          resources: {
+            cpu: formData.cpu,
+            memory: formData.memory,
+            storage: formData.storage,
+          },
         },
-      });
+        tenant_id: 1, // TODO: Get tenant_id from user session
+      };
+
+      await axios.post("/api/v1/agents", agentData, { headers });
+      
       toast.success("Agent created successfully!");
       onClose();
     } catch (error) {

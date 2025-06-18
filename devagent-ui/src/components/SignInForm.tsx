@@ -1,10 +1,9 @@
 "use client";
-import { useAuthActions } from "@convex-dev/auth/react";
+import axios from "axios";
 import { useState } from "react";
 import { toast } from "sonner";
 
 export function SignInForm() {
-  const { signIn } = useAuthActions();
   const [flow, setFlow] = useState<"signIn" | "signUp">("signIn");
   const [submitting, setSubmitting] = useState(false);
 
@@ -12,24 +11,29 @@ export function SignInForm() {
     <div className="w-full">
       <form
         className="flex flex-col gap-form-field"
-        onSubmit={(e) => {
+        onSubmit={async (e) => {
           e.preventDefault();
           setSubmitting(true);
           const formData = new FormData(e.target as HTMLFormElement);
-          formData.set("flow", flow);
-          void signIn("password", formData).catch((error) => {
-            let toastTitle = "";
-            if (error.message.includes("Invalid password")) {
-              toastTitle = "Invalid password. Please try again.";
-            } else {
-              toastTitle =
-                flow === "signIn"
-                  ? "Could not sign in, did you mean to sign up?"
-                  : "Could not sign up, did you mean to sign in?";
-            }
+          const email = formData.get("email") as string;
+          const password = formData.get("password") as string;
+
+          const endpoint = flow === "signIn" ? "/api/v1/auth/login" : "/api/v1/auth/register";
+          
+          try {
+            const response = await axios.post(endpoint, { email, password });
+            // TODO: Handle successful login: store token, redirect user
+            console.log("Auth success:", response.data);
+            toast.success(flow === "signIn" ? "Signed in successfully!" : "Signed up successfully!");
+          } catch (error: any) {
+            let toastTitle = error.response?.data?.detail || 
+              (flow === "signIn" 
+                ? "Could not sign in. Please check your credentials." 
+                : "Could not sign up. Please try again.");
             toast.error(toastTitle);
+          } finally {
             setSubmitting(false);
-          });
+          }
         }}
       >
         <input
@@ -69,9 +73,9 @@ export function SignInForm() {
         <span className="mx-4 text-secondary">or</span>
         <hr className="my-4 grow border-gray-200" />
       </div>
-      <button className="auth-button" onClick={() => void signIn("anonymous")}>
+      {/* <button className="auth-button" onClick={() => void signIn("anonymous")}>
         Sign in anonymously
-      </button>
+      </button> */}
     </div>
   );
 }

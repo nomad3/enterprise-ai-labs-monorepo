@@ -1,10 +1,55 @@
-import { useState } from "react";
-import { useQuery } from "convex/react";
-import { api } from "../../convex/_generated/api";
+import { useState, useEffect } from "react";
+import axios from "axios";
+
+// --- Type Definitions for Analytics Data ---
+interface AnalyticsSummary {
+  totalExecutions: number;
+  successRate: number;
+  avgResponseTime: number;
+  totalCost: number;
+}
+
+interface AnalyticsCharts {
+  executionsByDate: Record<string, number>;
+  executionsByAgentType: Record<string, number>;
+}
+
+interface TopAgent {
+  agentId: string;
+  name: string;
+  type: string;
+  executions: number;
+  successRate: number;
+  avgResponseTime: number;
+}
+
+interface AnalyticsData {
+  summary: AnalyticsSummary;
+  charts: AnalyticsCharts;
+  topAgents: TopAgent[];
+}
 
 export function Analytics() {
   const [timeRange, setTimeRange] = useState<"7d" | "30d" | "90d">("30d");
-  const analytics = useQuery(api.analytics.getAnalyticsDashboard, { timeRange });
+  const [analytics, setAnalytics] = useState<AnalyticsData | null>(null);
+
+  useEffect(() => {
+    const fetchAnalytics = async () => {
+      try {
+        // TODO: Replace with your actual auth token mechanism
+        const token = "your_jwt_token"; // Replace with a real token
+        const headers = { Authorization: `Bearer ${token}` };
+        const params = { timeRange };
+
+        const response = await axios.get("/api/v1/analytics", { headers, params });
+        setAnalytics(response.data);
+      } catch (error) {
+        console.error("Failed to fetch analytics", error);
+        // Handle error state in the UI
+      }
+    };
+    fetchAnalytics();
+  }, [timeRange]);
 
   if (!analytics) {
     return (
@@ -143,7 +188,7 @@ export function Analytics() {
               </tr>
             </thead>
             <tbody>
-              {analytics.topAgents.map((agent) => (
+              {analytics.topAgents.map((agent: TopAgent) => (
                 <tr key={agent.agentId} className="border-b border-gray-100">
                   <td className="py-3 px-4 font-medium text-gray-900">{agent.name}</td>
                   <td className="py-3 px-4 text-gray-600 capitalize">{agent.type.replace('_', ' ')}</td>

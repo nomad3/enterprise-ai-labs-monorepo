@@ -1,17 +1,35 @@
-import { useState } from "react";
-import { useQuery, useMutation } from "convex/react";
-import { api } from "../../convex/_generated/api";
-import { Id } from "../../convex/_generated/dataModel";
+import { useState, useEffect } from "react";
+import axios from "axios";
 import { toast } from "sonner";
+
+// The Id type from Convex is just a branded string. We can create a simple equivalent.
+type Id<T extends string> = string & { __tableName: T };
 
 export function Integrations() {
   const [showCreateModal, setShowCreateModal] = useState(false);
-  const integrations = useQuery(api.integrations.listIntegrations);
-  const testIntegration = useMutation(api.integrations.testIntegration);
+  const [integrations, setIntegrations] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchIntegrations = async () => {
+      try {
+        const token = "your_jwt_token"; // Replace with a real token
+        const headers = { Authorization: `Bearer ${token}` };
+        const response = await axios.get("/api/v1/integrations", { headers });
+        setIntegrations(response.data);
+      } catch (error) {
+        console.error("Failed to fetch integrations", error);
+        toast.error("Failed to load integrations.");
+      }
+    };
+    fetchIntegrations();
+  }, []);
 
   const handleTest = async (integrationId: Id<"integrations">) => {
     try {
-      const result = await testIntegration({ integrationId });
+      const token = "your_jwt_token"; // Replace with a real token
+      const headers = { Authorization: `Bearer ${token}` };
+      const response = await axios.post(`/api/v1/integrations/${integrationId}/test`, {}, { headers });
+      const result = response.data;
       if (result.success) {
         toast.success("Integration test successful");
       } else {
@@ -131,8 +149,6 @@ function CreateIntegrationModal({ onClose }: { onClose: () => void }) {
     apiKey: "",
   });
   const [isLoading, setIsLoading] = useState(false);
-  
-  const createIntegration = useMutation(api.integrations.createIntegration);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -140,14 +156,18 @@ function CreateIntegrationModal({ onClose }: { onClose: () => void }) {
 
     setIsLoading(true);
     try {
-      await createIntegration({
+      const token = "your_jwt_token";
+      const headers = { Authorization: `Bearer ${token}` };
+      const integrationData = {
         name: formData.name.trim(),
         type: formData.type,
         configuration: {
           endpoint: formData.endpoint || undefined,
           apiKey: formData.apiKey || undefined,
         },
-      });
+        tenant_id: 1, // TODO: Get tenant_id from user session
+      };
+      await axios.post("/api/v1/integrations", integrationData, { headers });
       toast.success("Integration created successfully!");
       onClose();
     } catch (error) {
