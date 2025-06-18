@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { useMutation } from "convex/react";
-import { api } from "../../convex/_generated/api";
+import axios from "axios";
 import { toast } from "sonner";
 
 export function TenantSetup() {
@@ -8,20 +7,25 @@ export function TenantSetup() {
   const [domain, setDomain] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   
-  const createTenant = useMutation(api.tenants.createTenant);
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim() || !domain.trim()) return;
 
     setIsLoading(true);
     try {
-      await createTenant({
+      const token = "your_jwt_token"; // Replace with your actual auth token
+      const headers = { Authorization: `Bearer ${token}` };
+      const tenantData = {
         name: name.trim(),
-        domain: domain.trim().toLowerCase(),
-        billingPlan: "trial",
-      });
+        slug: domain.trim().toLowerCase(), // The API uses 'slug' for the domain
+        description: "New tenant created from setup.",
+        subscription_tier: "trial",
+      };
+
+      await axios.post("/api/v1/tenants", tenantData, { headers });
+
       toast.success("Organization created successfully!");
+      // You might want to refresh user data or redirect here
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Failed to create organization");
     } finally {
