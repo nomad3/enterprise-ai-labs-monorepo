@@ -25,8 +25,8 @@ from devagent.api.version_control import router as version_control_router
 from devagent.core.config import get_settings
 from devagent.core.database import get_session, init_db
 from devagent.core.models.user_model import User  # noqa: F401 -> Ensures User table is created by init_db
-from devagent.api.routers.tenant import router as tenant_router
-from devagent.api.routers.agent import router as agent_router
+from devagent.api.routers import tenants as tenants_router
+from devagent.api.routers import agent as agent_router
 from devagent.api.routes.orchestration_routes import router as orchestration_router
 
 # Initialize OpenTelemetry
@@ -64,14 +64,8 @@ FastAPIInstrumentor.instrument_app(app)
 app.include_router(auth_router, prefix="/api/v1/auth", tags=["Authentication"])
 app.include_router(tickets_router, prefix="/api/v1/tickets", tags=["Tickets"])
 app.include_router(plans_router, prefix="/api/v1/plans", tags=["Plans"])
-app.include_router(code_gen_router, prefix="/api/v1/agents/code", tags=["Code Generation"])
-app.include_router(test_gen_router, prefix="/api/v1/agents/testing", tags=["Testing"])
-app.include_router(version_control_router, prefix="/api/v1/agents/version-control", tags=["Version Control"])
-app.include_router(ci_cd_router, prefix="/api/v1/agents/ci-cd", tags=["CI/CD"])
-app.include_router(communication_router, prefix="/api/v1/agents/communication", tags=["Communication"])
-app.include_router(files_router, prefix="/api/v1/agents/files", tags=["File Management"])
-app.include_router(devops_router, prefix="/api/v1/agents/devops", tags=["DevOps"])
-app.include_router(tenant_router, prefix="/api/v1")
+app.include_router(iac_router, prefix="/api/v1/iac", tags=["Infrastructure as Code"])
+app.include_router(tenants_router, prefix="/api/v1/tenants", tags=["Tenants"])
 app.include_router(agent_router, prefix="/api/v1")
 app.include_router(orchestration_router, prefix="/api/v1", tags=["Orchestration"])
 

@@ -1,6 +1,5 @@
-import { useState } from "react";
-import { useQuery } from "convex/react";
-import { api } from "../../convex/_generated/api";
+import { useState, useEffect } from "react";
+import axios from "axios";
 import { AgentManagement } from "./AgentManagement";
 import { Analytics } from "./Analytics";
 import { Integrations } from "./Integrations";
@@ -11,8 +10,31 @@ type TabType = "overview" | "agents" | "integrations" | "users" | "analytics" | 
 
 export function Dashboard() {
   const [activeTab, setActiveTab] = useState<TabType>("overview");
-  const overview = useQuery(api.tenants.getTenantOverview);
-  const currentUser = useQuery(api.users.getCurrentUser);
+  const [overview, setOverview] = useState<any>(null);
+  const [currentUser, setCurrentUser] = useState<any>(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // TODO: Replace with your actual auth token mechanism
+        const token = "your_jwt_token"; // Replace with a real token
+        const headers = { Authorization: `Bearer ${token}` };
+
+        const userResponse = await axios.get("/api/v1/auth/me", { headers });
+        setCurrentUser(userResponse.data);
+
+        // TODO: Get tenant_id from user or session
+        const tenantId = 1; 
+        const overviewResponse = await axios.get(`/api/v1/tenants/${tenantId}/overview`, { headers });
+        setOverview(overviewResponse.data);
+      } catch (error) {
+        console.error("Failed to fetch data", error);
+        // Handle error state in the UI
+      }
+    };
+
+    fetchData();
+  }, []);
 
   if (!overview || !currentUser) {
     return (

@@ -60,3 +60,22 @@ class TenantRead(TenantBase):
 
     class Config:
         orm_mode = True
+
+class TenantStats(BaseModel):
+    activeAgents: int
+    totalAgents: int
+    totalExecutions: int
+    monthlyCost: float
+    monthlyTokens: int
+
+class RecentExecution(BaseModel):
+    _id: str
+    _creationTime: datetime
+    input: Optional[str]
+    status: str
+
+class TenantOverview(BaseModel):
+    tenant: TenantRead
+    stats: TenantStats
+    agentsByType: Dict[str, int]
+    recentExecutions: list[RecentExecution]
