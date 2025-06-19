@@ -188,18 +188,23 @@ Required context:
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "thefullstackagent.component.fullname" (dict "Release" .Release "Chart" .Chart "Values" .Values "componentName" .componentName) }}
+  name: {{ include "thefullstackagent.component.fullname" . }}
   labels:
-    {{- include "thefullstackagent.labels.component" (dict "Release" .Release "Chart" .Chart "Values" .Values "componentName" .componentName) | nindent 4 }}
+    {{- include "thefullstackagent.component.labels" . | nindent 4 }}
+  annotations:
+    cloud.google.com/backend-config: '{"default": "{{ include "thefullstackagent.fullname" .root }}-{{ .componentName }}-backendconfig"}'
+    {{- with .componentValues.service.annotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
 spec:
   type: {{ .componentValues.service.type }}
   ports:
     - port: {{ .componentValues.service.port }}
-      targetPort: http # Refers to the container port name 'http'
+      targetPort: {{ .componentValues.service.targetPort | default .componentValues.service.port }}
       protocol: TCP
       name: http
   selector:
-    {{- include "thefullstackagent.labels.selector" (dict "Release" .Release "Chart" .Chart "Values" .Values "componentName" .componentName) | nindent 4 }}
+    {{- include "thefullstackagent.component.selectorLabels" . | nindent 4 }}
 {{- end -}}
 
 {{/*
