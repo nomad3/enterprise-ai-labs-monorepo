@@ -31,7 +31,7 @@ function App() {
         <Route path="/signin" element={<SignInForm />} />
         <Route path="/setup" element={<TenantSetup />} />
         <Route path="/users" element={<UserManagement />} />
-        <Route path="/settings" element={<TenantSettings />} />
+        <Route path="/settings" element={<TenantSettings overview={mockOverview} />} />
       </Routes>
     </Router>
   );
