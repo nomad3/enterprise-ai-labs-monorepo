@@ -135,8 +135,7 @@ devagentApi:
 #   #   tls:
 #   #     - secretName: devagent-ui-tls-gcp
 #   #       hosts:
-#   #         - devagent.your-gcp-domain.com 
-
+#   #         - devagent.your-gcp-domain.com
 devagentApi:
   nodeSelector: {}
   tolerations: [] 
