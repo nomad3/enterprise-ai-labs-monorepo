@@ -24,7 +24,10 @@
     "recharts": "^2.12.2",
     "sonner": "^1.4.3",
     "tailwind-merge": "^2.2.1",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "i18next": "^23.10.0",
+    "react-i18next": "^14.0.5",
+    "i18next-resources-to-backend": "^1.2.0"
   },
   "devDependencies": {
     "@types/node": "^20.11.25",

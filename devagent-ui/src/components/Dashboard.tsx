@@ -1,5 +1,4 @@
-import { useState, useEffect } from "react";
-import axios from "axios";
+import { useState } from "react";
 import { AgentManagement } from "./AgentManagement";
 import { Analytics } from "./Analytics";
 import { Integrations } from "./Integrations";
@@ -8,33 +7,8 @@ import { TenantSettings } from "./TenantSettings";
 
 type TabType = "overview" | "agents" | "integrations" | "users" | "analytics" | "settings";
 
-export function Dashboard() {
+export function Dashboard({ overview, currentUser }: { overview: any; currentUser: any }) {
   const [activeTab, setActiveTab] = useState<TabType>("overview");
-  const [overview, setOverview] = useState<any>(null);
-  const [currentUser, setCurrentUser] = useState<any>(null);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // TODO: Replace with your actual auth token mechanism
-        const token = "your_jwt_token"; // Replace with a real token
-        const headers = { Authorization: `Bearer ${token}` };
-
-        const userResponse = await axios.get("/api/v1/auth/me", { headers });
-        setCurrentUser(userResponse.data);
-
-        // TODO: Get tenant_id from user or session
-        const tenantId = 1; 
-        const overviewResponse = await axios.get(`/api/v1/tenants/${tenantId}/overview`, { headers });
-        setOverview(overviewResponse.data);
-      } catch (error) {
-        console.error("Failed to fetch data", error);
-        // Handle error state in the UI
-      }
-    };
-
-    fetchData();
-  }, []);
 
   if (!overview || !currentUser) {
     return (
