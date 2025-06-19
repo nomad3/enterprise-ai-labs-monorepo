@@ -93,7 +93,7 @@ devagentApi:
     tls: [] # TLS is handled by the Google-managed certificate
 
 # Values for the devagent-ui subchart (using its direct name from Chart.yaml dependencies)
-devagentUi:
+devagent-ui:
   # This enables the subchart itself if it had an enabled flag at its root
   # enabled: true # Assuming this is for the subchart deployment, not ingress specifically.
                 # The subchart's own values.yaml has replicaCount > 0 so it's deployed.

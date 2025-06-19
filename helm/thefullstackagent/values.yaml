@@ -81,7 +81,7 @@ devagentApi:
     # targetMemoryUtilizationPercentage: 80
 
 # Configuration for the devagent-ui subchart
-devagentUi:
+devagent-ui:
   enabled: true # Assuming we want to deploy it by default
   replicaCount: 1
   image:
