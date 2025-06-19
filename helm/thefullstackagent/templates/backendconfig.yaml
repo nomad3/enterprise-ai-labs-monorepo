@@ -3,7 +3,7 @@ kind: BackendConfig
 metadata:
   name: {{ include "thefullstackagent.fullname" . }}-api-backendconfig
   labels:
-    {{- include "thefullstackagent.labels" . | nindent 4 }}
+    {{- include "thefullstackagent.labels.standard" . | nindent 4 }}
 spec:
   healthCheck:
     type: HTTP
@@ -15,7 +15,7 @@ kind: BackendConfig
 metadata:
   name: {{ include "thefullstackagent.fullname" . }}-ui-backendconfig
   labels:
-    {{- include "thefullstackagent.labels" . | nindent 4 }}
+    {{- include "thefullstackagent.labels.standard" . | nindent 4 }}
 spec:
   healthCheck:
     type: HTTP
