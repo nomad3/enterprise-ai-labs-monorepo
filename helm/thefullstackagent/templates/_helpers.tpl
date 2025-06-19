@@ -192,7 +192,7 @@ metadata:
   labels:
     {{- include "thefullstackagent.labels.component" . | nindent 4 }}
   annotations:
-    cloud.google.com/backend-config: '{"default": "{{ include "thefullstackagent.fullname" .root }}-{{ .componentName }}-backendconfig"}'
+    cloud.google.com/backend-config: '{"default": "{{ include "thefullstackagent.fullname" $ }}-{{ .componentName }}-backendconfig"}'
     {{- with .componentValues.service.annotations }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
