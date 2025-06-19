@@ -39,7 +39,7 @@ securityContext: {}
 service:
   type: ClusterIP
   port: 80 # Port the service will expose
-  targetPort: 3000 # Port the container expects traffic on (Next.js default)
+  targetPort: 80 # Port the Nginx container expects traffic on
 
 ingress:
   enabled: false
@@ -81,11 +81,13 @@ affinity: {}
 livenessProbe:
   enabled: true
   path: / # Health check for the root path
+  port: 80
   initialDelaySeconds: 15
   periodSeconds: 20
 
 readinessProbe:
   enabled: true
   path: / # Health check for the root path
+  port: 80
   initialDelaySeconds: 5
   periodSeconds: 10 

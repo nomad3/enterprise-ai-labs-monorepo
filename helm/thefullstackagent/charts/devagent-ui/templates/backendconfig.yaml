@@ -15,7 +15,7 @@ spec:
   healthCheck:
     checkIntervalSec: 15
     healthyThreshold: 1
-    port: 3000
+    port: 80
     requestPath: /
     timeoutSec: 15
     type: HTTP
