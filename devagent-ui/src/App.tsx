@@ -5,6 +5,7 @@ import { SignInForm } from './components/SignInForm';
 import { TenantSetup } from './components/TenantSetup';
 import { UserManagement } from './components/UserManagement';
 import { TenantSettings } from './components/TenantSettings';
+import { ProtectedRoute } from './components/ProtectedRoute';
 
 // Mock data for development
 const mockOverview = {
@@ -27,11 +28,13 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<LandingPage />} />
-        <Route path="/dashboard" element={<Dashboard overview={mockOverview} currentUser={mockCurrentUser} />} />
         <Route path="/signin" element={<SignInForm />} />
         <Route path="/setup" element={<TenantSetup />} />
-        <Route path="/users" element={<UserManagement />} />
-        <Route path="/settings" element={<TenantSettings overview={mockOverview} />} />
+
+        {/* Protected Routes */}
+        <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+        <Route path="/users" element={<ProtectedRoute><UserManagement /></ProtectedRoute>} />
+        <Route path="/settings" element={<ProtectedRoute><TenantSettings /></ProtectedRoute>} />
       </Routes>
     </Router>
   );

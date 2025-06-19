@@ -1,31 +1,25 @@
-import { useState, useEffect } from "react";
-import axios from "axios";
+import { useState } from "react";
 import { toast } from "sonner";
 
-export function TenantSettings({ overview }: { overview: any }) {
+export function TenantSettings({ overview }: { overview?: any }) {
   const [activeTab, setActiveTab] = useState<"general" | "billing" | "security" | "webhooks">("general");
-  const [settings, setSettings] = useState({
+  const [settings, setSettings] = useState(overview?.tenant?.settings || {
     maxAgents: 5,
     allowedAgentTypes: ["dev", "qa", "documentation"],
     features: ["basic_agents", "basic_integrations"],
   });
 
-  useEffect(() => {
-    if (overview?.tenant?.settings) {
-      // Initialize local settings state from the fetched overview data
-      setSettings(overview.tenant.settings);
-    }
-  }, [overview]);
-
   const handleSaveSettings = async () => {
-    try {
-      const token = "your_jwt_token"; // Replace with real token
-      const headers = { Authorization: `Bearer ${token}` };
-      await axios.patch(`/api/v1/tenants/${overview.tenant.id}`, { settings }, { headers });
-      toast.success("Settings updated successfully");
-    } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Failed to update settings");
-    }
+    // This will be re-enabled once auth is fully plumbed
+    toast.info("Save settings functionality is temporarily disabled.");
+    // try {
+    //   const token = "your_jwt_token"; // Replace with real token
+    //   const headers = { Authorization: `Bearer ${token}` };
+    //   await axios.patch(`/api/v1/tenants/${overview.tenant.id}`, { settings }, { headers });
+    //   toast.success("Settings updated successfully");
+    // } catch (error) {
+    //   toast.error(error instanceof Error ? error.message : "Failed to update settings");
+    // }
   };
 
   if (!overview) {
@@ -135,7 +129,7 @@ export function TenantSettings({ overview }: { overview: any }) {
                           } else {
                             setSettings({
                               ...settings,
-                              allowedAgentTypes: settings.allowedAgentTypes.filter(t => t !== type)
+                              allowedAgentTypes: settings.allowedAgentTypes.filter((t: string) => t !== type)
                             });
                           }
                         }}

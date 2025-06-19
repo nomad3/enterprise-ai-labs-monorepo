@@ -1,11 +1,13 @@
 "use client";
 import axios from "axios";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 export function SignInForm() {
   const [flow, setFlow] = useState<"signIn" | "signUp">("signIn");
   const [submitting, setSubmitting] = useState(false);
+  const navigate = useNavigate();
 
   return (
     <div className="w-full">
@@ -22,9 +24,16 @@ export function SignInForm() {
           
           try {
             const response = await axios.post(endpoint, { email, password });
-            // TODO: Handle successful login: store token, redirect user
-            console.log("Auth success:", response.data);
-            toast.success(flow === "signIn" ? "Signed in successfully!" : "Signed up successfully!");
+            
+            // Store token and redirect on success
+            if (response.data.access_token) {
+              localStorage.setItem("authToken", response.data.access_token);
+              toast.success(flow === "signIn" ? "Signed in successfully!" : "Signed up successfully!");
+              navigate("/dashboard");
+            } else {
+              toast.error("Login failed: No token received.");
+            }
+
           } catch (error: any) {
             let toastTitle = error.response?.data?.detail || 
               (flow === "signIn" 

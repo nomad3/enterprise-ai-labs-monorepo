@@ -7,7 +7,7 @@ import { TenantSettings } from "./TenantSettings";
 
 type TabType = "overview" | "agents" | "integrations" | "users" | "analytics" | "settings";
 
-export function Dashboard({ overview, currentUser }: { overview: any; currentUser: any }) {
+export function Dashboard({ overview, currentUser }: { overview?: any; currentUser?: any }) {
   const [activeTab, setActiveTab] = useState<TabType>("overview");
 
   if (!overview || !currentUser) {
