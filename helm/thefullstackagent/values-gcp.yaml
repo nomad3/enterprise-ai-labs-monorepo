@@ -12,8 +12,22 @@ devagentApi:
   replicaCount: 1 # Ensure API replicas are set to 1
   image:
     repository: gcr.io/aremko-e51ae/devagent-api # Ensure this image exists in your GCR
-    tag: latest # Or a specific version/tag
+    tag: "" # This will be replaced by the CI/CD pipeline
     # pullPolicy: Always # Recommended for GCR to ensure fresh images
+
+  livenessProbe:
+    enabled: true
+    path: /health
+    initialDelaySeconds: 120 # Increased delay
+    periodSeconds: 60 # Increased period
+    timeoutSeconds: 10 # Increased timeout
+
+  readinessProbe:
+    enabled: true
+    path: /health # Changed from /ready as it does not exist
+    initialDelaySeconds: 60 # Increased delay
+    periodSeconds: 30 # Increased period
+    timeoutSeconds: 10 # Increased timeout
 
   env:
     DATABASE_URL: "postgresql+asyncpg://postgres:replace-with-secure-password@127.0.0.1:5432/devagent"
@@ -122,3 +136,7 @@ devagentApi:
 #   #     - secretName: devagent-ui-tls-gcp
 #   #       hosts:
 #   #         - devagent.your-gcp-domain.com 
+
+devagentApi:
+  nodeSelector: {}
+  tolerations: [] 
