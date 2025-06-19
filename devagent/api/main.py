@@ -25,8 +25,8 @@ from devagent.api.version_control import router as version_control_router
 from devagent.core.config import get_settings
 from devagent.core.database import get_session, init_db
 from devagent.core.models.user_model import User  # noqa: F401 -> Ensures User table is created by init_db
-from devagent.api.routers import tenants as tenants_router
-from devagent.api.routers import agent as agent_router
+from devagent.api.routers.tenants import router as tenants_router
+from devagent.api.routers.agent import router as agent_router
 from devagent.api.routes.orchestration_routes import router as orchestration_router
 
 # Initialize OpenTelemetry
