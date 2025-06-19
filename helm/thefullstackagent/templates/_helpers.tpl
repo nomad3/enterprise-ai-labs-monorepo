@@ -190,7 +190,7 @@ kind: Service
 metadata:
   name: {{ include "thefullstackagent.component.fullname" . }}
   labels:
-    {{- include "thefullstackagent.component.labels" . | nindent 4 }}
+    {{- include "thefullstackagent.labels.component" . | nindent 4 }}
   annotations:
     cloud.google.com/backend-config: '{"default": "{{ include "thefullstackagent.fullname" .root }}-{{ .componentName }}-backendconfig"}'
     {{- with .componentValues.service.annotations }}
@@ -204,7 +204,7 @@ spec:
       protocol: TCP
       name: http
   selector:
-    {{- include "thefullstackagent.component.selectorLabels" . | nindent 4 }}
+    {{- include "thefullstackagent.labels.selector" . | nindent 4 }}
 {{- end -}}
 
 {{/*
