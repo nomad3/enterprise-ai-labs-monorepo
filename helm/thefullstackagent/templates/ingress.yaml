@@ -6,14 +6,4 @@
     "componentName" "api" 
     "componentValues" .Values.devagentApi 
     "root" . 
-  ) | nindent 0 }}
----
-{{/* Call the common ingress template for the UI component */}}
-{{- include "thefullstackagent.component.ingress" (dict
-    "Chart" .Chart
-    "Release" .Release
-    "Values" .Values
-    "componentName" "ui"
-    "componentValues" .Values.devagent-ui
-    "root" .
   ) | nindent 0 }} 

@@ -64,6 +64,6 @@ jobs:
           helm dependency build ./helm/thefullstackagent
           helm upgrade --install ${{ env.HELM_RELEASE_NAME }} ./helm/thefullstackagent \
             --namespace ${{ env.HELM_NAMESPACE }} --create-namespace \
-            -f ./helm/thefullstackagent/values-gcp.yaml \
+            --values ./helm/thefullstackagent/values-gcp.yaml \
             --set devagentApi.image.tag=${{ steps.get_sha.outputs.sha }} \
             --set devagent-ui.image.tag=${{ steps.get_sha.outputs.sha }} 
