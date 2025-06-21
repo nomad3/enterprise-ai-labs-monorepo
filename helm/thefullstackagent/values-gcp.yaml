@@ -100,18 +100,16 @@ devagent-ui:
 
   # Configuration for the ingress object within the devagent-ui subchart
   ingress:
-    enabled: false # THIS IS THE KEY - Disabling UI subchart's ingress
-    # className: ""
-    # annotations:
-    #   kubernetes.io/ingress.class: "gce"
-    #   kubernetes.io/ingress.global-static-ip-name: "devagent-static-ip"
-    #   networking.gke.io/managed-certificates: "devagent-managed-cert"
-    # hosts:
-    #   - host: "agents.datamatic.app"
-    #     paths:
-    #       - path: /
-    #         pathType: Prefix
-    #   tls: []
+    enabled: true # THIS IS THE KEY - Disabling UI subchart's ingress
+    className: ""
+    annotations:
+      kubernetes.io/ingress.class: "gce"
+      kubernetes.io/ingress.global-static-ip-name: "devagent-static-ip"
+      networking.gke.io/managed-certificates: "devagent-managed-cert"
+    hosts:
+      - host: "agents.datamatic.app"
+    tls: []
+
   service:
     annotations:
       cloud.google.com/backend-config: '{"default": "devagent-thefullstackagent-ui-backendconfig"}'

@@ -1,0 +1,30 @@
+{{- if .Values.devagent-ui.ingress.enabled -}}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "thefullstackagent.fullname" . }}-ui
+  labels:
+    {{- include "thefullstackagent.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: ui
+  annotations:
+    {{- toYaml .Values.devagent-ui.ingress.annotations | nindent 4 }}
+spec:
+  {{- if .Values.devagent-ui.ingress.className }}
+  ingressClassName: {{ .Values.devagent-ui.ingress.className }}
+  {{- end }}
+  tls:
+    - hosts:
+        - {{ (index .Values.devagent-ui.ingress.hosts 0).host }}
+      secretName: {{ (index .Values.devagent-ui.ingress.tls 0).secretName | default "devagent-ui-tls" }}
+  rules:
+    - host: {{ (index .Values.devagent-ui.ingress.hosts 0).host }}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ include "thefullstackagent.fullname" . }}-devagent-ui-ui
+                port:
+                  name: http
+{{- end }} 

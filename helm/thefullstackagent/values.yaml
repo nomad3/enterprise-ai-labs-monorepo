@@ -14,7 +14,7 @@ devagentApi:
     targetPort: 8000 # Container port for the API
 
   ingress:
-    enabled: false # Disabled by default, should be enabled in env-specific values
+    enabled: false
     className: "nginx"
     annotations:
       kubernetes.io/ingress.class: nginx
