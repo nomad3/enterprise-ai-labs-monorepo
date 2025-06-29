@@ -16,15 +16,4 @@ maintainers:
   - name: nomade
     email: your@email.com
 
-dependencies:
-  - name: devagent-ui
-    version: "0.1.0" # Should match the version in charts/devagent-ui/Chart.yaml
-    repository: "file://./charts/devagent-ui" # Local chart
-  - name: postgresql
-    version: "14.x.x" # Specify a version range compatible with your needs
-    repository: "https://charts.bitnami.com/bitnami"
-    condition: postgresql.enabled # Allows disabling this dependency if needed
-  - name: redis
-    version: "18.x.x" # Specify a version range compatible with your needs
-    repository: "https://charts.bitnami.com/bitnami"
-    condition: redis.enabled # Allows disabling this dependency if needed 
+dependencies: [] 

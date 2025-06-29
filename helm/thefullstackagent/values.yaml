@@ -14,16 +14,21 @@ devagentApi:
     targetPort: 8000 # Container port for the API
 
   ingress:
-    enabled: false
+    enabled: true
     className: "nginx"
     annotations:
       kubernetes.io/ingress.class: nginx
       # cert-manager.io/cluster-issuer: letsencrypt-prod # Keep commented for local
     hosts:
-      - host: devagent-api.local # Adjusted for local testing
+      - host: api.agents.datamatic.app
         paths:
           - path: /
             pathType: Prefix
+            backend:
+              service:
+                name: thefullstackagent-api
+                port:
+                  name: http
     tls: []
     #  - secretName: devagent-api-tls
     #    hosts:
@@ -81,17 +86,21 @@ devagentApi:
     # targetMemoryUtilizationPercentage: 80
 
 # Configuration for the devagent-ui subchart
-devagent-ui:
+devagentUi:
   enabled: true # Assuming we want to deploy it by default
   replicaCount: 1
   image:
-    repository: devagent-ui # Assuming local image 'devagent-ui:latest'
+    repository: gcr.io/aremko-e51ae/devagent-ui
     tag: latest
     pullPolicy: IfNotPresent # Or Never, if image is definitely local
   service:
     type: ClusterIP
     port: 80
     targetPort: 3000
+  serviceAccount:
+    create: true
+    annotations: {}
+    name: ""
   ingress:
     enabled: true
     className: "nginx"
@@ -99,14 +108,36 @@ devagent-ui:
       kubernetes.io/ingress.class: nginx
       # cert-manager.io/cluster-issuer: letsencrypt-prod
     hosts:
-      - host: devagent.local # Main entry point for users
+      - host: agents.datamatic.app
         paths:
           - path: /
             pathType: ImplementationSpecific
+            backend:
+              service:
+                name: thefullstackagent-ui
+                port:
+                  name: http
     tls: []
     #  - secretName: devagent-ui-tls
     #    hosts:
     #      - devagent.local
+  livenessProbe:
+    enabled: true
+    path: /
+    initialDelaySeconds: 120
+    periodSeconds: 60
+    timeoutSeconds: 10
+  readinessProbe:
+    enabled: true
+    path: /
+    initialDelaySeconds: 120
+    periodSeconds: 30
+    timeoutSeconds: 10
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 3
+    targetCPUUtilizationPercentage: 80
 
 # Configuration for the PostgreSQL subchart (Bitnami)
 postgresql:

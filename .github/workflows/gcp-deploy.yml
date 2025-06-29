@@ -66,4 +66,4 @@ jobs:
             --namespace ${{ env.HELM_NAMESPACE }} --create-namespace \
             --values ./helm/thefullstackagent/values-gcp.yaml \
             --set devagentApi.image.tag=${{ steps.get_sha.outputs.sha }} \
-            --set devagent-ui.image.tag=${{ steps.get_sha.outputs.sha }} 
+            --set devagentUi.image.tag=${{ steps.get_sha.outputs.sha }} 

@@ -1,8 +1,0 @@
-{{/* Call the common deployment template from the parent chart for the UI component */}}
-{{- include "thefullstackagent.component.deployment" (dict 
-    "Chart" .Chart
-    "Release" .Release
-    "Values" .Values
-    "componentName" "ui" 
-    "componentValues" .Values
-  ) | nindent 0 }} 

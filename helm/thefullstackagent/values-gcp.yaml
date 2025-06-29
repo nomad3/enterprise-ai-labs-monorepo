@@ -9,49 +9,19 @@ redis:
   enabled: false
 
 devagentApi:
-  replicaCount: 1 # Ensure API replicas are set to 1
+  replicaCount: 1
   image:
-    repository: gcr.io/aremko-e51ae/devagent-api # Ensure this image exists in your GCR
-    tag: "" # This will be replaced by the CI/CD pipeline
-    # pullPolicy: Always # Recommended for GCR to ensure fresh images
-
-  livenessProbe:
-    enabled: true
-    path: /health
-    initialDelaySeconds: 120 # Increased delay
-    periodSeconds: 60 # Increased period
-    timeoutSeconds: 10 # Increased timeout
-
-  readinessProbe:
-    enabled: true
-    path: /health # Changed from /ready as it does not exist
-    initialDelaySeconds: 60 # Increased delay
-    periodSeconds: 30 # Increased period
-    timeoutSeconds: 10 # Increased timeout
-
+    repository: gcr.io/aremko-e51ae/devagent-api
+    tag: "latest"
   env:
     DATABASE_URL: "postgresql+asyncpg://postgres:replace-with-secure-password@127.0.0.1:5432/devagent"
     REDIS_URL: "redis://10.93.221.219:6379"
-    # JWT_SECRET should be a strong, unique secret managed via K8s secrets, not hardcoded here for prod.
-    # For now, we'll let it take the default from the main values.yaml or you can override it.
-    # JWT_SECRET: "your-gcp-specific-jwt-secret"
-
-  # Configure to use the existing GKE service account created by Terraform
   serviceAccount:
-    create: false # Do not create a new service account
-    name: gke-deploy-sa # Name of the Terraform-managed Google Service Account (GSA)
-                        # This assumes K8s SA with the same name exists or is linked via Workload Identity.
-                        # For Cloud SQL Proxy, the POD needs to run with an SA that has cloudsql.client perm.
-
-  resources:
-    requests:
-      cpu: "75m"
-    # Limits will also be inherited (cpu: 500m, memory: 512Mi)
-
+    create: false
+    name: gke-deploy-sa
   sidecars:
     - name: cloud-sql-proxy
-      image: "gcr.io/cloud-sql-connectors/cloud-sql-proxy:2.8.0" # Use a specific version tag
-      # imagePullPolicy: Always # Optional, but good for ensuring latest patch of the version
+      image: "gcr.io/cloud-sql-connectors/cloud-sql-proxy:2.8.0"
       args:
         - "--structured-logs"
         - "--port=5432"
@@ -66,60 +36,16 @@ devagentApi:
           memory: "128Mi"
           cpu: "100m"
 
-  ingress:
-    enabled: true
-    className: "" # Explicitly empty to use GKE default or annotation
-    annotations:
-      kubernetes.io/ingress.class: "gce" # Explicitly select GKE Ingress controller
-      kubernetes.io/ingress.global-static-ip-name: "devagent-static-ip"
-      networking.gke.io/managed-certificates: "devagent-managed-cert"
-    hosts:
-      - host: "agents.datamatic.app"
-        paths:
-          - path: /api
-            pathType: Prefix
-            backend: # Backend for the API
-              service:
-                name: devagent-thefullstackagent-api # Main API service
-                port:
-                  name: http
-          - path: / # New path for the UI
-            pathType: Prefix
-            backend: # Backend for the UI
-              service:
-                name: devagent-devagent-ui-ui # UI service name from subchart
-                port:
-                  name: http
-    tls: [] # TLS is handled by the Google-managed certificate
-
-# Values for the devagent-ui subchart (using its direct name from Chart.yaml dependencies)
-devagent-ui:
-  # This enables the subchart itself if it had an enabled flag at its root
-  # enabled: true # Assuming this is for the subchart deployment, not ingress specifically.
-                # The subchart's own values.yaml has replicaCount > 0 so it's deployed.
-
-  # Configuration for the ingress object within the devagent-ui subchart
-  ingress:
-    enabled: true # THIS IS THE KEY - Disabling UI subchart's ingress
-    className: ""
-    annotations:
-      kubernetes.io/ingress.class: "gce"
-      kubernetes.io/ingress.global-static-ip-name: "devagent-static-ip"
-      networking.gke.io/managed-certificates: "devagent-managed-cert"
-    hosts:
-      - host: "agents.datamatic.app"
-    tls: []
-
-  service:
-    annotations:
-      cloud.google.com/backend-config: '{"default": "devagent-thefullstackagent-ui-backendconfig"}'
-  # Other devagent-ui specific overrides if needed, e.g.:
+devagentUi:
   image:
     repository: gcr.io/aremko-e51ae/devagent-ui
-    tag: "" # This will be replaced by the CI/CD pipeline
-  replicaCount: 1 # Start with 1, can be scaled later
+    tag: "latest"
+  replicaCount: 1
   env:
     NEXT_PUBLIC_API_URL: "https://agents.datamatic.app/api/v1"
+  serviceAccount:
+    create: false
+    name: gke-deploy-sa
 
 # devagent-ui can be configured similarly if it needs cloud-specific settings
 # devagent-ui:
@@ -136,7 +62,8 @@ devagent-ui:
 #   #   tls:
 #   #     - secretName: devagent-ui-tls-gcp
 #   #       hosts:
-#   #         - devagent.your-gcp-domain.com
+#   #         - devagent.your-gcp-domain.com 
+
 devagentApi:
   nodeSelector: {}
   tolerations: [] 

@@ -19,5 +19,5 @@ metadata:
 spec:
   healthCheck:
     type: HTTP
-    port: {{ (index .Values "devagent-ui").service.port }}
+    port: 3000
     requestPath: / 

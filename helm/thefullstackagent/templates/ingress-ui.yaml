@@ -1,30 +1,41 @@
-{{- if .Values.devagent-ui.ingress.enabled -}}
+{{- if .Values.devagentUi.ingress.enabled -}}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ include "thefullstackagent.fullname" . }}-ui
+  name: {{ template "thefullstackagent.component.fullname" (dict "Release" .Release "Chart" .Chart "Values" .Values "componentName" "ui") }}
   labels:
-    {{- include "thefullstackagent.labels.standard" . | nindent 4 }}
-    app.kubernetes.io/component: ui
+    {{- include "thefullstackagent.labels.component" (dict "Release" .Release "Chart" .Chart "Values" .Values "componentName" "ui") | nindent 4 }}
+  {{- with .Values.devagentUi.ingress.annotations }}
   annotations:
-    {{- toYaml .Values.devagent-ui.ingress.annotations | nindent 4 }}
-spec:
-  {{- if .Values.devagent-ui.ingress.className }}
-  ingressClassName: {{ .Values.devagent-ui.ingress.className }}
+    {{- toYaml . | nindent 4 }}
   {{- end }}
+spec:
+  {{- if .Values.devagentUi.ingress.className }}
+  ingressClassName: {{ .Values.devagentUi.ingress.className }}
+  {{- end }}
+  {{- if .Values.devagentUi.ingress.tls }}
   tls:
+    {{- range .Values.devagentUi.ingress.tls }}
     - hosts:
-        - {{ (index .Values.devagent-ui.ingress.hosts 0).host }}
-      secretName: {{ (index .Values.devagent-ui.ingress.tls 0).secretName | default "devagent-ui-tls" }}
+        {{- range .hosts }}
+        - {{ . | quote }}
+        {{- end }}
+      secretName: {{ .secretName }}
+    {{- end }}
+  {{- end }}
   rules:
-    - host: {{ (index .Values.devagent-ui.ingress.hosts 0).host }}
+    {{- range .Values.devagentUi.ingress.hosts }}
+    - host: {{ .host | quote }}
       http:
         paths:
-          - path: /
-            pathType: Prefix
+          {{- range .paths }}
+          - path: {{ .path }}
+            pathType: {{ .pathType }}
             backend:
               service:
-                name: {{ include "thefullstackagent.fullname" . }}-devagent-ui-ui
+                name: {{ .backend.service.name | default (include "thefullstackagent.component.fullname" (dict "Release" $.Release "Chart" $.Chart "Values" $.Values "componentName" "ui")) }}
                 port:
-                  name: http
+                  name: {{ .backend.service.port.name | default "http" }}
+          {{- end }}
+    {{- end }}
 {{- end }} 

@@ -18,6 +18,18 @@ resource "google_compute_network" "vpc_network" {
   auto_create_subnetworks = true
 }
 
+# Firewall rule to allow HTTP and HTTPS traffic to the GKE cluster
+resource "google_compute_firewall" "allow_http_https" {
+  name    = "devagent-vpc-allow-http-https"
+  network = google_compute_network.vpc_network.name
+  allow {
+    protocol = "tcp"
+    ports    = ["80", "443"]
+  }
+  source_ranges = ["0.0.0.0/0"]
+  target_tags   = ["gke-${var.gke_cluster_name}"]
+}
+
 # GKE Cluster
 resource "google_container_cluster" "gke" {
   name     = var.gke_cluster_name
@@ -25,6 +37,12 @@ resource "google_container_cluster" "gke" {
   network  = google_compute_network.vpc_network.name
   remove_default_node_pool = true
   initial_node_count = 1
+
+  addons_config {
+    http_load_balancing {
+      disabled = false
+    }
+  }
 
   workload_identity_config {
     workload_pool = "${var.gcp_project}.svc.id.goog"
@@ -34,6 +52,7 @@ resource "google_container_cluster" "gke" {
   node_config {
     machine_type = "e2-small"
     disk_size_gb = 30
+    tags = ["gke-${var.gke_cluster_name}"]
   }
 }
 
@@ -54,6 +73,7 @@ resource "google_container_node_pool" "primary_nodes" {
     oauth_scopes = [
       "https://www.googleapis.com/auth/cloud-platform"
     ]
+    tags = ["gke-${var.gke_cluster_name}"]
     workload_metadata_config {
       mode = "GKE_METADATA"
     }
