@@ -58,12 +58,18 @@ jobs:
           location: ${{ env.GCP_REGION }}
           project_id: ${{ env.GCP_PROJECT_ID }}
 
-      - name: Deploy Helm chart
+      - name: Deploy to GKE
         run: |
           helm repo add bitnami https://charts.bitnami.com/bitnami
-          helm dependency build ./helm/thefullstackagent
-          helm upgrade --install ${{ env.HELM_RELEASE_NAME }} ./helm/thefullstackagent \
-            --namespace ${{ env.HELM_NAMESPACE }} --create-namespace \
+          helm dependency update ./helm/thefullstackagent
+          
+          # Add deletion commands here
+          kubectl delete ingress thefullstackagent-api -n dev-agent --ignore-not-found
+          kubectl delete ingress thefullstackagent-ui -n dev-agent --ignore-not-found
+
+          helm upgrade --install thefullstackagent ./helm/thefullstackagent \
+            --namespace dev-agent \
+            --create-namespace \
             --values ./helm/thefullstackagent/values-gcp.yaml \
             --set devagentApi.image.tag=${{ steps.get_sha.outputs.sha }} \
             --set devagentUi.image.tag=${{ steps.get_sha.outputs.sha }} 
