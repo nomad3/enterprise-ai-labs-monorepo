@@ -102,11 +102,10 @@ devagentUi:
     annotations: {}
     name: ""
   ingress:
-    enabled: true
+    enabled: false
     className: "nginx"
     annotations:
       kubernetes.io/ingress.class: nginx
-      # cert-manager.io/cluster-issuer: letsencrypt-prod
     hosts:
       - host: agents.datamatic.app
         paths:
