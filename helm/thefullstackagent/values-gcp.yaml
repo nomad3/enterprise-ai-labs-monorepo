@@ -39,6 +39,8 @@ devagentApi:
         limits:
           memory: "128Mi"
           cpu: "100m"
+  nodeSelector: {}
+  tolerations: []
 
 devagentUi:
   image:
@@ -67,10 +69,6 @@ devagentUi:
 #   #     - secretName: devagent-ui-tls-gcp
 #   #       hosts:
 #   #         - devagent.your-gcp-domain.com 
-
-devagentApi:
-  nodeSelector: {}
-  tolerations: []
 
 redis:
   host: "10.93.221.219"
