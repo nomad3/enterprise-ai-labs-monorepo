@@ -6,3 +6,10 @@
     "componentName" "ui" 
     "componentValues" .Values.devagentUi 
   ) | nindent 0 }} 
+
+        ports:
+        - name: http
+          containerPort: 80
+          protocol: TCP
+        livenessProbe:
+          httpGet: 
