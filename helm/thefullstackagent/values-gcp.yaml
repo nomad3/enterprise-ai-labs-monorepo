@@ -22,7 +22,9 @@ devagentApi:
     name: "devagent"
   serviceAccount:
     create: true
-    name: gke-deploy-sa
+    name: "gke-deploy-sa"
+    annotations:
+      iam.gke.io/gcp-service-account: "gke-deploy-sa@aremko-e51ae.iam.gserviceaccount.com"
   sidecars:
     - name: cloud-sql-proxy
       image: "gcr.io/cloud-sql-connectors/cloud-sql-proxy:2.8.0"
@@ -51,7 +53,9 @@ devagentUi:
     NEXT_PUBLIC_API_URL: "https://api.agents.datamatic.app"
   serviceAccount:
     create: true
-    name: gke-deploy-sa
+    name: "gke-deploy-sa"
+    annotations:
+      iam.gke.io/gcp-service-account: "gke-deploy-sa@aremko-e51ae.iam.gserviceaccount.com"
 
 # devagent-ui can be configured similarly if it needs cloud-specific settings
 # devagent-ui:
