@@ -67,7 +67,7 @@ jobs:
           kubectl delete ingress thefullstackagent-api -n dev-agent --ignore-not-found
           kubectl delete ingress thefullstackagent-ui -n dev-agent --ignore-not-found
 
-          helm upgrade --install thefullstackagent ./helm/thefullstackagent \
+          helm upgrade --install devagent ./helm/thefullstackagent \
             --namespace dev-agent \
             --create-namespace \
             --values ./helm/thefullstackagent/values-gcp.yaml \
