@@ -14,8 +14,12 @@ devagentApi:
     repository: gcr.io/aremko-e51ae/devagent-api
     tag: "latest"
   env:
-    DATABASE_URL: "postgresql+asyncpg://postgres:replace-with-secure-password@127.0.0.1:5432/devagent"
-    REDIS_URL: "redis://10.93.221.219:6379"
+    DATABASE_URL: "postgresql+asyncpg://{{ .Values.devagentApi.db.user }}:{{ .Values.devagentApi.db.password }}@127.0.0.1:5432/{{ .Values.devagentApi.db.name }}"
+    REDIS_URL: "redis://{{ .Values.redis.host }}:{{ .Values.redis.port }}"
+  db:
+    user: "postgres"
+    password: "replace-with-secure-password" # This should be stored in a secret
+    name: "devagent"
   serviceAccount:
     create: false
     name: gke-deploy-sa
@@ -66,4 +70,10 @@ devagentUi:
 
 devagentApi:
   nodeSelector: {}
-  tolerations: [] 
+  tolerations: []
+
+redis:
+  host: "10.93.221.219"
+  port: 6379
+
+# ... existing code ... 
