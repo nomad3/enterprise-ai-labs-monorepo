@@ -18,7 +18,7 @@ devagentApi:
     REDIS_URL: "redis://{{ .Values.redis.host }}:{{ .Values.redis.port }}"
   db:
     user: "postgres"
-    password: "replace-with-secure-password" # This should be stored in a secret
+    password: "a-secure-devagent-password" # This should be stored in a secret
     name: "devagent"
   serviceAccount:
     create: true
