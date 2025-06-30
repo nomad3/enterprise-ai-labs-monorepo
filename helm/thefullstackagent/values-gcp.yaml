@@ -48,7 +48,7 @@ devagentUi:
     tag: "latest"
   replicaCount: 1
   env:
-    NEXT_PUBLIC_API_URL: "https://agents.datamatic.app/api/v1"
+    NEXT_PUBLIC_API_URL: "https://api.agents.datamatic.app"
   serviceAccount:
     create: false
     name: gke-deploy-sa
