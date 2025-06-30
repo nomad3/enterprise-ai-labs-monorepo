@@ -2,7 +2,7 @@
 
 # Disable PostgreSQL subchart (using Cloud SQL)
 postgresql:
-  enabled: false
+  enabled: true
 
 # Disable Redis subchart (using Memorystore)
 redis:
