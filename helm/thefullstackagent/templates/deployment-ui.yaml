@@ -1,15 +1,8 @@
 {{/* Call the common deployment template for the UI component */}}
-{{- include "thefullstackagent.component.deployment" (dict 
-    "Chart" .Chart 
-    "Release" .Release 
+{{- include "agentforge.component.deployment" (dict
+    "Chart" .Chart
+    "Release" .Release
     "Values" .Values
-    "componentName" "ui" 
-    "componentValues" .Values.devagentUi 
-  ) | nindent 0 }} 
-
-        ports:
-        - name: http
-          containerPort: 80
-          protocol: TCP
-        livenessProbe:
-          httpGet: 
+    "componentName" "ui"
+    "componentValues" .Values.agentforgeUi
+  ) | nindent 0 }}

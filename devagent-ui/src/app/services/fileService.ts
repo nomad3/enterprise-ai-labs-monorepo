@@ -6,8 +6,14 @@ export interface FileWriteResponse {
   filePath?: string;
 }
 
+const VITE_API_URL = (import.meta as any)?.env?.VITE_API_URL;
+const DEFAULT_BASE_URL = (typeof window !== 'undefined'
+  ? `${window.location.origin}/api/v1`
+  : 'http://localhost:8000/api/v1');
+const BASE_URL = VITE_API_URL || DEFAULT_BASE_URL;
+
 class FileService {
-  private baseUrl = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+  private baseUrl = BASE_URL;
 
   async writeCodeToFile(code: string, fileName: string): Promise<FileWriteResponse> {
     try {
@@ -42,4 +48,4 @@ class FileService {
   }
 }
 
-export const fileService = new FileService(); 
+export const fileService = new FileService();

@@ -1,10 +1,10 @@
 # Top-level values for thefullstackagent Helm chart
 
-devagentApi:
+agentforgeApi:
   replicaCount: 1 # Adjusted from 3 for local testing initially
 
   image:
-    repository: gcr.io/aremko-e51ae/devagent-api # Corrected repository
+    repository: gcr.io/aremko-e51ae/agentforge-api # Corrected repository
     tag: "latest" # Using "latest" as a placeholder, to be overridden by CI/CD
     pullPolicy: IfNotPresent # Or Never, if image is definitely local
 
@@ -24,11 +24,6 @@ devagentApi:
         paths:
           - path: /
             pathType: Prefix
-            backend:
-              service:
-                name: thefullstackagent-api
-                port:
-                  name: http
     tls: []
     #  - secretName: devagent-api-tls
     #    hosts:
@@ -86,11 +81,11 @@ devagentApi:
     # targetMemoryUtilizationPercentage: 80
 
 # Configuration for the devagent-ui subchart
-devagentUi:
+agentforgeUi:
   enabled: true # Assuming we want to deploy it by default
   replicaCount: 1
   image:
-    repository: gcr.io/aremko-e51ae/devagent-ui
+    repository: gcr.io/aremko-e51ae/agentforge-ui
     tag: latest
     pullPolicy: IfNotPresent # Or Never, if image is definitely local
   service:
@@ -111,11 +106,6 @@ devagentUi:
         paths:
           - path: /
             pathType: ImplementationSpecific
-            backend:
-              service:
-                name: thefullstackagent-ui
-                port:
-                  name: http
     tls: []
     #  - secretName: devagent-ui-tls
     #    hosts:
@@ -184,5 +174,5 @@ redis:
       limits:
         cpu: 200m
         memory: 256Mi
-  # sentinel: 
-  #   enabled: false # Disable sentinel if using standalone architecture 
+  # sentinel:
+  #   enabled: false # Disable sentinel if using standalone architecture

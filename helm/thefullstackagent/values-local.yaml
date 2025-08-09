@@ -42,8 +42,8 @@ env:
   SLACK_WEBHOOK_URL: "https://hooks.slack.com/services/test"
   TEAMS_WEBHOOK_URL: "https://outlook.office.com/webhook/test"
 
-# Add override for devagentApi image tag for local development
-devagentApi:
+# Add override for agentforgeApi image tag for local development
+agentforgeApi:
   image:
     tag: "latest"
     pullPolicy: IfNotPresent
@@ -62,4 +62,4 @@ readinessProbe:
 
 nodeSelector: {}
 tolerations: []
-affinity: {} 
+affinity: {}

@@ -1,77 +1,33 @@
 import axios from 'axios';
-import type { InternalAxiosRequestConfig } from 'axios';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || '/api';
+const VITE_API_URL = (import.meta as any)?.env?.VITE_API_URL;
+const DEFAULT_BASE_URL = (typeof window !== 'undefined'
+  ? `${window.location.origin}/api/v1`
+  : 'http://localhost:8000/api/v1');
+const API_BASE_URL = VITE_API_URL || DEFAULT_BASE_URL;
 
-export interface User {
-  id: string;
-  email: string;
-  name: string;
-  role: 'admin' | 'developer' | 'viewer';
+interface LoginResponse {
+  access_token: string;
+  token_type: string;
 }
-
-export interface AuthResponse {
-  user: User;
-  token: string;
-}
-
-export interface LoginCredentials {
-  email: string;
-  password: string;
-}
-
-export interface RegisterData extends LoginCredentials {
-  name: string;
-}
-
-const authApi = axios.create({
-  baseURL: API_BASE_URL,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-});
-
-// Add token to requests if it exists
-authApi.interceptors.request.use((config: InternalAxiosRequestConfig) => {
-  if (typeof window !== 'undefined') {
-    const token = localStorage.getItem('token');
-    if (token && config.headers) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-  }
-  return config;
-});
 
 export const authService = {
-  login: async (credentials: LoginCredentials): Promise<AuthResponse> => {
-    const response = await authApi.post<AuthResponse>('/auth/login', credentials);
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('token', response.data.token);
-    }
+  async login(username: string, password: string): Promise<LoginResponse> {
+    const response = await axios.post(`${API_BASE_URL}/auth/token`, { username, password });
     return response.data;
   },
 
-  register: async (data: RegisterData): Promise<AuthResponse> => {
-    const response = await authApi.post<AuthResponse>('/auth/register', data);
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('token', response.data.token);
-    }
+  async getCurrentUser(): Promise<any> {
+    const response = await axios.get(`${API_BASE_URL}/auth/me`);
     return response.data;
   },
 
-  logout: () => {
-    if (typeof window !== 'undefined') {
-      localStorage.removeItem('token');
-    }
-  },
-
-  getCurrentUser: async (): Promise<User> => {
-    const response = await authApi.get<User>('/auth/me');
+  async register(data: any): Promise<any> {
+    const response = await axios.post(`${API_BASE_URL}/auth/register`, data);
     return response.data;
   },
 
-  isAuthenticated: (): boolean => {
-    if (typeof window === 'undefined') return false;
-    return !!localStorage.getItem('token');
+  async logout(): Promise<void> {
+    await Promise.resolve();
   },
-}; 
+};

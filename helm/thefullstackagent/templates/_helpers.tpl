@@ -4,17 +4,17 @@ Standard Helm chart labels, names, etc.
 
 {{/*
 Expand the name of the chart.
-Usage: {{ include "thefullstackagent.name" (dict "Chart" .Chart "Values" .Values) }}
+Usage: {{ include "agentforge.name" (dict "Chart" .Chart "Values" .Values) }}
 */}}
-{{- define "thefullstackagent.name" -}}
+{{- define "agentforge.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
 Create a default fully qualified app name.
-Usage: {{ include "thefullstackagent.fullname" (dict "Chart" .Chart "Release" .Release "Values" .Values) }}
+Usage: {{ include "agentforge.fullname" (dict "Chart" .Chart "Release" .Release "Values" .Values) }}
 */}}
-{{- define "thefullstackagent.fullname" -}}
+{{- define "agentforge.fullname" -}}
 {{- if .Values.fullnameOverride -}}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
@@ -29,51 +29,51 @@ Usage: {{ include "thefullstackagent.fullname" (dict "Chart" .Chart "Release" .R
 
 {{/*
 Create chart name and version as used by the chart label.
-Usage: {{ include "thefullstackagent.chart" . }}
+Usage: {{ include "agentforge.chart" . }}
 */}}
-{{- define "thefullstackagent.chart" -}}
+{{- define "agentforge.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
 Common labels for all resources within the chart.
-Usage: {{- include "thefullstackagent.labels.standard" . | nindent 4 }} (expects top-level .)
+Usage: {{- include "agentforge.labels.standard" . | nindent 4 }} (expects top-level .)
 */}}
-{{- define "thefullstackagent.labels.standard" -}}
-helm.sh/chart: {{ include "thefullstackagent.chart" . }}
+{{- define "agentforge.labels.standard" -}}
+helm.sh/chart: {{ include "agentforge.chart" . }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
-app.kubernetes.io/part-of: {{ include "thefullstackagent.name" . }} {{/* . here is top-level, has .Chart and .Values */}}
+app.kubernetes.io/part-of: {{ include "agentforge.name" . }}
 {{- end -}}
 
 {{/*
 Selector labels for a component.
 Takes a context dict with .Release, .Chart, .Values, .componentName
-Usage: {{- include "thefullstackagent.labels.selector" (dict "Release" .Release "Chart" .Chart "Values" .Values "componentName" "my-component") | nindent 4 }}
+Usage: {{- include "agentforge.labels.selector" (dict "Release" .Release "Chart" .Chart "Values" .Values "componentName" "my-component") | nindent 4 }}
 */}}
-{{- define "thefullstackagent.labels.selector" -}}
-app.kubernetes.io/name: {{ printf "%s-%s" (include "thefullstackagent.name" (dict "Chart" .Chart "Values" .Values)) .componentName | trunc 63 | trimSuffix "-" }}
+{{- define "agentforge.labels.selector" -}}
+app.kubernetes.io/name: {{ printf "%s-%s" (include "agentforge.name" (dict "Chart" .Chart "Values" .Values)) .componentName | trunc 63 | trimSuffix "-" }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end -}}
 
 {{/*
 Labels for a specific component, including standard labels and selector labels.
 Takes a context dict with .Release, .Chart, .Values, .componentName
-Usage: {{- include "thefullstackagent.labels.component" (dict "Release" .Release "Chart" .Chart "Values" .Values "componentName" "my-component") | nindent 4 }}
+Usage: {{- include "agentforge.labels.component" (dict "Release" .Release "Chart" .Chart "Values" .Values "componentName" "my-component") | nindent 4 }}
 */}}
-{{- define "thefullstackagent.labels.component" -}}
-{{ include "thefullstackagent.labels.standard" (dict "Chart" .Chart "Release" .Release "Values" .Values) }} {{/* Pass explicit dict */}}
-{{ include "thefullstackagent.labels.selector" . }} {{/* . already has Chart, Release, Values, componentName */}}
+{{- define "agentforge.labels.component" -}}
+{{ include "agentforge.labels.standard" (dict "Chart" .Chart "Release" .Release "Values" .Values) }}
+{{ include "agentforge.labels.selector" . }}
 {{- end -}}
 
 {{/*
 Create a fully qualified name for a component.
 Takes a component name as context string.
-Usage: {{ include "thefullstackagent.component.fullname" (dict "Release" .Release "Chart" .Chart "Values" .Values "componentName" "my-component") }}
+Usage: {{ include "agentforge.component.fullname" (dict "Release" .Release "Chart" .Chart "Values" .Values "componentName" "my-component") }}
 */}}
-{{- define "thefullstackagent.component.fullname" -}}
-{{- $compFullName := printf "%s-%s" (include "thefullstackagent.fullname" .) .componentName -}}
+{{- define "agentforge.component.fullname" -}}
+{{- $compFullName := printf "%s-%s" (include "agentforge.fullname" .) .componentName -}}
 {{- $compFullName | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
@@ -82,22 +82,22 @@ Define a common application deployment structure.
 Required context:
   .Chart, .Release, .Values (top level, or from subchart's perspective)
   .componentName (string)
-  .componentValues (dict, e.g., .Values.devagentApi or .Values.devagentUi)
+  .componentValues (dict, e.g., .Values.agentforgeApi or .Values.agentforgeUi)
 */}}
-{{- define "thefullstackagent.component.deployment" -}}
+{{- define "agentforge.component.deployment" -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "thefullstackagent.component.fullname" (dict "Release" .Release "Chart" .Chart "Values" .Values "componentName" .componentName) }}
+  name: {{ include "agentforge.component.fullname" (dict "Release" .Release "Chart" .Chart "Values" .Values "componentName" .componentName) }}
   labels:
-    {{- include "thefullstackagent.labels.component" (dict "Release" .Release "Chart" .Chart "Values" .Values "componentName" .componentName) | nindent 4 }}
+    {{- include "agentforge.labels.component" (dict "Release" .Release "Chart" .Chart "Values" .Values "componentName" .componentName) | nindent 4 }}
 spec:
   {{- if not .componentValues.autoscaling.enabled }}
   replicas: {{ .componentValues.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
-      {{- include "thefullstackagent.labels.selector" (dict "Release" .Release "Chart" .Chart "Values" .Values "componentName" .componentName) | nindent 6 }}
+      {{- include "agentforge.labels.selector" (dict "Release" .Release "Chart" .Chart "Values" .Values "componentName" .componentName) | nindent 6 }}
   template:
     metadata:
       {{- with .componentValues.podAnnotations }}
@@ -105,13 +105,13 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "thefullstackagent.labels.component" (dict "Release" .Release "Chart" .Chart "Values" .Values "componentName" .componentName) | nindent 8 }}
+        {{- include "agentforge.labels.component" (dict "Release" .Release "Chart" .Chart "Values" .Values "componentName" .componentName) | nindent 8 }}
     spec:
       {{- with .componentValues.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "thefullstackagent.component.serviceAccountName" (dict "Release" .Release "Chart" .Chart "Values" .Values "componentName" .componentName "componentValues" .componentValues) }}
+      serviceAccountName: {{ include "agentforge.component.serviceAccountName" (dict "Release" .Release "Chart" .Chart "Values" .Values "componentName" .componentName "componentValues" .componentValues) }}
       securityContext:
         {{- toYaml .componentValues.podSecurityContext | nindent 8 }}
       containers:
@@ -169,11 +169,11 @@ spec:
 {{/*
 Determine the service account name for a component.
 */}}
-{{- define "thefullstackagent.component.serviceAccountName" -}}
+{{- define "agentforge.component.serviceAccountName" -}}
 {{- if .componentValues.serviceAccount.create -}}
-{{- include "thefullstackagent.component.fullname" . -}}
+{{- include "agentforge.component.fullname" . -}}
 {{- else -}}
-{{- .componentValues.serviceAccount.name | default (include "thefullstackagent.component.fullname" .) -}}
+{{- .componentValues.serviceAccount.name | default (include "agentforge.component.fullname" .) -}}
 {{- end -}}
 {{- end -}}
 
@@ -182,24 +182,28 @@ Define a common application service structure.
 Required context:
   .Chart, .Release, .Values
   .componentName (string)
-  .componentValues (dict, e.g., .Values.devagentApi or .Values.devagentUi)
+  .componentValues (dict, e.g., .Values.agentforgeApi or .Values.agentforgeUi)
 */}}
-{{- define "thefullstackagent.component.service" -}}
+{{- define "agentforge.component.service" -}}
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "thefullstackagent.component.fullname" (dict "Release" .Release "Chart" .Chart "Values" .Values "componentName" .componentName) }}
+  name: {{ include "agentforge.component.fullname" (dict "Release" .Release "Chart" .Chart "Values" .Values "componentName" .componentName) }}
   labels:
-    {{- include "thefullstackagent.labels.component" (dict "Release" .Release "Chart" .Chart "Values" .Values "componentName" .componentName) | nindent 4 }}
+    {{- include "agentforge.labels.component" (dict "Release" .Release "Chart" .Chart "Values" .Values "componentName" .componentName) | nindent 4 }}
+  {{- with .componentValues.service.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
 spec:
   type: {{ .componentValues.service.type }}
   ports:
     - port: {{ .componentValues.service.port }}
-      targetPort: http # Refers to the container port name 'http'
+      targetPort: http
       protocol: TCP
       name: http
   selector:
-    {{- include "thefullstackagent.labels.selector" (dict "Release" .Release "Chart" .Chart "Values" .Values "componentName" .componentName) | nindent 4 }}
+    {{- include "agentforge.labels.selector" (dict "Release" .Release "Chart" .Chart "Values" .Values "componentName" .componentName) | nindent 4 }}
 {{- end -}}
 
 {{/*
@@ -207,16 +211,16 @@ Define a common application ingress structure.
 Required context:
   .Chart, .Release, .Values
   .componentName (string)
-  .componentValues (dict, e.g., .Values.devagentApi or .Values.devagentUi)
+  .componentValues (dict, e.g., .Values.agentforgeApi or .Values.agentforgeUi)
 */}}
-{{- define "thefullstackagent.component.ingress" -}}
+{{- define "agentforge.component.ingress" -}}
 {{- if .componentValues.ingress.enabled -}}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ include "thefullstackagent.component.fullname" (dict "Release" .Release "Chart" .Chart "Values" .Values "componentName" .componentName) }}
+  name: {{ include "agentforge.component.fullname" (dict "Release" .Release "Chart" .Chart "Values" .Values "componentName" .componentName) }}
   labels:
-    {{- include "thefullstackagent.labels.component" (dict "Release" .Release "Chart" .Chart "Values" .Values "componentName" .componentName) | nindent 4 }}
+    {{- include "agentforge.labels.component" (dict "Release" .Release "Chart" .Chart "Values" .Values "componentName" .componentName) | nindent 4 }}
   {{- with .componentValues.ingress.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
@@ -243,12 +247,20 @@ spec:
           {{- range .paths }}
           - path: {{ .path }}
             pathType: {{ .pathType }}
+            {{- if .backend }}
             backend:
               service:
-                name: {{ .backend.service.name | default (include "thefullstackagent.component.fullname" (dict "Release" $.Release "Chart" $.Chart "Values" $.Values "componentName" $.componentName)) }}
+                name: {{ .backend.service.name | default (include "agentforge.component.fullname" (dict "Release" $.Release "Chart" $.Chart "Values" $.Values "componentName" $.componentName)) }}
                 port:
                   name: {{ .backend.service.port.name | default "http" }}
+            {{- else }}
+            backend:
+              service:
+                name: {{ include "agentforge.component.fullname" (dict "Release" $.Release "Chart" $.Chart "Values" $.Values "componentName" $.componentName) }}
+                port:
+                  name: "http"
+            {{- end }}
           {{- end }}
     {{- end }}
 {{- end }}
-{{- end -}} 
+{{- end -}}

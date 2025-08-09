@@ -1,23 +1,17 @@
 apiVersion: cloud.google.com/v1
 kind: BackendConfig
 metadata:
-  name: {{ include "thefullstackagent.fullname" . }}-api-backendconfig
+  name: {{ include "agentforge.fullname" . }}-api-backendconfig
   labels:
-    {{- include "thefullstackagent.labels.standard" . | nindent 4 }}
+    {{- include "agentforge.labels.standard" . | nindent 4 }}
 spec:
-  healthCheck:
-    type: HTTP
-    port: {{ .Values.devagentApi.service.port }}
-    requestPath: /health
+  timeoutSec: 30
 ---
 apiVersion: cloud.google.com/v1
 kind: BackendConfig
 metadata:
-  name: {{ include "thefullstackagent.fullname" . }}-ui-backendconfig
+  name: {{ include "agentforge.fullname" . }}-ui-backendconfig
   labels:
-    {{- include "thefullstackagent.labels.standard" . | nindent 4 }}
+    {{- include "agentforge.labels.standard" . | nindent 4 }}
 spec:
-  healthCheck:
-    type: HTTP
-    port: 3000
-    requestPath: / 
+  timeoutSec: 30

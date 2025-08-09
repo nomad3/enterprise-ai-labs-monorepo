@@ -8,49 +8,82 @@ postgresql:
 redis:
   enabled: false
 
-devagentApi:
+agentforgeApi:
   replicaCount: 1
   image:
-    repository: gcr.io/aremko-e51ae/devagent-api
+    repository: gcr.io/aremko-e51ae/agentforge-api
     tag: "latest"
-  env:
-    DATABASE_URL: "postgresql+asyncpg://{{ .Values.devagentApi.db.user }}:{{ .Values.devagentApi.db.password }}@127.0.0.1:5432/{{ .Values.devagentApi.db.name }}"
-    REDIS_URL: "redis://{{ .Values.redis.host }}:{{ .Values.redis.port }}"
+  service:
+    type: ClusterIP
+    port: 8000
+    targetPort: 8000
   db:
+    host: "postgres-service-postgresql.default.svc.cluster.local"
+    port: 5432
     user: "postgres"
-    password: "replace-with-secure-password" # This should be stored in a secret
-    name: "devagent"
+    password: "tTbdm7U6WL"
+    name: "postgres"
+  env:
+    DATABASE_URL: "postgresql://{{ .Values.agentforgeApi.db.user }}:{{ .Values.agentforgeApi.db.password }}@{{ .Values.agentforgeApi.db.host }}:{{ .Values.agentforgeApi.db.port }}/{{ .Values.agentforgeApi.db.name }}"
+    REDIS_URL: "redis://{{ .Values.redis.host }}:{{ .Values.redis.port }}"
+    ALLOWED_ORIGINS_ENV: "https://agents.datamatic.app, http://agents.datamatic.app"
+  ingress:
+    enabled: true
+    className: "nginx"
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+    hosts:
+      - host: api.agents.datamatic.app
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: agentforge-api
+                port:
+                  name: http
+    tls:
+      - secretName: api-agents-datamatic-app-tls
+        hosts:
+          - api.agents.datamatic.app
   serviceAccount:
     create: true
     name: "gke-deploy-sa"
     annotations:
       iam.gke.io/gcp-service-account: "gke-deploy-sa@aremko-e51ae.iam.gserviceaccount.com"
-  sidecars:
-    - name: cloud-sql-proxy
-      image: "gcr.io/cloud-sql-connectors/cloud-sql-proxy:2.8.0"
-      args:
-        - "--structured-logs"
-        - "--port=5432"
-        - "aremko-e51ae:southamerica-west1:devagent-postgres"
-      securityContext:
-        runAsNonRoot: true
-      resources:
-        requests:
-          memory: "64Mi"
-          cpu: "50m"
-        limits:
-          memory: "128Mi"
-          cpu: "100m"
   nodeSelector: {}
   tolerations: []
 
-devagentUi:
+fullnameOverride: agentforge
+
+agentforgeUi:
   image:
-    repository: gcr.io/aremko-e51ae/devagent-ui
+    repository: gcr.io/aremko-e51ae/agentforge-ui
     tag: "latest"
   replicaCount: 1
   env:
-    NEXT_PUBLIC_API_URL: "https://api.agents.datamatic.app"
+    NEXT_PUBLIC_API_URL: "https://agents.datamatic.app/api/v1"
+  ingress:
+    enabled: true
+    className: "nginx"
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+    hosts:
+      - host: agents.datamatic.app
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: agentforge-api
+                port:
+                  name: http
+    tls:
+      - secretName: agents-datamatic-app-tls
+        hosts:
+          - agents.datamatic.app
   serviceAccount:
     create: true
     name: "gke-deploy-sa"
@@ -72,10 +105,10 @@ devagentUi:
 #   #   tls:
 #   #     - secretName: devagent-ui-tls-gcp
 #   #       hosts:
-#   #         - devagent.your-gcp-domain.com 
+#   #         - devagent.your-gcp-domain.com
 
 redis:
   host: "10.93.221.219"
   port: 6379
 
-# ... existing code ... 
+# ... existing code ...

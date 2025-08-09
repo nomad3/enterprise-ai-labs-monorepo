@@ -1,6 +1,10 @@
 import axios, { AxiosError } from 'axios';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+const DEFAULT_BASE_URL = (typeof window !== 'undefined'
+  ? `${window.location.origin}/api/v1`
+  : 'http://localhost:8000/api/v1');
+const ENV_API_URL = (import.meta as any)?.env?.VITE_API_URL || (process as any)?.env?.NEXT_PUBLIC_API_URL;
+const API_BASE_URL = ENV_API_URL || DEFAULT_BASE_URL;
 
 export type TicketStatus = 'To Do' | 'In Progress' | 'In Review' | 'Done' | 'Blocked';
 export type TicketType = 'Task' | 'Story' | 'Bug' | 'Epic';
@@ -337,4 +341,4 @@ export const coreService = {
       throw error;
     }
   }
-}; 
+};

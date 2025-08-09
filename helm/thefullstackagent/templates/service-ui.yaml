@@ -1,8 +1,8 @@
 {{/* Call the common service template for the UI component */}}
-{{- include "thefullstackagent.component.service" (dict 
-    "Chart" .Chart 
-    "Release" .Release 
+{{- include "agentforge.component.service" (dict
+    "Chart" .Chart
+    "Release" .Release
     "Values" .Values
-    "componentName" "ui" 
-    "componentValues" .Values.devagentUi 
-  ) | nindent 0 }} 
+    "componentName" "ui"
+    "componentValues" .Values.agentforgeUi
+  ) | nindent 0 }}

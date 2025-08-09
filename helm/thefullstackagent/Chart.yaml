@@ -1,6 +1,6 @@
 apiVersion: v2
-name: thefullstackagent
-description: A Helm chart for deploying the TheFullStackAgent application suite on Kubernetes
+name: agentforge
+description: Helm chart for deploying the AgentForge application suite on Kubernetes
 version: 0.1.0
 appVersion: "1.0.0"
 keywords:
@@ -11,9 +11,9 @@ keywords:
   - terraform
   - helm
   - gcp
-home: https://github.com/nomade/thefullstackagent
+home: https://github.com/nomade/agentforge
 maintainers:
   - name: nomade
     email: your@email.com
 
-dependencies: [] 
+dependencies: []

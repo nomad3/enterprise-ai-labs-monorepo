@@ -1,15 +1,21 @@
 'use client';
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 import { authService } from '../services/auth';
-import type { User, LoginCredentials, RegisterData } from '../services/auth';
+
+interface User {
+  id?: string;
+  email?: string;
+  name?: string;
+  role?: string;
+}
 
 interface AuthContextType {
   user: User | null;
   loading: boolean;
   error: string | null;
-  login: (credentials: LoginCredentials) => Promise<void>;
-  register: (data: RegisterData) => Promise<void>;
+  login: (credentials: { username: string; password: string }) => Promise<void>;
+  register: (data: any) => Promise<void>;
   logout: () => Promise<void>;
 }
 
@@ -43,12 +49,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const login = async (credentials: LoginCredentials) => {
+  const login = async (credentials: { username: string; password: string }) => {
     try {
       setLoading(true);
       setError(null);
-      const response = await authService.login(credentials);
-      setUser(response.user);
+      await authService.login(credentials.username, credentials.password);
+      const currentUser = await authService.getCurrentUser();
+      setUser(currentUser);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Login failed');
       throw err;
@@ -57,12 +64,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const register = async (data: RegisterData) => {
+  const register = async (data: any) => {
     try {
       setLoading(true);
       setError(null);
-      const response = await authService.register(data);
-      setUser(response.user);
+      await authService.register(data);
+      const currentUser = await authService.getCurrentUser();
+      setUser(currentUser);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Registration failed');
       throw err;
@@ -102,4 +110,4 @@ export function useAuth() {
     throw new Error('useAuth must be used within an AuthProvider');
   }
   return context;
-} 
+}

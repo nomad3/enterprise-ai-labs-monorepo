@@ -1,6 +1,10 @@
 import axios from 'axios';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+const VITE_API_URL = (import.meta as any)?.env?.VITE_API_URL;
+const DEFAULT_BASE_URL = (typeof window !== 'undefined'
+  ? `${window.location.origin}/api/v1`
+  : 'http://localhost:8000/api/v1');
+const API_BASE_URL = VITE_API_URL || DEFAULT_BASE_URL;
 
 export interface TicketResponse {
   id: string;
@@ -54,4 +58,4 @@ export const ticketService = {
       } as TicketError;
     }
   }
-}; 
+};
