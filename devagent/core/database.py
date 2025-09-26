@@ -2,6 +2,8 @@
 Database configuration and session management.
 """
 
+import asyncio
+import logging
 import os
 from typing import AsyncGenerator
 
@@ -11,15 +13,11 @@ from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 # from sqlalchemy.ext.declarative import declarative_base # Redundant import
 from sqlalchemy.orm import declarative_base, sessionmaker
 
-import asyncio
-import logging
-
-from devagent.core.config import get_settings # Added import for get_settings
 from devagent.core.base import Base
-
+from devagent.core.config import get_settings  # Added import for get_settings
+from devagent.core.models.agent_model import Agent
 # Import models to ensure tables are created
 from devagent.core.models.tenant_model import Tenant
-from devagent.core.models.agent_model import Agent
 
 # Configure a logger for this module
 logger = logging.getLogger(__name__)
@@ -37,12 +35,14 @@ async def get_session() -> AsyncGenerator[AsyncSession, None]:
     """
     settings = get_settings()
     # Construct async URL from settings
-    async_db_url = settings.DATABASE_URL.replace("postgresql://", "postgresql+asyncpg://")
+    async_db_url = settings.DATABASE_URL.replace(
+        "postgresql://", "postgresql+asyncpg://"
+    )
     engine = create_async_engine(
-        async_db_url, 
-        echo=settings.DATABASE_ECHO, 
+        async_db_url,
+        echo=settings.DATABASE_ECHO,
         pool_size=settings.DATABASE_POOL_SIZE,
-        max_overflow=settings.DATABASE_MAX_OVERFLOW
+        max_overflow=settings.DATABASE_MAX_OVERFLOW,
     )
     AsyncSessionLocal = sessionmaker(
         bind=engine,
@@ -66,13 +66,17 @@ async def init_db():
     """
     settings = get_settings()
     # Construct async URL from settings
-    async_db_url = settings.DATABASE_URL.replace("postgresql://", "postgresql+asyncpg://")
-    logger.info(f"Attempting to connect to database with URL: {async_db_url}") # Log the URL
+    async_db_url = settings.DATABASE_URL.replace(
+        "postgresql://", "postgresql+asyncpg://"
+    )
+    logger.info(
+        f"Attempting to connect to database with URL: {async_db_url}"
+    )  # Log the URL
     engine = create_async_engine(
-        async_db_url, 
+        async_db_url,
         echo=settings.DATABASE_ECHO,
         pool_size=settings.DATABASE_POOL_SIZE,
-        max_overflow=settings.DATABASE_MAX_OVERFLOW
+        max_overflow=settings.DATABASE_MAX_OVERFLOW,
     )
 
     max_retries = 5
@@ -85,7 +89,9 @@ async def init_db():
             logger.info("Database tables created/verified successfully.")
             return  # Success, exit the function
         except Exception as e:
-            logger.error(f"Database connection attempt {attempt + 1} of {max_retries} failed: {e}")
+            logger.error(
+                f"Database connection attempt {attempt + 1} of {max_retries} failed: {e}"
+            )
             if attempt < max_retries - 1:
                 logger.info(f"Retrying in {retry_delay} seconds...")
                 await asyncio.sleep(retry_delay)
@@ -93,7 +99,7 @@ async def init_db():
                 logger.error("Max retries reached. Database initialization failed.")
                 # Consider not re-raising here to allow app to start,
                 # but log verbosely. Or re-raise if DB is critical for ANY operation.
-                raise # Re-raise the last exception if all retries fail
+                raise  # Re-raise the last exception if all retries fail
 
     # This part should not be reached if successful or if an exception is re-raised
     # Ensure all tables are created

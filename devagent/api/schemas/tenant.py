@@ -1,6 +1,8 @@
-from pydantic import BaseModel, Field
-from typing import Optional, Dict, Any
 from datetime import datetime
+from typing import Any, Dict, Optional
+
+from pydantic import BaseModel, Field
+
 
 class TenantBase(BaseModel):
     name: str
@@ -12,11 +14,13 @@ class TenantBase(BaseModel):
     custom_domain: Optional[str] = None
     sso_provider: Optional[str] = None
 
+
 class TenantCreate(TenantBase):
     pass
 
+
 class TenantUpdate(BaseModel):
-    name: Optional[str] = None # Allow updating name
+    name: Optional[str] = None  # Allow updating name
     description: Optional[str] = None
     is_active: Optional[bool] = None
     settings: Optional[Dict[str, Any]] = None
@@ -44,8 +48,8 @@ class TenantRead(TenantBase):
     sso_config: Optional[Dict[str, Any]] = None
     audit_log_retention_days: Optional[int] = None
     data_retention_days: Optional[int] = None
-    allowed_origins: Optional[list[str]] = None # Assuming JSON array of strings
-    allowed_ips: Optional[list[str]] = None # Assuming JSON array of strings
+    allowed_origins: Optional[list[str]] = None  # Assuming JSON array of strings
+    allowed_ips: Optional[list[str]] = None  # Assuming JSON array of strings
     rate_limit_requests: Optional[int] = None
     rate_limit_window: Optional[int] = None
     enable_2fa: Optional[bool] = None
@@ -57,9 +61,9 @@ class TenantRead(TenantBase):
     enable_custom_domain: Optional[bool] = None
     enable_advanced_features: Optional[bool] = None
 
-
     class Config:
         orm_mode = True
+
 
 class TenantStats(BaseModel):
     activeAgents: int
@@ -68,11 +72,13 @@ class TenantStats(BaseModel):
     monthlyCost: float
     monthlyTokens: int
 
+
 class RecentExecution(BaseModel):
     _id: str
     _creationTime: datetime
     input: Optional[str]
     status: str
+
 
 class TenantOverview(BaseModel):
     tenant: TenantRead

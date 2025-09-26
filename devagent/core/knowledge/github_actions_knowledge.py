@@ -137,14 +137,38 @@ Deploying to Kubernetes (GKE) using Helm in GitHub Actions:
 """
 
 GITHUB_ACTIONS_TROUBLESHOOTING_COMMON_ISSUES = [
-    ("OIDC Authentication Failure (401/403 with GCP)", "Verify Workload Identity Pool & Provider attribute conditions match GitHub token claims (e.g., repository name, branch). Print OIDC token in workflow for debugging. Ensure `id-token: write` permission."),
-    ("GCR/Artifact Registry Push Denied", "Ensure CI/CD GSA has `roles/artifactregistry.writer` and `roles/artifactregistry.repoAdmin` (or `createOnPushWriter` for GCR). Check `gcloud auth configure-docker` was successful."),
-    ("Helm Error: `dependencies missing in charts/ directory`", "Run `helm repo add <repo_name> <repo_url>` for dependencies and then `helm dependency build ./path/to/chart` before `helm upgrade/install`."),
-    ("Helm `--set` not working as expected", "Double-check the exact path in `values.yaml` (case-sensitive) for the item being overridden. E.g., `devagentApi.image.tag` vs `image.tag`."),
-    ("Pod `ImagePullBackOff`", "Verify the image name and tag are correct in the registry and accessible. Check image path set by Helm in the deployment/pod spec."),
-    ("Pod `CrashLoopBackOff` - API cannot connect to DB via Cloud SQL Proxy", "1. Check API's DB connection string (Unix socket vs TCP). 2. Check Cloud SQL Proxy container logs for errors. 3. **Enable Cloud SQL Admin API in GCP Project.** 4. Ensure GKE pod's SA has `cloudsql.client` role."),
-    ("Pod `CrashLoopBackOff` - Application Error (e.g., Python `ModuleNotFoundError`)", "Check Dockerfile `WORKDIR`, `COPY` instructions, and `CMD` for correct paths and module references relative to the application structure within the image."),
-    ("GKE API or other GCP service API not enabled", "Many GCP services require their respective APIs (e.g., Kubernetes Engine API, Cloud SQL Admin API, Artifact Registry API, Memorystore API) to be explicitly enabled in the project. Terraform apply or proxy logs will usually indicate this with a 403 error and a link to enable it.")
+    (
+        "OIDC Authentication Failure (401/403 with GCP)",
+        "Verify Workload Identity Pool & Provider attribute conditions match GitHub token claims (e.g., repository name, branch). Print OIDC token in workflow for debugging. Ensure `id-token: write` permission.",
+    ),
+    (
+        "GCR/Artifact Registry Push Denied",
+        "Ensure CI/CD GSA has `roles/artifactregistry.writer` and `roles/artifactregistry.repoAdmin` (or `createOnPushWriter` for GCR). Check `gcloud auth configure-docker` was successful.",
+    ),
+    (
+        "Helm Error: `dependencies missing in charts/ directory`",
+        "Run `helm repo add <repo_name> <repo_url>` for dependencies and then `helm dependency build ./path/to/chart` before `helm upgrade/install`.",
+    ),
+    (
+        "Helm `--set` not working as expected",
+        "Double-check the exact path in `values.yaml` (case-sensitive) for the item being overridden. E.g., `devagentApi.image.tag` vs `image.tag`.",
+    ),
+    (
+        "Pod `ImagePullBackOff`",
+        "Verify the image name and tag are correct in the registry and accessible. Check image path set by Helm in the deployment/pod spec.",
+    ),
+    (
+        "Pod `CrashLoopBackOff` - API cannot connect to DB via Cloud SQL Proxy",
+        "1. Check API's DB connection string (Unix socket vs TCP). 2. Check Cloud SQL Proxy container logs for errors. 3. **Enable Cloud SQL Admin API in GCP Project.** 4. Ensure GKE pod's SA has `cloudsql.client` role.",
+    ),
+    (
+        "Pod `CrashLoopBackOff` - Application Error (e.g., Python `ModuleNotFoundError`)",
+        "Check Dockerfile `WORKDIR`, `COPY` instructions, and `CMD` for correct paths and module references relative to the application structure within the image.",
+    ),
+    (
+        "GKE API or other GCP service API not enabled",
+        "Many GCP services require their respective APIs (e.g., Kubernetes Engine API, Cloud SQL Admin API, Artifact Registry API, Memorystore API) to be explicitly enabled in the project. Terraform apply or proxy logs will usually indicate this with a 403 error and a link to enable it.",
+    ),
 ]
 
 # Example of how this knowledge might be used by an agent (conceptual)
@@ -154,4 +178,4 @@ GITHUB_ACTIONS_TROUBLESHOOTING_COMMON_ISSUES = [
 #     elif topic == "docker_build":
 #         return GITHUB_ACTIONS_DOCKER
 #     # ... and so on
-#     return "No specific guidance found for that GitHub Actions topic." 
+#     return "No specific guidance found for that GitHub Actions topic."

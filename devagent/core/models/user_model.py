@@ -6,8 +6,8 @@ import uuid
 from datetime import datetime
 from typing import Optional
 
-from pydantic import BaseModel, EmailStr, Field, ConfigDict
-from sqlalchemy import Boolean, Column, DateTime, String, Integer, ForeignKey
+from pydantic import BaseModel, ConfigDict, EmailStr, Field
+from sqlalchemy import Boolean, Column, DateTime, ForeignKey, Integer, String
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 
@@ -36,7 +36,7 @@ class User(Base):
 # Pydantic models
 class UserBase(BaseModel):
     model_config = ConfigDict(extra="allow")
-    
+
     email: EmailStr = Field(..., example="user@example.com")
     full_name: Optional[str] = Field(None, example="John Doe")
 
@@ -53,7 +53,7 @@ class UserUpdate(UserBase):
 
 class UserInDBBase(UserBase):
     model_config = ConfigDict(from_attributes=True, extra="allow")
-    
+
     id: uuid.UUID
     is_active: bool
     is_superuser: bool
@@ -68,19 +68,19 @@ class UserResponse(UserInDBBase):  # For sending user data to client (without pa
 
 class Token(BaseModel):
     model_config = ConfigDict(extra="allow")
-    
+
     access_token: str
     token_type: str
 
 
 class TokenData(BaseModel):
     model_config = ConfigDict(extra="allow")
-    
+
     email: Optional[EmailStr] = None
 
 
 class LoginRequest(BaseModel):
     model_config = ConfigDict(extra="allow")
-    
+
     email: EmailStr
     password: str

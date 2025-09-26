@@ -3,10 +3,10 @@ Configuration settings for the AgentProvision application.
 """
 
 from functools import lru_cache
-from typing import List, Optional, Dict, Any
+from typing import Any, Dict, List, Optional
 
+from pydantic import ConfigDict, model_validator
 from pydantic_settings import BaseSettings
-from pydantic import model_validator, ConfigDict
 
 
 class Settings(BaseSettings):
@@ -16,7 +16,7 @@ class Settings(BaseSettings):
         case_sensitive=True,
         env_file=".env",
         env_file_encoding="utf-8",
-        extra="allow"  # Allow extra fields for environment variables
+        extra="allow",  # Allow extra fields for environment variables
     )
 
     # Application settings
@@ -55,16 +55,37 @@ class Settings(BaseSettings):
     ALLOWED_ORIGINS_ENV: Optional[str] = None
 
     # These will be populated by the root_validator based on _ENV vars or use these defaults
-    BACKEND_CORS_ORIGINS: List[str] = ["http://localhost:3000", "http://localhost:3002", "http://127.0.0.1:3000", "http://127.0.0.1:3002"]
-    ALLOWED_ORIGINS: List[str] = ["http://localhost:3000", "http://localhost:3002", "http://127.0.0.1:3000", "http://127.0.0.1:3002"]
+    BACKEND_CORS_ORIGINS: List[str] = [
+        "http://localhost:3000",
+        "http://localhost:3002",
+        "http://127.0.0.1:3000",
+        "http://127.0.0.1:3002",
+    ]
+    ALLOWED_ORIGINS: List[str] = [
+        "http://localhost:3000",
+        "http://localhost:3002",
+        "http://127.0.0.1:3000",
+        "http://127.0.0.1:3002",
+    ]
 
-    @model_validator(mode='after')
+    @model_validator(mode="after")
     def assemble_cors_settings(self):
-        if isinstance(self.BACKEND_CORS_ORIGINS_ENV, str) and self.BACKEND_CORS_ORIGINS_ENV:
-            self.BACKEND_CORS_ORIGINS = [item.strip() for item in self.BACKEND_CORS_ORIGINS_ENV.split(",") if item.strip()]
+        if (
+            isinstance(self.BACKEND_CORS_ORIGINS_ENV, str)
+            and self.BACKEND_CORS_ORIGINS_ENV
+        ):
+            self.BACKEND_CORS_ORIGINS = [
+                item.strip()
+                for item in self.BACKEND_CORS_ORIGINS_ENV.split(",")
+                if item.strip()
+            ]
 
         if isinstance(self.ALLOWED_ORIGINS_ENV, str) and self.ALLOWED_ORIGINS_ENV:
-            self.ALLOWED_ORIGINS = [item.strip() for item in self.ALLOWED_ORIGINS_ENV.split(",") if item.strip()]
+            self.ALLOWED_ORIGINS = [
+                item.strip()
+                for item in self.ALLOWED_ORIGINS_ENV.split(",")
+                if item.strip()
+            ]
 
         return self
 
@@ -110,8 +131,6 @@ class Settings(BaseSettings):
     MAX_LOGIN_ATTEMPTS: int = 5
     LOGIN_BLOCK_DURATION_MINUTES: int = 15
     PASSWORD_RESET_TIMEOUT_MINUTES: int = 30
-
-
 
 
 @lru_cache()

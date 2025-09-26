@@ -25,8 +25,8 @@ HELM_CHART_STRUCTURE = {
             "For cloud deployments, use a separate values file (e.g., values-gcp.yaml, values-aws.yaml).",
             "In cloud-specific values, clearly document how to disable subcharts for managed services (e.g., postgresql.enabled: false).",
             "Provide clear examples in values files for connection strings to managed services, especially when using proxies (e.g., Cloud SQL Proxy DATABASE_URL).",
-            "Structure values for service accounts to allow creating a new KSA or using an existing one (e.g., serviceAccount.create, serviceAccount.name)."
-        ]
+            "Structure values for service accounts to allow creating a new KSA or using an existing one (e.g., serviceAccount.create, serviceAccount.name).",
+        ],
     },
     "values.yaml": {
         "best_practices": [
@@ -58,7 +58,7 @@ HELM_BEST_PRACTICES = [
     "Use appropriate security contexts in pod specs",
     "Implement proper resource management (requests and limits)",
     "Design helper templates (_helpers.tpl) to be generic and reusable, e.g., for injecting common sidecars or setting standard pod configurations.",
-    "Ensure helper templates correctly handle conditional logic, especially for optional resources or when referencing values that might not be present (e.g., using an existing KSA vs. creating one)."
+    "Ensure helper templates correctly handle conditional logic, especially for optional resources or when referencing values that might not be present (e.g., using an existing KSA vs. creating one).",
 ]
 
 HELM_TESTING = {

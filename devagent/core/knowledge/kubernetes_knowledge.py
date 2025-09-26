@@ -15,7 +15,7 @@ KUBERNETES_TROUBLESHOOTING = {
                 "Resource constraints",
                 "Configuration issues",
                 "Dependency problems",
-                "Database connection failures (e.g., to Cloud SQL - check proxy setup and Workload Identity if used)."
+                "Database connection failures (e.g., to Cloud SQL - check proxy setup and Workload Identity if used).",
             ],
             "solutions": [
                 "Check container logs: kubectl logs <pod-name>",
@@ -23,7 +23,7 @@ KUBERNETES_TROUBLESHOOTING = {
                 "Describe pod for events: kubectl describe pod <pod-name>",
                 "Check resource limits and requests",
                 "Verify environment variables and configs",
-                "If using Cloud SQL Proxy, ensure sidecar is running, KSA is annotated for Workload Identity, and the linked GSA has 'roles/cloudsql.client'."
+                "If using Cloud SQL Proxy, ensure sidecar is running, KSA is annotated for Workload Identity, and the linked GSA has 'roles/cloudsql.client'.",
             ],
         },
         "pending": {
@@ -82,7 +82,7 @@ KUBERNETES_BEST_PRACTICES = {
         "Use appropriate restart policies",
         "Implement proper logging",
         "Use appropriate security contexts",
-        "For connecting to Cloud SQL from GKE, consider using the Cloud SQL Auth Proxy as a sidecar container."
+        "For connecting to Cloud SQL from GKE, consider using the Cloud SQL Auth Proxy as a sidecar container.",
     ],
     "deployments": [
         "Use rolling updates",
@@ -103,7 +103,7 @@ KUBERNETES_BEST_PRACTICES = {
     "serviceaccounts_and_rbac": [
         "Follow the principle of least privilege.",
         "When using GCP Workload Identity, annotate Kubernetes Service Account (KSA) with 'iam.gke.io/gcp-service-account: GSA_EMAIL' to link to a Google Service Account (GSA).",
-        "Ensure the corresponding GSA has 'roles/iam.workloadIdentityUser' for the KSA principal (e.g., 'serviceAccount:PROJECT_ID.svc.id.goog[NAMESPACE/KSA_NAME]')."
+        "Ensure the corresponding GSA has 'roles/iam.workloadIdentityUser' for the KSA principal (e.g., 'serviceAccount:PROJECT_ID.svc.id.goog[NAMESPACE/KSA_NAME]').",
     ],
 }
 

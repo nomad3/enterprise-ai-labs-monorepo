@@ -2,13 +2,14 @@
 Agent model for multi-agent support.
 """
 
-from datetime import datetime
-from typing import Optional, Dict, Any
-from pydantic import BaseModel, Field, ConfigDict
-
-from sqlalchemy import Column, DateTime, Integer, String, Boolean, JSON, ForeignKey, Enum
-from sqlalchemy.orm import relationship
 import enum
+from datetime import datetime
+from typing import Any, Dict, Optional
+
+from pydantic import BaseModel, ConfigDict, Field
+from sqlalchemy import (JSON, Boolean, Column, DateTime, Enum, ForeignKey,
+                        Integer, String)
+from sqlalchemy.orm import relationship
 
 from devagent.core.base import Base
 
@@ -38,8 +39,9 @@ class AgentStatus(enum.Enum):
 
 class AgentResources(BaseModel):
     """Pydantic model for agent resource allocation."""
+
     model_config = ConfigDict(extra="allow")
-    
+
     cpu_cores: float = Field(default=1.0, description="CPU cores allocated")
     memory_mb: int = Field(default=512, description="Memory in MB")
     max_concurrent_tasks: int = Field(default=5, description="Maximum concurrent tasks")
@@ -47,8 +49,9 @@ class AgentResources(BaseModel):
 
 class AgentResponse(BaseModel):
     """Pydantic model for API responses."""
+
     model_config = ConfigDict(from_attributes=True, extra="allow")
-    
+
     id: int
     name: str
     agent_type: str
@@ -63,8 +66,9 @@ class AgentResponse(BaseModel):
 
 class AgentCreate(BaseModel):
     """Pydantic model for creating agents."""
+
     model_config = ConfigDict(extra="allow")
-    
+
     name: str = Field(..., description="Name of the agent")
     agent_type: str = Field(..., description="Type of the agent")
     description: Optional[str] = Field(None, description="Description of the agent")
@@ -78,7 +82,9 @@ class Agent(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, index=True, nullable=False)
-    agent_type = Column(String, nullable=False)  # e.g., devops, qa, data, security, etc.
+    agent_type = Column(
+        String, nullable=False
+    )  # e.g., devops, qa, data, security, etc.
     description = Column(String, nullable=True)
     config = Column(JSON, nullable=True)
     is_active = Column(Boolean, default=True)
@@ -89,7 +95,7 @@ class Agent(Base):
     last_run_at = Column(DateTime, nullable=True)
     last_active = Column(DateTime, nullable=True)
     tenant_id = Column(Integer, ForeignKey("tenants.id"), nullable=False)
-    
+
     # Performance metrics
     success_count = Column(Integer, default=0)
     error_count = Column(Integer, default=0)
@@ -143,9 +149,8 @@ class Agent(Base):
         self.success_count += 1
         self.total_execution_time += execution_time
         self.average_response_time = (
-            (self.average_response_time * (self.success_count - 1) + execution_time)
-            / self.success_count
-        )
+            self.average_response_time * (self.success_count - 1) + execution_time
+        ) / self.success_count
         self.last_active = datetime.utcnow()
 
 
@@ -184,7 +189,7 @@ class AgentLog(Base):
     agent_id = Column(Integer, ForeignKey("agents.id"), nullable=False)
     level = Column(String, nullable=False)  # INFO, WARNING, ERROR, DEBUG
     message = Column(String, nullable=False)
-    log_metadata = Column(JSON, nullable=True) # Renamed from metadata
+    log_metadata = Column(JSON, nullable=True)  # Renamed from metadata
     created_at = Column(DateTime, default=datetime.utcnow)
 
     # Relationships

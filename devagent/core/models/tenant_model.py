@@ -3,21 +3,23 @@ Tenant model for multi-tenant support.
 """
 
 from datetime import datetime
-from typing import Optional, List
-from pydantic import BaseModel, Field, ConfigDict
+from typing import List, Optional
 from uuid import UUID, uuid4
 
-from sqlalchemy import Column, DateTime, Integer, String, Boolean, JSON
+from pydantic import BaseModel, ConfigDict, Field
+from sqlalchemy import JSON, Boolean, Column, DateTime, Integer, String
 from sqlalchemy.orm import relationship
 
 from devagent.core.base import Base
+
 from .audit_log_model import AuditLog
 
 
 class ResourceQuota(BaseModel):
     """Resource quota configuration for tenants."""
+
     model_config = ConfigDict(extra="allow")
-    
+
     cpu_cores: int = Field(default=2, description="Number of CPU cores allocated")
     memory_gb: int = Field(default=4, description="Memory allocation in GB")
     storage_gb: int = Field(default=50, description="Storage allocation in GB")
@@ -26,8 +28,9 @@ class ResourceQuota(BaseModel):
 
 class TenantResponse(BaseModel):
     """Pydantic model for API responses."""
+
     model_config = ConfigDict(from_attributes=True, extra="allow")
-    
+
     id: int
     name: str
     slug: str
@@ -43,8 +46,9 @@ class TenantResponse(BaseModel):
 
 class TenantCreate(BaseModel):
     """Pydantic model for creating tenants."""
+
     model_config = ConfigDict(extra="allow")
-    
+
     name: str = Field(..., description="Name of the tenant")
     slug: str = Field(..., description="Unique slug for the tenant")
     description: Optional[str] = Field(None, description="Description of the tenant")
@@ -71,7 +75,9 @@ class Tenant(Base):
     max_users = Column(Integer, default=100)
     max_storage_gb = Column(Integer, default=100)
     subscription_tier = Column(String, default="basic")  # basic, pro, enterprise
-    subscription_status = Column(String, default="active")  # active, suspended, cancelled
+    subscription_status = Column(
+        String, default="active"
+    )  # active, suspended, cancelled
     subscription_expires_at = Column(DateTime, nullable=True)
     custom_domain = Column(String, nullable=True)
     sso_provider = Column(String, nullable=True)  # okta, azure, google, etc.
@@ -131,4 +137,4 @@ class Tenant(Base):
             return False
         if not self.subscription_is_active:
             return False
-        return len(self.users) < self.max_users 
+        return len(self.users) < self.max_users

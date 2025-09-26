@@ -58,8 +58,7 @@ services:
       - "6379:6379"
     volumes:
       - redis_data:/data
-    command:
-      - redis-server --appendonly yes
+    command: ["redis-server", "--appendonly", "yes"]
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 5s
@@ -116,8 +115,7 @@ services:
       - BACKEND_CORS_ORIGINS_ENV=http://testserver # Use _ENV suffix
     depends_on:
       - postgres
-    command:
-      - pytest -v --cov=devagent devagent/tests/
+    command: ["pytest", "-v", "--cov=devagent", "devagent/tests/"]
 
   lint:
     build:
@@ -125,8 +123,7 @@ services:
       dockerfile: Dockerfile
     volumes:
       - .:/app
-    command:
-      - sh -c "black . && isort . && flake8 . && mypy ."
+    command: ["sh", "-c", "black . && isort . && flake8 . && mypy ."]
 
   node-exporter:
     image: prom/node-exporter:v1.6.1

@@ -11,24 +11,24 @@ This service handles:
 """
 
 import asyncio
-import logging
-import json
-import hmac
 import hashlib
-from datetime import datetime, timedelta
-from typing import Dict, List, Optional, Any, Callable
-from uuid import UUID, uuid4
-from enum import Enum
+import hmac
+import json
+import logging
 from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from enum import Enum
+from typing import Any, Callable, Dict, List, Optional
+from uuid import UUID, uuid4
 
 import aiohttp
 import httpx
 from pydantic import BaseModel, Field, HttpUrl
 from sqlalchemy.orm import Session
 
-from devagent.core.models.tenant_model import Tenant
-from devagent.core.database import get_session
 from devagent.core.config import get_settings
+from devagent.core.database import get_session
+from devagent.core.models.tenant_model import Tenant
 
 logger = logging.getLogger(__name__)
 settings = get_settings()
@@ -36,6 +36,7 @@ settings = get_settings()
 
 class IntegrationType(str, Enum):
     """Types of integrations supported."""
+
     SLACK = "slack"
     TEAMS = "teams"
     JIRA = "jira"
@@ -61,6 +62,7 @@ class IntegrationType(str, Enum):
 
 class EventType(str, Enum):
     """Types of events that can be processed."""
+
     WEBHOOK = "webhook"
     API_CALL = "api_call"
     SCHEDULED = "scheduled"
@@ -70,6 +72,7 @@ class EventType(str, Enum):
 
 class IntegrationStatus(str, Enum):
     """Status of an integration."""
+
     ACTIVE = "active"
     INACTIVE = "inactive"
     ERROR = "error"
@@ -80,6 +83,7 @@ class IntegrationStatus(str, Enum):
 @dataclass
 class IntegrationConfig:
     """Configuration for an integration."""
+
     id: UUID = field(default_factory=uuid4)
     tenant_id: int = 0
     name: str = ""
@@ -101,6 +105,7 @@ class IntegrationConfig:
 @dataclass
 class WebhookEvent:
     """Represents a webhook event."""
+
     id: UUID = field(default_factory=uuid4)
     integration_id: UUID = field(default_factory=uuid4)
     tenant_id: int = 0
@@ -118,6 +123,7 @@ class WebhookEvent:
 @dataclass
 class APICall:
     """Represents an API call to an external service."""
+
     id: UUID = field(default_factory=uuid4)
     integration_id: UUID = field(default_factory=uuid4)
     tenant_id: int = 0
@@ -156,7 +162,9 @@ class IntegrationConnector:
         """Get data from the external service."""
         return {}
 
-    async def post_data(self, endpoint: str, data: Dict[str, Any], **kwargs) -> Dict[str, Any]:
+    async def post_data(
+        self, endpoint: str, data: Dict[str, Any], **kwargs
+    ) -> Dict[str, Any]:
         """Post data to the external service."""
         return {}
 
@@ -182,7 +190,7 @@ class SlackConnector(IntegrationConnector):
 
         self.client = httpx.AsyncClient(
             headers={"Authorization": f"Bearer {token}"},
-            timeout=self.config.timeout_seconds
+            timeout=self.config.timeout_seconds,
         )
         return True
 
@@ -200,15 +208,10 @@ class SlackConnector(IntegrationConnector):
         try:
             channel = channel or self.config.config.get("default_channel", "#general")
 
-            payload = {
-                "channel": channel,
-                "text": message,
-                **kwargs
-            }
+            payload = {"channel": channel, "text": message, **kwargs}
 
             response = await self.client.post(
-                "https://slack.com/api/chat.postMessage",
-                json=payload
+                "https://slack.com/api/chat.postMessage", json=payload
             )
 
             result = response.json()
@@ -234,9 +237,7 @@ class JiraConnector(IntegrationConnector):
 
         auth = httpx.BasicAuth(username, api_token)
         self.client = httpx.AsyncClient(
-            base_url=base_url,
-            auth=auth,
-            timeout=self.config.timeout_seconds
+            base_url=base_url, auth=auth, timeout=self.config.timeout_seconds
         )
         return True
 
@@ -249,7 +250,9 @@ class JiraConnector(IntegrationConnector):
             logger.error(f"Jira connection test failed: {e}")
             return False
 
-    async def create_issue(self, project_key: str, summary: str, description: str, issue_type: str = "Task") -> Dict[str, Any]:
+    async def create_issue(
+        self, project_key: str, summary: str, description: str, issue_type: str = "Task"
+    ) -> Dict[str, Any]:
         """Create a Jira issue."""
         try:
             payload = {
@@ -262,11 +265,11 @@ class JiraConnector(IntegrationConnector):
                         "content": [
                             {
                                 "type": "paragraph",
-                                "content": [{"type": "text", "text": description}]
+                                "content": [{"type": "text", "text": description}],
                             }
-                        ]
+                        ],
                     },
-                    "issuetype": {"name": issue_type}
+                    "issuetype": {"name": issue_type},
                 }
             }
 
@@ -296,7 +299,7 @@ class GitHubConnector(IntegrationConnector):
         self.client = httpx.AsyncClient(
             base_url="https://api.github.com",
             headers={"Authorization": f"token {token}"},
-            timeout=self.config.timeout_seconds
+            timeout=self.config.timeout_seconds,
         )
         return True
 
@@ -309,14 +312,12 @@ class GitHubConnector(IntegrationConnector):
             logger.error(f"GitHub connection test failed: {e}")
             return False
 
-    async def create_issue(self, repo: str, title: str, body: str, labels: List[str] = None) -> Dict[str, Any]:
+    async def create_issue(
+        self, repo: str, title: str, body: str, labels: List[str] = None
+    ) -> Dict[str, Any]:
         """Create a GitHub issue."""
         try:
-            payload = {
-                "title": title,
-                "body": body,
-                "labels": labels or []
-            }
+            payload = {"title": title, "body": body, "labels": labels or []}
 
             response = await self.client.post(f"/repos/{repo}/issues", json=payload)
 
@@ -366,7 +367,9 @@ class IntegrationHub:
 
     async def register_integration(self, config: IntegrationConfig) -> UUID:
         """Register a new integration."""
-        logger.info(f"Registering integration {config.name} of type {config.integration_type}")
+        logger.info(
+            f"Registering integration {config.name} of type {config.integration_type}"
+        )
 
         # Create appropriate connector
         connector = self._create_connector(config)
@@ -399,14 +402,17 @@ class IntegrationHub:
 
         return False
 
-    async def get_integration(self, integration_id: UUID) -> Optional[IntegrationConfig]:
+    async def get_integration(
+        self, integration_id: UUID
+    ) -> Optional[IntegrationConfig]:
         """Get an integration by ID."""
         return self.integrations.get(integration_id)
 
     async def get_tenant_integrations(self, tenant_id: int) -> List[IntegrationConfig]:
         """Get all integrations for a tenant."""
         return [
-            config for config in self.integrations.values()
+            config
+            for config in self.integrations.values()
             if config.tenant_id == tenant_id
         ]
 
@@ -420,10 +426,19 @@ class IntegrationHub:
         try:
             return await connector.send_message(message, **kwargs)
         except Exception as e:
-            logger.error(f"Failed to send message through integration {integration_id}: {e}")
+            logger.error(
+                f"Failed to send message through integration {integration_id}: {e}"
+            )
             return False
 
-    async def make_api_call(self, integration_id: UUID, method: str, endpoint: str, data: Dict[str, Any] = None, **kwargs) -> Dict[str, Any]:
+    async def make_api_call(
+        self,
+        integration_id: UUID,
+        method: str,
+        endpoint: str,
+        data: Dict[str, Any] = None,
+        **kwargs,
+    ) -> Dict[str, Any]:
         """Make an API call through an integration."""
         connector = self.connectors.get(integration_id)
         if not connector:
@@ -434,7 +449,7 @@ class IntegrationHub:
             integration_id=integration_id,
             tenant_id=self.integrations[integration_id].tenant_id,
             method=method,
-            url=endpoint
+            url=endpoint,
         )
 
         try:
@@ -448,7 +463,9 @@ class IntegrationHub:
                 raise ValueError(f"Unsupported method: {method}")
 
             api_call.completed_at = datetime.utcnow()
-            api_call.duration_ms = (api_call.completed_at - start_time).total_seconds() * 1000
+            api_call.duration_ms = (
+                api_call.completed_at - start_time
+            ).total_seconds() * 1000
             api_call.response_data = result
 
             self.api_calls.append(api_call)
@@ -461,7 +478,13 @@ class IntegrationHub:
             logger.error(f"API call failed for integration {integration_id}: {e}")
             return {}
 
-    async def process_webhook(self, integration_id: UUID, payload: Dict[str, Any], headers: Dict[str, str], source_ip: str) -> bool:
+    async def process_webhook(
+        self,
+        integration_id: UUID,
+        payload: Dict[str, Any],
+        headers: Dict[str, str],
+        source_ip: str,
+    ) -> bool:
         """Process a webhook event."""
         integration = self.integrations.get(integration_id)
         if not integration:
@@ -470,8 +493,12 @@ class IntegrationHub:
 
         # Verify webhook signature if secret is configured
         if integration.webhook_secret:
-            if not self._verify_webhook_signature(payload, headers, integration.webhook_secret):
-                logger.error(f"Webhook signature verification failed for integration {integration_id}")
+            if not self._verify_webhook_signature(
+                payload, headers, integration.webhook_secret
+            ):
+                logger.error(
+                    f"Webhook signature verification failed for integration {integration_id}"
+                )
                 return False
 
         event = WebhookEvent(
@@ -480,7 +507,7 @@ class IntegrationHub:
             event_type=headers.get("X-Event-Type", "unknown"),
             payload=payload,
             headers=headers,
-            source_ip=source_ip
+            source_ip=source_ip,
         )
 
         self.webhook_events.append(event)
@@ -505,7 +532,9 @@ class IntegrationHub:
             except Exception as e:
                 logger.error(f"Event handler failed for {event_type}: {e}")
 
-    def _create_connector(self, config: IntegrationConfig) -> Optional[IntegrationConnector]:
+    def _create_connector(
+        self, config: IntegrationConfig
+    ) -> Optional[IntegrationConnector]:
         """Create appropriate connector based on integration type."""
         connector_map = {
             IntegrationType.SLACK: SlackConnector,
@@ -521,18 +550,20 @@ class IntegrationHub:
         # Default to base connector for custom integrations
         return IntegrationConnector(config)
 
-    def _verify_webhook_signature(self, payload: Dict[str, Any], headers: Dict[str, str], secret: str) -> bool:
+    def _verify_webhook_signature(
+        self, payload: Dict[str, Any], headers: Dict[str, str], secret: str
+    ) -> bool:
         """Verify webhook signature."""
-        signature = headers.get("X-Hub-Signature-256") or headers.get("X-Slack-Signature")
+        signature = headers.get("X-Hub-Signature-256") or headers.get(
+            "X-Slack-Signature"
+        )
         if not signature:
             return False
 
         # Create expected signature
-        payload_bytes = json.dumps(payload, separators=(',', ':')).encode('utf-8')
+        payload_bytes = json.dumps(payload, separators=(",", ":")).encode("utf-8")
         expected_signature = hmac.new(
-            secret.encode('utf-8'),
-            payload_bytes,
-            hashlib.sha256
+            secret.encode("utf-8"), payload_bytes, hashlib.sha256
         ).hexdigest()
 
         # Compare signatures
@@ -542,7 +573,9 @@ class IntegrationHub:
         """Background task to process webhook events."""
         while self._hub_running:
             try:
-                events_to_process = [e for e in self.webhook_events if e.status == "pending"]
+                events_to_process = [
+                    e for e in self.webhook_events if e.status == "pending"
+                ]
 
                 for event in events_to_process:
                     await self._process_single_webhook_event(event)
@@ -565,12 +598,15 @@ class IntegrationHub:
                     event.processed_at = datetime.utcnow()
 
                     # Emit event for other systems to handle
-                    await self.emit_event("webhook_processed", {
-                        "integration_id": str(event.integration_id),
-                        "tenant_id": event.tenant_id,
-                        "event_type": event.event_type,
-                        "payload": event.payload
-                    })
+                    await self.emit_event(
+                        "webhook_processed",
+                        {
+                            "integration_id": str(event.integration_id),
+                            "tenant_id": event.tenant_id,
+                            "event_type": event.event_type,
+                            "payload": event.payload,
+                        },
+                    )
                 else:
                     event.status = "failed"
                     event.error_message = "Connector failed to process webhook"
@@ -597,7 +633,9 @@ class IntegrationHub:
                     else:
                         if config.status == IntegrationStatus.ACTIVE:
                             config.status = IntegrationStatus.ERROR
-                            logger.error(f"Integration {integration_id} health check failed")
+                            logger.error(
+                                f"Integration {integration_id} health check failed"
+                            )
 
                 await asyncio.sleep(300)  # Check every 5 minutes
 
@@ -613,14 +651,12 @@ class IntegrationHub:
 
                 # Cleanup old webhook events
                 self.webhook_events = [
-                    e for e in self.webhook_events
-                    if e.received_at > cutoff_time
+                    e for e in self.webhook_events if e.received_at > cutoff_time
                 ]
 
                 # Cleanup old API calls
                 self.api_calls = [
-                    c for c in self.api_calls
-                    if c.created_at > cutoff_time
+                    c for c in self.api_calls if c.created_at > cutoff_time
                 ]
 
                 await asyncio.sleep(3600)  # Cleanup every hour
@@ -634,39 +670,57 @@ class IntegrationHub:
         tenant_integrations = await self.get_tenant_integrations(tenant_id)
 
         total_integrations = len(tenant_integrations)
-        active_integrations = len([i for i in tenant_integrations if i.status == IntegrationStatus.ACTIVE])
+        active_integrations = len(
+            [i for i in tenant_integrations if i.status == IntegrationStatus.ACTIVE]
+        )
 
         # Count events and API calls for this tenant
-        tenant_webhook_events = [e for e in self.webhook_events if e.tenant_id == tenant_id]
+        tenant_webhook_events = [
+            e for e in self.webhook_events if e.tenant_id == tenant_id
+        ]
         tenant_api_calls = [c for c in self.api_calls if c.tenant_id == tenant_id]
 
         # Calculate success rates
-        processed_events = len([e for e in tenant_webhook_events if e.status == "processed"])
+        processed_events = len(
+            [e for e in tenant_webhook_events if e.status == "processed"]
+        )
         failed_events = len([e for e in tenant_webhook_events if e.status == "failed"])
 
-        successful_api_calls = len([c for c in tenant_api_calls if c.error_message is None])
-        failed_api_calls = len([c for c in tenant_api_calls if c.error_message is not None])
+        successful_api_calls = len(
+            [c for c in tenant_api_calls if c.error_message is None]
+        )
+        failed_api_calls = len(
+            [c for c in tenant_api_calls if c.error_message is not None]
+        )
 
         return {
             "tenant_id": tenant_id,
             "integrations": {
                 "total": total_integrations,
                 "active": active_integrations,
-                "inactive": total_integrations - active_integrations
+                "inactive": total_integrations - active_integrations,
             },
             "webhook_events": {
                 "total": len(tenant_webhook_events),
                 "processed": processed_events,
                 "failed": failed_events,
-                "success_rate": (processed_events / len(tenant_webhook_events) * 100) if tenant_webhook_events else 0
+                "success_rate": (
+                    (processed_events / len(tenant_webhook_events) * 100)
+                    if tenant_webhook_events
+                    else 0
+                ),
             },
             "api_calls": {
                 "total": len(tenant_api_calls),
                 "successful": successful_api_calls,
                 "failed": failed_api_calls,
-                "success_rate": (successful_api_calls / len(tenant_api_calls) * 100) if tenant_api_calls else 0
+                "success_rate": (
+                    (successful_api_calls / len(tenant_api_calls) * 100)
+                    if tenant_api_calls
+                    else 0
+                ),
             },
-            "timestamp": datetime.utcnow()
+            "timestamp": datetime.utcnow(),
         }
 
 

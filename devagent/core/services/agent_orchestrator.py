@@ -13,9 +13,9 @@ This service handles:
 import asyncio
 import logging
 from datetime import datetime, timedelta
-from typing import Dict, List, Optional, Any
-from uuid import UUID, uuid4
 from enum import Enum
+from typing import Any, Dict, List, Optional
+from uuid import UUID, uuid4
 
 from pydantic import BaseModel, Field
 
@@ -43,6 +43,7 @@ class TaskStatus(str, Enum):
 
 class AgentTask(BaseModel):
     """Represents a task to be executed by an agent."""
+
     id: UUID = Field(default_factory=uuid4)
     tenant_id: int
     agent_type: str
@@ -66,6 +67,7 @@ class AgentTask(BaseModel):
 
 class AgentCapacity(BaseModel):
     """Represents an agent's current capacity and resource usage."""
+
     agent_id: int
     max_concurrent_tasks: int = 5
     current_tasks: int = 0
@@ -78,6 +80,7 @@ class AgentCapacity(BaseModel):
 
 class WorkflowDefinition(BaseModel):
     """Defines a workflow with multiple agent tasks."""
+
     id: UUID = Field(default_factory=uuid4)
     name: str
     description: str
@@ -98,7 +101,7 @@ class AgentOrchestrator:
             TaskPriority.CRITICAL: [],
             TaskPriority.HIGH: [],
             TaskPriority.NORMAL: [],
-            TaskPriority.LOW: []
+            TaskPriority.LOW: [],
         }
         self.agent_capacities: Dict[int, AgentCapacity] = {}
         self.running_tasks: Dict[UUID, AgentTask] = {}
@@ -122,7 +125,9 @@ class AgentOrchestrator:
 
     async def submit_task(self, task: AgentTask) -> UUID:
         """Submit a new task for execution."""
-        logger.info(f"Submitting task {task.id} of type {task.task_type} for tenant {task.tenant_id}")
+        logger.info(
+            f"Submitting task {task.id} of type {task.task_type} for tenant {task.tenant_id}"
+        )
 
         # Validate task
         if not await self._validate_task(task):
@@ -139,7 +144,9 @@ class AgentOrchestrator:
 
     async def submit_workflow(self, workflow: WorkflowDefinition) -> UUID:
         """Submit a workflow for execution."""
-        logger.info(f"Submitting workflow {workflow.name} for tenant {workflow.tenant_id}")
+        logger.info(
+            f"Submitting workflow {workflow.name} for tenant {workflow.tenant_id}"
+        )
 
         self.workflows[workflow.id] = workflow
 
@@ -152,7 +159,10 @@ class AgentOrchestrator:
                 priority=TaskPriority(step.get("priority", "normal")),
                 payload=step.get("payload", {}),
                 dependencies=step.get("dependencies", []),
-                metadata={"workflow_id": str(workflow.id), "step_name": step.get("name")}
+                metadata={
+                    "workflow_id": str(workflow.id),
+                    "step_name": step.get("name"),
+                },
             )
             await self.submit_task(task)
 
@@ -176,7 +186,7 @@ class AgentOrchestrator:
             "memory_usage": capacity.memory_usage_mb,
             "average_task_duration": capacity.average_task_duration,
             "last_health_check": capacity.last_health_check,
-            "success_rate": 95.0
+            "success_rate": 95.0,
         }
 
     async def get_tenant_agents(self, tenant_id: int) -> List[Dict[str, Any]]:
@@ -196,7 +206,9 @@ class AgentOrchestrator:
             self.agent_capacities[agent_id] = AgentCapacity(agent_id=agent_id)
 
         self.agent_capacities[agent_id].max_concurrent_tasks = max_concurrent_tasks
-        logger.info(f"Scaled agent {agent_id} to {max_concurrent_tasks} concurrent tasks")
+        logger.info(
+            f"Scaled agent {agent_id} to {max_concurrent_tasks} concurrent tasks"
+        )
         return True
 
     async def pause_agent(self, agent_id: int) -> bool:
@@ -234,7 +246,7 @@ class AgentOrchestrator:
                 "assigned_agent_id": task.assigned_agent_id,
                 "created_at": task.created_at,
                 "started_at": task.started_at,
-                "progress": self._calculate_task_progress(task)
+                "progress": self._calculate_task_progress(task),
             }
 
         # Check queued tasks
@@ -245,7 +257,7 @@ class AgentOrchestrator:
                         "task_id": str(task_id),
                         "status": task.status,
                         "queue_position": priority_queue.index(task),
-                        "created_at": task.created_at
+                        "created_at": task.created_at,
                     }
 
         return {"task_id": str(task_id), "status": "not_found"}
@@ -285,7 +297,12 @@ class AgentOrchestrator:
     async def _schedule_next_tasks(self):
         """Schedule next available tasks to available agents."""
         # Process tasks by priority
-        for priority in [TaskPriority.CRITICAL, TaskPriority.HIGH, TaskPriority.NORMAL, TaskPriority.LOW]:
+        for priority in [
+            TaskPriority.CRITICAL,
+            TaskPriority.HIGH,
+            TaskPriority.NORMAL,
+            TaskPriority.LOW,
+        ]:
             queue = self.task_queue[priority]
 
             # Process tasks in queue
@@ -334,7 +351,9 @@ class AgentOrchestrator:
         """Calculate agent suitability score for a task."""
         # Factors: current load, performance history, resource usage
         load_factor = 1.0 - (capacity.current_tasks / capacity.max_concurrent_tasks)
-        performance_factor = 1.0 / (capacity.average_task_duration + 1)  # Prefer faster agents
+        performance_factor = 1.0 / (
+            capacity.average_task_duration + 1
+        )  # Prefer faster agents
         resource_factor = 1.0 - (capacity.cpu_usage_percent / 100.0)
 
         return load_factor * 0.4 + performance_factor * 0.3 + resource_factor * 0.3
@@ -369,7 +388,10 @@ class AgentOrchestrator:
             # Mark task as completed
             task.status = TaskStatus.COMPLETED
             task.completed_at = datetime.utcnow()
-            task.result = {"status": "success", "message": "Task completed successfully"}
+            task.result = {
+                "status": "success",
+                "message": "Task completed successfully",
+            }
 
             logger.info(f"Task {task.id} completed successfully")
 
@@ -395,7 +417,11 @@ class AgentOrchestrator:
                     capacity.current_tasks = max(0, capacity.current_tasks - 1)
 
             # Remove from running tasks if completed or failed permanently
-            if task.status in [TaskStatus.COMPLETED, TaskStatus.FAILED, TaskStatus.CANCELLED]:
+            if task.status in [
+                TaskStatus.COMPLETED,
+                TaskStatus.FAILED,
+                TaskStatus.CANCELLED,
+            ]:
                 self.running_tasks.pop(task.id, None)
 
     async def _health_monitor(self):
