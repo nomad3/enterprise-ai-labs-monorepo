@@ -1,5 +1,5 @@
 """
-Main FastAPI application entry point for AgentForge.
+Main FastAPI application entry point for AgentProvision.
 """
 
 from fastapi import Depends, FastAPI
@@ -39,7 +39,7 @@ start_http_server(port=8001, addr="0.0.0.0")
 
 # Create FastAPI app
 app = FastAPI(
-    title="AgentForge",
+    title="AgentProvision",
     description="Enterprise-Grade Multi-Agent Platform",
     version="1.0.0",
     docs_url="/api/docs",
@@ -74,14 +74,14 @@ app.include_router(orchestration_router, prefix="/api/v1", tags=["Orchestration"
 async def startup_event():
     """Initialize services on startup."""
     await init_db()
-    
+
     # Start core services
     from devagent.core.services.agent_orchestrator import get_orchestrator
     from devagent.core.services.integration_hub import get_integration_hub
-    
+
     orchestrator = await get_orchestrator()
     await orchestrator.start_orchestrator()
-    
+
     integration_hub = await get_integration_hub()
     await integration_hub.start_hub()
 
@@ -90,7 +90,7 @@ async def startup_event():
 async def root():
     """Root endpoint returning basic API information."""
     return {
-        "name": "AgentForge",
+        "name": "AgentProvision",
         "version": "1.0.0",
         "status": "operational",
         "description": "Enterprise-Grade Multi-Agent Platform",

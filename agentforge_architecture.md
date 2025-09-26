@@ -1,9 +1,9 @@
-# AgentForge: Enterprise AI Agent Management Platform
+# AgentProvision: Enterprise AI Agent Management Platform
 ## Architectural Blueprint
 
 ### Executive Summary
 
-AgentForge is a cloud-native, multi-tenant B2B SaaS platform designed to enable enterprises to deploy, manage, and orchestrate specialized AI agents across their organization. The platform provides enterprise-grade security, scalability, and governance while maintaining operational excellence and cost efficiency.
+AgentProvision is a cloud-native, multi-tenant B2B SaaS platform designed to enable enterprises to deploy, manage, and orchestrate specialized AI agents across their organization. The platform provides enterprise-grade security, scalability, and governance while maintaining operational excellence and cost efficiency.
 
 ---
 
@@ -164,9 +164,9 @@ def route_request(request):
     # Priority: Custom model > Performance > Cost > Availability
     if request.has_custom_model():
         return route_to_custom_model(request)
-    
+
     available_models = get_available_models(request.capabilities)
-    
+
     if request.priority == "performance":
         return select_fastest_model(available_models)
     elif request.priority == "cost":
@@ -398,15 +398,15 @@ CREATE POLICY tenant_isolation ON agents
 // Tenant context middleware
 export const tenantContextMiddleware = (req: Request, res: Response, next: NextFunction) => {
   const tenantId = extractTenantId(req);
-  
+
   if (!tenantId) {
     return res.status(401).json({ error: 'Tenant not identified' });
   }
-  
+
   // Set tenant context for database queries
   req.tenantId = tenantId;
   req.dbContext = { tenantId };
-  
+
   next();
 };
 
@@ -437,14 +437,14 @@ export const getAgents = async (tenantId: string) => {
 // Encryption service
 export class EncryptionService {
   private kms: AWS.KMS;
-  
+
   constructor() {
     this.kms = new AWS.KMS();
   }
-  
+
   async encryptData(data: string, tenantId: string): Promise<string> {
     const keyId = await this.getTenantKey(tenantId);
-    
+
     const params = {
       KeyId: keyId,
       Plaintext: Buffer.from(data),
@@ -452,7 +452,7 @@ export class EncryptionService {
         tenantId: tenantId
       }
     };
-    
+
     const result = await this.kms.encrypt(params).promise();
     return result.CiphertextBlob?.toString('base64') || '';
   }
@@ -542,7 +542,7 @@ export class ComplianceReporter {
     const auditEvents = await this.getAuditEvents(tenantId, period);
     const accessControls = await this.getAccessControlEvents(tenantId, period);
     const securityIncidents = await this.getSecurityIncidents(tenantId, period);
-    
+
     return {
       period,
       tenantId,
@@ -574,16 +574,16 @@ interface AgentContract {
   start(): Promise<void>;
   stop(): Promise<void>;
   restart(): Promise<void>;
-  
+
   // Execution methods
   execute(task: Task): Promise<TaskResult>;
   getStatus(): AgentStatus;
   getMetrics(): AgentMetrics;
-  
+
   // Configuration methods
   updateConfig(config: Partial<AgentConfig>): Promise<void>;
   validateConfig(config: AgentConfig): ValidationResult;
-  
+
   // Health and monitoring
   healthCheck(): Promise<HealthStatus>;
   getResourceUsage(): ResourceUsage;
@@ -621,14 +621,14 @@ class AgentLifecycleManager {
   async transitionState(agentId: string, targetState: AgentState): Promise<void> {
     const agent = await this.getAgent(agentId);
     const currentState = agent.state;
-    
+
     if (!this.isValidTransition(currentState, targetState)) {
       throw new Error(`Invalid state transition: ${currentState} -> ${targetState}`);
     }
-    
+
     await this.executeTransition(agent, targetState);
   }
-  
+
   private isValidTransition(from: AgentState, to: AgentState): boolean {
     const validTransitions: Record<AgentState, AgentState[]> = {
       [AgentState.CREATED]: [AgentState.CONFIGURING],
@@ -641,7 +641,7 @@ class AgentLifecycleManager {
       [AgentState.ERROR]: [AgentState.STARTING, AgentState.TERMINATED],
       [AgentState.TERMINATED]: []
     };
-    
+
     return validTransitions[from]?.includes(to) || false;
   }
 }
@@ -690,26 +690,26 @@ class ResourceAllocator {
   async allocateResources(agent: Agent): Promise<ResourceAllocation> {
     const requirements = agent.config.resources;
     const availableResources = await this.getAvailableResources();
-    
+
     // Calculate optimal allocation based on:
     // 1. Agent requirements
     // 2. Historical usage patterns
     // 3. Available cluster resources
     // 4. Cost optimization
-    
+
     const allocation = this.calculateOptimalAllocation(
       requirements,
       availableResources,
       agent.historicalUsage
     );
-    
+
     if (!this.canAllocate(allocation, availableResources)) {
       throw new InsufficientResourcesError();
     }
-    
+
     return allocation;
   }
-  
+
   private calculateOptimalAllocation(
     requirements: ResourceRequirements,
     available: AvailableResources,
@@ -722,7 +722,7 @@ class ResourceAllocator {
       timeOfDay: new Date().getHours(),
       dayOfWeek: new Date().getDay()
     });
-    
+
     return {
       cpu: Math.max(requirements.cpu.min, prediction.cpu),
       memory: Math.max(requirements.memory.min, prediction.memory),
@@ -760,11 +760,11 @@ class SSOProvider {
         throw new UnsupportedProviderError(provider);
     }
   }
-  
+
   private async authenticateSAML(token: string): Promise<User> {
     const samlResponse = await this.validateSAMLToken(token);
     const userAttributes = this.extractUserAttributes(samlResponse);
-    
+
     return this.createOrUpdateUser(userAttributes);
   }
 }
@@ -798,15 +798,15 @@ class RateLimiter {
     endpoint: string
   ): Promise<RateLimitResult> {
     const config = await this.getRateLimitConfig(tenantId);
-    
+
     const checks = await Promise.all([
       this.checkTenantLimit(tenantId, config.tenant),
       this.checkUserLimit(userId, config.user),
       this.checkEndpointLimit(endpoint, config.endpoint[endpoint])
     ]);
-    
+
     const failed = checks.find(check => !check.allowed);
-    
+
     return failed || { allowed: true, remaining: Math.min(...checks.map(c => c.remaining)) };
   }
 }
@@ -832,28 +832,28 @@ class WebhookManager {
     if (!this.shouldDeliver(event, webhook)) {
       return;
     }
-    
+
     const payload = this.buildPayload(event, webhook);
     const signature = this.generateSignature(payload, webhook.secret);
-    
+
     try {
       await this.sendWebhook(webhook.url, payload, signature);
     } catch (error) {
       await this.handleDeliveryFailure(webhook, payload, error);
     }
   }
-  
+
   private async handleDeliveryFailure(
     webhook: WebhookConfig,
     payload: any,
     error: Error
   ): Promise<void> {
     const retryPolicy = webhook.retryPolicy;
-    
+
     for (let attempt = 1; attempt <= retryPolicy.maxRetries; attempt++) {
       const delay = this.calculateBackoffDelay(attempt, retryPolicy);
       await this.sleep(delay);
-      
+
       try {
         await this.sendWebhook(webhook.url, payload, webhook.secret);
         return; // Success
@@ -895,10 +895,10 @@ interface EventMetadata {
 class EventBus {
   private kafka: Kafka;
   private subscribers: Map<string, EventHandler[]> = new Map();
-  
+
   async publish(event: Event): Promise<void> {
     const topic = this.getTopicForEvent(event.type);
-    
+
     await this.kafka.producer().send({
       topic,
       messages: [{
@@ -912,13 +912,13 @@ class EventBus {
       }]
     });
   }
-  
+
   async subscribe(eventType: string, handler: EventHandler): Promise<void> {
     if (!this.subscribers.has(eventType)) {
       this.subscribers.set(eventType, []);
       await this.createConsumer(eventType);
     }
-    
+
     this.subscribers.get(eventType)!.push(handler);
   }
 }
@@ -937,19 +937,19 @@ interface PlatformMetrics {
   requestLatency: Histogram;
   requestThroughput: Counter;
   errorRate: Gauge;
-  
+
   // Resource metrics
   cpuUtilization: Gauge;
   memoryUtilization: Gauge;
   diskUtilization: Gauge;
   networkThroughput: Gauge;
-  
+
   // Business metrics
   activeAgents: Gauge;
   agentExecutions: Counter;
   llmTokenUsage: Counter;
   tenantCount: Gauge;
-  
+
   // Cost metrics
   computeCosts: Gauge;
   storageCosts: Gauge;
@@ -989,7 +989,7 @@ import { trace, context, SpanStatusCode } from '@opentelemetry/api';
 
 class TracingService {
   private tracer = trace.getTracer('agentforge');
-  
+
   async executeWithTracing<T>(
     operationName: string,
     operation: () => Promise<T>,
@@ -1002,7 +1002,7 @@ class TracingService {
         ...attributes
       }
     });
-    
+
     try {
       const result = await context.with(trace.setSpan(context.active(), span), operation);
       span.setStatus({ code: SpanStatusCode.OK });
@@ -1036,7 +1036,7 @@ groups:
         annotations:
           summary: "High error rate detected"
           description: "Error rate is {{ $value }} for the last 5 minutes"
-      
+
       - alert: AgentExecutionFailure
         expr: rate(agent_executions_failed_total[5m]) > 0.05
         for: 2m
@@ -1045,7 +1045,7 @@ groups:
         annotations:
           summary: "Agent execution failures detected"
           description: "Agent execution failure rate is {{ $value }}"
-      
+
       - alert: ResourceUtilizationHigh
         expr: (cpu_usage_percent > 80) or (memory_usage_percent > 85)
         for: 10m
@@ -1063,7 +1063,7 @@ groups:
 class CostTrackingService {
   async trackResourceUsage(tenantId: string, resource: ResourceUsage): Promise<void> {
     const cost = await this.calculateCost(resource);
-    
+
     await this.recordCost({
       tenantId,
       resourceType: resource.type,
@@ -1072,20 +1072,20 @@ class CostTrackingService {
       currency: cost.currency,
       timestamp: new Date()
     });
-    
+
     // Check if tenant is approaching budget limits
     const monthlyUsage = await this.getMonthlyUsage(tenantId);
     const budget = await this.getTenantBudget(tenantId);
-    
+
     if (monthlyUsage.cost > budget.warning_threshold) {
       await this.sendBudgetAlert(tenantId, monthlyUsage, budget);
     }
   }
-  
+
   async optimizeCosts(tenantId: string): Promise<CostOptimizationRecommendations> {
     const usage = await this.getDetailedUsage(tenantId);
     const recommendations: CostOptimizationRecommendations = [];
-    
+
     // Analyze compute usage
     const underutilizedResources = this.findUnderutilizedResources(usage.compute);
     if (underutilizedResources.length > 0) {
@@ -1096,11 +1096,11 @@ class CostTrackingService {
         resources: underutilizedResources
       });
     }
-    
+
     // Analyze LLM usage
     const llmOptimizations = this.analyzeLLMUsage(usage.llm);
     recommendations.push(...llmOptimizations);
-    
+
     return recommendations;
   }
 }
@@ -1135,9 +1135,9 @@ class AutoScaler {
     const policy = await this.getScalingPolicy(service);
     const currentMetrics = await this.getCurrentMetrics(service);
     const currentReplicas = await this.getCurrentReplicas(service);
-    
+
     const scalingScore = this.calculateScalingScore(currentMetrics, policy.metrics);
-    
+
     if (scalingScore > 1.2 && currentReplicas < policy.maxReplicas) {
       return {
         action: 'scale_up',
@@ -1155,7 +1155,7 @@ class AutoScaler {
         )
       };
     }
-    
+
     return { action: 'no_change', targetReplicas: currentReplicas };
   }
 }
@@ -1210,30 +1210,30 @@ spec:
 ```typescript
 class DatabaseShardManager {
   private shards: DatabaseShard[];
-  
+
   getShardForTenant(tenantId: string): DatabaseShard {
     // Use consistent hashing for tenant distribution
     const hash = this.hashFunction(tenantId);
     const shardIndex = hash % this.shards.length;
     return this.shards[shardIndex];
   }
-  
+
   async rebalanceShards(): Promise<void> {
     const shardLoads = await this.getShardLoads();
     const overloadedShards = shardLoads.filter(load => load.utilization > 0.8);
-    
+
     for (const overloadedShard of overloadedShards) {
       const targetShard = this.findLeastLoadedShard(shardLoads);
       await this.migrateTenants(overloadedShard, targetShard);
     }
   }
-  
+
   private async migrateTenants(
     sourceShard: DatabaseShard,
     targetShard: DatabaseShard
   ): Promise<void> {
     const tenantsToMigrate = await this.selectTenantsForMigration(sourceShard);
-    
+
     for (const tenant of tenantsToMigrate) {
       await this.migrateTenantData(tenant, sourceShard, targetShard);
     }
@@ -1249,13 +1249,13 @@ class CacheManager {
   private l1Cache: Map<string, any> = new Map(); // In-memory
   private l2Cache: Redis; // Redis cluster
   private l3Cache: CDN; // CloudFront/CDN
-  
+
   async get<T>(key: string): Promise<T | null> {
     // L1 Cache (in-memory)
     if (this.l1Cache.has(key)) {
       return this.l1Cache.get(key);
     }
-    
+
     // L2 Cache (Redis)
     const l2Value = await this.l2Cache.get(key);
     if (l2Value) {
@@ -1263,7 +1263,7 @@ class CacheManager {
       this.l1Cache.set(key, parsed);
       return parsed;
     }
-    
+
     // L3 Cache (CDN) - for static content
     if (this.isStaticContent(key)) {
       const l3Value = await this.l3Cache.get(key);
@@ -1273,15 +1273,15 @@ class CacheManager {
         return l3Value;
       }
     }
-    
+
     return null;
   }
-  
+
   async set<T>(key: string, value: T, ttl: number = 3600): Promise<void> {
     // Set in all cache levels
     this.l1Cache.set(key, value);
     await this.l2Cache.setex(key, ttl, JSON.stringify(value));
-    
+
     if (this.isStaticContent(key)) {
       await this.l3Cache.set(key, value, ttl);
     }
@@ -1302,28 +1302,28 @@ class DisasterRecoveryManager {
       type: 'full',
       status: 'in_progress'
     };
-    
+
     try {
       // Backup database
       const dbBackup = await this.backupDatabase(tenantId);
-      
+
       // Backup file storage
       const storageBackup = await this.backupStorage(tenantId);
-      
+
       // Backup configuration
       const configBackup = await this.backupConfiguration(tenantId);
-      
+
       backup.components = {
         database: dbBackup,
         storage: storageBackup,
         configuration: configBackup
       };
-      
+
       backup.status = 'completed';
-      
+
       // Store backup metadata
       await this.storeBackupMetadata(backup);
-      
+
       return backup;
     } catch (error) {
       backup.status = 'failed';
@@ -1331,19 +1331,19 @@ class DisasterRecoveryManager {
       throw error;
     }
   }
-  
+
   async restoreFromBackup(backupId: string, targetTenantId?: string): Promise<void> {
     const backup = await this.getBackupInfo(backupId);
     const tenantId = targetTenantId || backup.tenantId;
-    
+
     // Create restoration plan
     const plan = await this.createRestorationPlan(backup, tenantId);
-    
+
     // Execute restoration in phases
     for (const phase of plan.phases) {
       await this.executeRestorationPhase(phase);
     }
-    
+
     // Verify restoration
     await this.verifyRestoration(tenantId, backup);
   }
@@ -1360,11 +1360,11 @@ class DisasterRecoveryManager {
 ```yaml
 openapi: 3.0.3
 info:
-  title: AgentForge API
+  title: AgentProvision API
   description: Enterprise AI Agent Management Platform
   version: 1.0.0
   contact:
-    name: AgentForge Support
+    name: AgentProvision Support
     email: support@agentforge.com
     url: https://docs.agentforge.com
 
@@ -1443,9 +1443,9 @@ components:
 
 **TypeScript SDK**:
 ```typescript
-export class AgentForgeSDK {
+export class AgentProvisionSDK {
   private apiClient: ApiClient;
-  
+
   constructor(config: SDKConfig) {
     this.apiClient = new ApiClient({
       baseURL: config.baseURL,
@@ -1453,67 +1453,67 @@ export class AgentForgeSDK {
       tenantId: config.tenantId
     });
   }
-  
+
   // Agent management
   agents = {
     list: async (options?: ListAgentsOptions): Promise<PaginatedResponse<Agent>> => {
       return this.apiClient.get('/agents', { params: options });
     },
-    
+
     create: async (agent: CreateAgentRequest): Promise<Agent> => {
       return this.apiClient.post('/agents', agent);
     },
-    
+
     get: async (agentId: string): Promise<Agent> => {
       return this.apiClient.get(`/agents/${agentId}`);
     },
-    
+
     update: async (agentId: string, updates: UpdateAgentRequest): Promise<Agent> => {
       return this.apiClient.patch(`/agents/${agentId}`, updates);
     },
-    
+
     delete: async (agentId: string): Promise<void> => {
       return this.apiClient.delete(`/agents/${agentId}`);
     },
-    
+
     deploy: async (agentId: string): Promise<Agent> => {
       return this.apiClient.post(`/agents/${agentId}/deploy`);
     },
-    
+
     stop: async (agentId: string): Promise<Agent> => {
       return this.apiClient.post(`/agents/${agentId}/stop`);
     },
-    
+
     getMetrics: async (agentId: string, timeRange?: TimeRange): Promise<AgentMetrics> => {
       return this.apiClient.get(`/agents/${agentId}/metrics`, { params: timeRange });
     }
   };
-  
+
   // Integration management
   integrations = {
     list: async (): Promise<Integration[]> => {
       return this.apiClient.get('/integrations');
     },
-    
+
     create: async (integration: CreateIntegrationRequest): Promise<Integration> => {
       return this.apiClient.post('/integrations', integration);
     },
-    
+
     test: async (integrationId: string): Promise<TestResult> => {
       return this.apiClient.post(`/integrations/${integrationId}/test`);
     }
   };
-  
+
   // Webhook management
   webhooks = {
     list: async (): Promise<Webhook[]> => {
       return this.apiClient.get('/webhooks');
     },
-    
+
     create: async (webhook: CreateWebhookRequest): Promise<Webhook> => {
       return this.apiClient.post('/webhooks', webhook);
     },
-    
+
     deliveries: async (webhookId: string): Promise<WebhookDelivery[]> => {
       return this.apiClient.get(`/webhooks/${webhookId}/deliveries`);
     }
@@ -1534,28 +1534,28 @@ export class AgentTestFramework {
       tests: [],
       status: 'running'
     };
-    
+
     try {
       // Deploy agent in test environment
       const testAgent = await this.deployTestAgent(agentConfig);
-      
+
       // Run test cases
       for (const testCase of testSuite.testCases) {
         const result = await this.runTestCase(testAgent, testCase);
         testResults.tests.push(result);
       }
-      
+
       // Performance tests
       const performanceResults = await this.runPerformanceTests(testAgent, testSuite.performanceTests);
       testResults.performance = performanceResults;
-      
+
       // Security tests
       const securityResults = await this.runSecurityTests(testAgent, testSuite.securityTests);
       testResults.security = securityResults;
-      
+
       testResults.status = 'completed';
       testResults.endTime = new Date();
-      
+
       return testResults;
     } catch (error) {
       testResults.status = 'failed';
@@ -1566,16 +1566,16 @@ export class AgentTestFramework {
       await this.cleanupTestEnvironment(agentConfig.id);
     }
   }
-  
+
   private async runTestCase(agent: TestAgent, testCase: TestCase): Promise<TestResult> {
     const startTime = Date.now();
-    
+
     try {
       const result = await agent.execute(testCase.input);
       const endTime = Date.now();
-      
+
       const passed = this.validateResult(result, testCase.expectedOutput);
-      
+
       return {
         testCaseId: testCase.id,
         name: testCase.name,
@@ -1603,7 +1603,7 @@ export class AgentTestFramework {
 
 **CLI Tool**:
 ```bash
-# AgentForge CLI
+# AgentProvision CLI
 npm install -g @agentforge/cli
 
 # Initialize new agent project
@@ -1632,8 +1632,8 @@ agentforge export --agent-id=agent-123 --format=yaml
 ```json
 {
   "name": "agentforge-vscode",
-  "displayName": "AgentForge",
-  "description": "AgentForge development tools for VS Code",
+  "displayName": "AgentProvision",
+  "description": "AgentProvision development tools for VS Code",
   "version": "1.0.0",
   "engines": {
     "vscode": "^1.60.0"
@@ -1644,23 +1644,23 @@ agentforge export --agent-id=agent-123 --format=yaml
       {
         "command": "agentforge.validateConfig",
         "title": "Validate Agent Configuration",
-        "category": "AgentForge"
+        "category": "AgentProvision"
       },
       {
         "command": "agentforge.deployAgent",
         "title": "Deploy Agent",
-        "category": "AgentForge"
+        "category": "AgentProvision"
       },
       {
         "command": "agentforge.viewLogs",
         "title": "View Agent Logs",
-        "category": "AgentForge"
+        "category": "AgentProvision"
       }
     ],
     "languages": [
       {
         "id": "agentforge-config",
-        "aliases": ["AgentForge Config", "agentforge"],
+        "aliases": ["AgentProvision Config", "agentforge"],
         "extensions": [".agent.json", ".agent.yaml"],
         "configuration": "./language-configuration.json"
       }
@@ -1725,7 +1725,7 @@ class TenantDashboardService {
       this.getSecurityData(tenantId),
       this.getAnalyticsData(tenantId)
     ]);
-    
+
     return {
       overview,
       agents,
@@ -1750,14 +1750,14 @@ interface AgentConfigurationUI {
     type: AgentType;
     version: string;
   };
-  
+
   resources: {
     cpu: ResourceConfig;
     memory: ResourceConfig;
     storage: ResourceConfig;
     scaling: ScalingConfig;
   };
-  
+
   llmSettings: {
     primaryModel: string;
     fallbackModels: string[];
@@ -1765,18 +1765,18 @@ interface AgentConfigurationUI {
     maxTokens: number;
     customInstructions: string;
   };
-  
+
   integrations: {
     enabled: Integration[];
     configuration: Record<string, any>;
   };
-  
+
   security: {
     accessLevel: SecurityLevel;
     dataClassification: DataClassification;
     auditLevel: AuditLevel;
   };
-  
+
   monitoring: {
     metricsEnabled: boolean;
     alertThresholds: AlertThreshold[];
@@ -1794,14 +1794,14 @@ class AgentConfigurationService {
       this.validateSecurity,
       this.validateMonitoring
     ];
-    
+
     const results = await Promise.all(
       validationRules.map(rule => rule(config))
     );
-    
+
     const errors = results.flatMap(result => result.errors);
     const warnings = results.flatMap(result => result.warnings);
-    
+
     return {
       valid: errors.length === 0,
       errors,
@@ -1839,17 +1839,17 @@ class RoleManagementService {
     const invalidPermissions = roleData.permissions.filter(
       p => !validPermissions.includes(p)
     );
-    
+
     if (invalidPermissions.length > 0) {
       throw new InvalidPermissionsError(invalidPermissions);
     }
-    
+
     // Check for permission conflicts
     const conflicts = this.checkPermissionConflicts(roleData.permissions);
     if (conflicts.length > 0) {
       throw new PermissionConflictError(conflicts);
     }
-    
+
     const role: Role = {
       id: generateId(),
       name: roleData.name,
@@ -1860,13 +1860,13 @@ class RoleManagementService {
       createdAt: new Date(),
       updatedAt: new Date()
     };
-    
+
     await this.saveRole(role);
     await this.auditLog('role_created', { roleId: role.id, tenantId });
-    
+
     return role;
   }
-  
+
   async assignRoleToUser(
     tenantId: string,
     userId: string,
@@ -1874,18 +1874,18 @@ class RoleManagementService {
   ): Promise<void> {
     const user = await this.getUser(userId);
     const role = await this.getRole(roleId);
-    
+
     if (user.tenantId !== tenantId || role.tenantId !== tenantId) {
       throw new UnauthorizedError('Cross-tenant role assignment not allowed');
     }
-    
+
     await this.createUserRoleAssignment({
       userId,
       roleId,
       tenantId,
       assignedAt: new Date()
     });
-    
+
     await this.auditLog('role_assigned', { userId, roleId, tenantId });
   }
 }
@@ -1929,9 +1929,9 @@ class BillingService {
   async generateInvoice(tenantId: string, period: BillingPeriod): Promise<Invoice> {
     const usage = await this.getUsageForPeriod(tenantId, period);
     const pricing = await this.getPricingPlan(tenantId);
-    
+
     const lineItems: InvoiceLineItem[] = [];
-    
+
     // Compute costs
     lineItems.push({
       description: 'Compute Usage',
@@ -1939,7 +1939,7 @@ class BillingService {
       unitPrice: pricing.compute.cpuHourRate,
       amount: usage.compute.cpuHours * pricing.compute.cpuHourRate
     });
-    
+
     // LLM costs
     lineItems.push({
       description: 'LLM Token Usage',
@@ -1947,7 +1947,7 @@ class BillingService {
       unitPrice: pricing.llm.tokenRate,
       amount: usage.llm.tokenCount * pricing.llm.tokenRate
     });
-    
+
     // Integration costs
     lineItems.push({
       description: 'API Calls',
@@ -1955,11 +1955,11 @@ class BillingService {
       unitPrice: pricing.integrations.apiCallRate,
       amount: usage.integrations.apiCalls * pricing.integrations.apiCallRate
     });
-    
+
     const subtotal = lineItems.reduce((sum, item) => sum + item.amount, 0);
     const tax = subtotal * pricing.taxRate;
     const total = subtotal + tax;
-    
+
     const invoice: Invoice = {
       id: generateId(),
       tenantId,
@@ -1972,10 +1972,10 @@ class BillingService {
       dueDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days
       createdAt: new Date()
     };
-    
+
     await this.saveInvoice(invoice);
     await this.sendInvoiceNotification(tenantId, invoice);
-    
+
     return invoice;
   }
 }
@@ -2027,7 +2027,7 @@ CREATE SCHEMA IF NOT EXISTS tenant_data;
 
 -- Migrate existing data with tenant context
 INSERT INTO tenant_data.agents (id, tenant_id, name, type, configuration)
-SELECT 
+SELECT
     id,
     'default-tenant' as tenant_id,
     name,
@@ -2036,8 +2036,8 @@ SELECT
 FROM legacy_agents;
 
 -- Update application configuration
-UPDATE system_config 
-SET value = 'tenant_data' 
+UPDATE system_config
+SET value = 'tenant_data'
 WHERE key = 'default_schema';
 
 COMMIT;
@@ -2054,22 +2054,22 @@ class ServiceMigrationManager {
     // Blue-green deployment strategy
     const blueEnvironment = await this.getCurrentEnvironment(serviceName);
     const greenEnvironment = await this.createNewEnvironment(serviceName, toVersion);
-    
+
     // Deploy new version to green environment
     await this.deployToEnvironment(greenEnvironment, toVersion);
-    
+
     // Run health checks
     const healthCheck = await this.runHealthChecks(greenEnvironment);
     if (!healthCheck.healthy) {
       throw new MigrationError('Health checks failed for new version');
     }
-    
+
     // Gradually shift traffic
     await this.gradualTrafficShift(blueEnvironment, greenEnvironment);
-    
+
     // Monitor for issues
     await this.monitorMigration(greenEnvironment, 300000); // 5 minutes
-    
+
     // Complete migration
     await this.completeTrafficShift(greenEnvironment);
     await this.cleanupOldEnvironment(blueEnvironment);

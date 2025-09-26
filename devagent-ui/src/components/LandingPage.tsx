@@ -27,11 +27,11 @@ export function LandingPage() {
               <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent"> Platform</span>
             </h1>
             <p className="text-xl md:text-2xl text-gray-600 mb-12 max-w-4xl mx-auto leading-relaxed">
-              Deploy, manage, and orchestrate AI agents at enterprise scale. 
+              Deploy, manage, and orchestrate AI agents at enterprise scale.
               Reduce operational costs by 60% while increasing productivity across your organization.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16">
-              <button 
+              <button
                 onClick={() => setShowSignIn(true)}
                 className="px-8 py-4 bg-blue-600 text-white text-lg font-semibold rounded-lg hover:bg-blue-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
               >
@@ -41,7 +41,7 @@ export function LandingPage() {
                 Schedule Demo
               </button>
             </div>
-            
+
             {/* Trust Indicators */}
             <div className="flex flex-wrap justify-center items-center gap-8 opacity-60">
               <div className="text-sm text-gray-500">Trusted by 500+ enterprises</div>
@@ -69,7 +69,7 @@ export function LandingPage() {
               Organizations struggle to deploy AI at scale due to complexity, security concerns, and lack of proper governance.
             </p>
           </div>
-          
+
           <div className="grid md:grid-cols-3 gap-8">
             <div className="bg-white p-8 rounded-xl shadow-sm border">
               <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center mb-6">
@@ -80,7 +80,7 @@ export function LandingPage() {
                 Teams use disparate AI solutions without centralized management, leading to security risks and inefficiencies.
               </p>
             </div>
-            
+
             <div className="bg-white p-8 rounded-xl shadow-sm border">
               <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center mb-6">
                 <span className="text-2xl">💸</span>
@@ -90,7 +90,7 @@ export function LandingPage() {
                 Uncontrolled AI spending and redundant implementations drain budgets without clear ROI visibility.
               </p>
             </div>
-            
+
             <div className="bg-white p-8 rounded-xl shadow-sm border">
               <div className="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center mb-6">
                 <span className="text-2xl">🔒</span>
@@ -112,7 +112,7 @@ export function LandingPage() {
               One Platform. Complete Control.
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              AgentForge provides enterprise-grade AI agent management with security, compliance, and cost optimization built-in.
+              AgentProvision provides enterprise-grade AI agent management with security, compliance, and cost optimization built-in.
             </p>
           </div>
 
@@ -128,7 +128,7 @@ export function LandingPage() {
                     <p className="text-gray-600">Secure isolation for different departments and teams with granular access controls.</p>
                   </div>
                 </div>
-                
+
                 <div className="flex items-start gap-4">
                   <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
                     <span className="text-green-600">📊</span>
@@ -138,7 +138,7 @@ export function LandingPage() {
                     <p className="text-gray-600">Monitor performance, costs, and usage across all AI agents with comprehensive dashboards.</p>
                   </div>
                 </div>
-                
+
                 <div className="flex items-start gap-4">
                   <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
                     <span className="text-purple-600">🔐</span>
@@ -148,7 +148,7 @@ export function LandingPage() {
                     <p className="text-gray-600">SOC 2 compliant with audit trails, role-based access, and data encryption.</p>
                   </div>
                 </div>
-                
+
                 <div className="flex items-start gap-4">
                   <div className="w-8 h-8 bg-orange-100 rounded-lg flex items-center justify-center flex-shrink-0 mt-1">
                     <span className="text-orange-600">⚡</span>
@@ -160,11 +160,11 @@ export function LandingPage() {
                 </div>
               </div>
             </div>
-            
+
             <div className="bg-gradient-to-br from-blue-50 to-purple-50 p-8 rounded-2xl">
               <div className="bg-white rounded-xl p-6 shadow-lg">
                 <div className="flex items-center justify-between mb-4">
-                  <h4 className="font-semibold text-gray-900">AgentForge Dashboard</h4>
+                  <h4 className="font-semibold text-gray-900">AgentProvision Dashboard</h4>
                   <div className="flex gap-2">
                     <div className="w-3 h-3 bg-red-400 rounded-full"></div>
                     <div className="w-3 h-3 bg-yellow-400 rounded-full"></div>
@@ -305,7 +305,7 @@ export function LandingPage() {
               Proven Enterprise Results
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Organizations using AgentForge see immediate impact on their bottom line and operational efficiency.
+              Organizations using AgentProvision see immediate impact on their bottom line and operational efficiency.
             </p>
           </div>
 
@@ -337,7 +337,7 @@ export function LandingPage() {
                   Fortune 500 Financial Services Company
                 </h3>
                 <p className="text-gray-600 mb-6">
-                  "AgentForge helped us consolidate 15 different AI tools into one platform, 
+                  "AgentProvision helped us consolidate 15 different AI tools into one platform,
                   reducing our AI infrastructure costs by $2.3M annually while improving security compliance."
                 </p>
                 <div className="grid grid-cols-2 gap-4">
@@ -360,7 +360,7 @@ export function LandingPage() {
                   </div>
                 </div>
                 <p className="text-gray-600 italic">
-                  "The platform's multi-tenant architecture and compliance features 
+                  "The platform's multi-tenant architecture and compliance features
                   were exactly what we needed for our regulated environment."
                 </p>
               </div>
@@ -498,9 +498,9 @@ export function LandingPage() {
             Ready to Transform Your AI Operations?
           </h2>
           <p className="text-xl text-blue-100 mb-8">
-            Join 500+ enterprises already using AgentForge to scale their AI initiatives.
+            Join 500+ enterprises already using AgentProvision to scale their AI initiatives.
           </p>
-          
+
           {!isSubmitted ? (
             <form onSubmit={handleSubmit} className="max-w-md mx-auto">
               <div className="flex gap-4">
@@ -531,7 +531,7 @@ export function LandingPage() {
               </div>
             </div>
           )}
-          
+
           <p className="text-blue-100 text-sm mt-4">
             No credit card required • 30-day free trial • Setup in under 5 minutes
           </p>
@@ -547,13 +547,13 @@ export function LandingPage() {
                 <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
                   <span className="text-white font-bold text-sm">AF</span>
                 </div>
-                <span className="text-xl font-semibold">AgentForge</span>
+                <span className="text-xl font-semibold">AgentProvision</span>
               </div>
               <p className="text-gray-400">
                 Enterprise AI Agent Platform for modern organizations.
               </p>
             </div>
-            
+
             <div>
               <h4 className="font-semibold mb-4">Product</h4>
               <ul className="space-y-2 text-gray-400">
@@ -563,7 +563,7 @@ export function LandingPage() {
                 <li><a href="#" className="hover:text-white transition-colors">Integrations</a></li>
               </ul>
             </div>
-            
+
             <div>
               <h4 className="font-semibold mb-4">Company</h4>
               <ul className="space-y-2 text-gray-400">
@@ -573,7 +573,7 @@ export function LandingPage() {
                 <li><a href="#" className="hover:text-white transition-colors">Contact</a></li>
               </ul>
             </div>
-            
+
             <div>
               <h4 className="font-semibold mb-4">Support</h4>
               <ul className="space-y-2 text-gray-400">
@@ -584,9 +584,9 @@ export function LandingPage() {
               </ul>
             </div>
           </div>
-          
+
           <div className="border-t border-gray-800 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
-            <p className="text-gray-400">© 2024 AgentForge. All rights reserved.</p>
+            <p className="text-gray-400">© 2024 AgentProvision. All rights reserved.</p>
             <div className="flex gap-6 mt-4 md:mt-0">
               <a href="#" className="text-gray-400 hover:text-white transition-colors">Privacy</a>
               <a href="#" className="text-gray-400 hover:text-white transition-colors">Terms</a>

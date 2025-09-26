@@ -1,6 +1,6 @@
 apiVersion: v2
 name: agentforge
-description: Helm chart for deploying the AgentForge application suite on Kubernetes
+description: Helm chart for deploying the AgentProvision application suite on Kubernetes
 version: 0.1.0
 appVersion: "1.0.0"
 keywords:

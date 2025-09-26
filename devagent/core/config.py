@@ -1,5 +1,5 @@
 """
-Configuration settings for the AgentForge application.
+Configuration settings for the AgentProvision application.
 """
 
 from functools import lru_cache
@@ -11,7 +11,7 @@ from pydantic import model_validator, ConfigDict
 
 class Settings(BaseSettings):
     """Application settings."""
-    
+
     model_config = ConfigDict(
         case_sensitive=True,
         env_file=".env",
@@ -20,7 +20,7 @@ class Settings(BaseSettings):
     )
 
     # Application settings
-    PROJECT_NAME: str = "AgentForge"
+    PROJECT_NAME: str = "AgentProvision"
     VERSION: str = "1.0.0"
     API_V1_STR: str = "/api/v1"
     ENVIRONMENT: str = "development"  # development, staging, production
@@ -53,7 +53,7 @@ class Settings(BaseSettings):
     # CORS settings - Environment variables should be comma-separated strings
     BACKEND_CORS_ORIGINS_ENV: Optional[str] = None
     ALLOWED_ORIGINS_ENV: Optional[str] = None
-    
+
     # These will be populated by the root_validator based on _ENV vars or use these defaults
     BACKEND_CORS_ORIGINS: List[str] = ["http://localhost:3000", "http://localhost:3002", "http://127.0.0.1:3000", "http://127.0.0.1:3002"]
     ALLOWED_ORIGINS: List[str] = ["http://localhost:3000", "http://localhost:3002", "http://127.0.0.1:3000", "http://127.0.0.1:3002"]
@@ -62,10 +62,10 @@ class Settings(BaseSettings):
     def assemble_cors_settings(self):
         if isinstance(self.BACKEND_CORS_ORIGINS_ENV, str) and self.BACKEND_CORS_ORIGINS_ENV:
             self.BACKEND_CORS_ORIGINS = [item.strip() for item in self.BACKEND_CORS_ORIGINS_ENV.split(",") if item.strip()]
-        
+
         if isinstance(self.ALLOWED_ORIGINS_ENV, str) and self.ALLOWED_ORIGINS_ENV:
             self.ALLOWED_ORIGINS = [item.strip() for item in self.ALLOWED_ORIGINS_ENV.split(",") if item.strip()]
-        
+
         return self
 
     # Monitoring settings
