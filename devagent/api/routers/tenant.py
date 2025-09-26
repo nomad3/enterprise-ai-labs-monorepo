@@ -3,11 +3,11 @@ from typing import List, Optional
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from devagent.api.schemas.tenant import TenantCreate, TenantRead, TenantUpdate
-from devagent.api.services.tenant_service import (create_tenant, delete_tenant,
+from AgentProvision.api.schemas.tenant import TenantCreate, TenantRead, TenantUpdate
+from AgentProvision.api.services.tenant_service import (create_tenant, delete_tenant,
                                                   get_tenant, list_tenants,
                                                   update_tenant)
-from devagent.core.database import get_session
+from AgentProvision.core.database import get_session
 
 router = APIRouter(prefix="/tenants", tags=["Tenants"])
 

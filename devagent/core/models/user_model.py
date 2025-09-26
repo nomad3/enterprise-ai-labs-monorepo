@@ -11,7 +11,7 @@ from sqlalchemy import Boolean, Column, DateTime, ForeignKey, Integer, String
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 
-from devagent.core.base import Base
+from AgentProvision.core.base import Base
 
 
 # SQLAlchemy User Model

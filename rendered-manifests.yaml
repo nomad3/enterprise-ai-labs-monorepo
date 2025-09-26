@@ -1,5 +1,5 @@
 ---
-# Source: thefullstackagent/charts/postgresql/templates/primary/networkpolicy.yaml
+# Source: AgentProvisionagent/charts/postgresql/templates/primary/networkpolicy.yaml
 kind: NetworkPolicy
 apiVersion: networking.k8s.io/v1
 metadata:
@@ -27,7 +27,7 @@ spec:
     - ports:
         - port: 5432
 ---
-# Source: thefullstackagent/charts/redis/templates/networkpolicy.yaml
+# Source: AgentProvisionagent/charts/redis/templates/networkpolicy.yaml
 kind: NetworkPolicy
 apiVersion: networking.k8s.io/v1
 metadata:
@@ -54,23 +54,23 @@ spec:
     - ports:
         - port: 6379
 ---
-# Source: thefullstackagent/charts/devagent-ui/templates/serviceaccount.yaml
+# Source: AgentProvisionagent/charts/AgentProvision-ui/templates/serviceaccount.yaml
 apiVersion: v1
 kind: ServiceAccount
 metadata:
   # The name of the service account should match what the common deployment template expects.
   # Common deployment template sets serviceAccountName to the component's fullname.
-  name: test-release-devagent-ui-ui
+  name: test-release-AgentProvision-ui-ui
   labels:
-    helm.sh/chart: devagent-ui-0.1.0
+    helm.sh/chart: AgentProvision-ui-0.1.0
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/instance: test-release
     app.kubernetes.io/version: "1.0.0"
-    app.kubernetes.io/part-of: devagent-ui  
-    app.kubernetes.io/name: devagent-ui-ui
+    app.kubernetes.io/part-of: AgentProvision-ui
+    app.kubernetes.io/name: AgentProvision-ui-ui
     app.kubernetes.io/instance: test-release
 ---
-# Source: thefullstackagent/charts/postgresql/templates/serviceaccount.yaml
+# Source: AgentProvisionagent/charts/postgresql/templates/serviceaccount.yaml
 apiVersion: v1
 kind: ServiceAccount
 metadata:
@@ -84,7 +84,7 @@ metadata:
     helm.sh/chart: postgresql-14.3.3
 automountServiceAccountToken: false
 ---
-# Source: thefullstackagent/charts/redis/templates/master/serviceaccount.yaml
+# Source: AgentProvisionagent/charts/redis/templates/master/serviceaccount.yaml
 apiVersion: v1
 kind: ServiceAccount
 automountServiceAccountToken: false
@@ -98,21 +98,21 @@ metadata:
     app.kubernetes.io/version: 7.2.4
     helm.sh/chart: redis-18.19.4
 ---
-# Source: thefullstackagent/templates/serviceaccount.yaml
+# Source: AgentProvisionagent/templates/serviceaccount.yaml
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: test-release-thefullstackagent-api
+  name: test-release-AgentProvisionagent-api
   labels:
-    helm.sh/chart: thefullstackagent-0.1.0
+    helm.sh/chart: AgentProvisionagent-0.1.0
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/instance: test-release
     app.kubernetes.io/version: "1.0.0"
-    app.kubernetes.io/part-of: thefullstackagent  
-    app.kubernetes.io/name: thefullstackagent-api
+    app.kubernetes.io/part-of: AgentProvisionagent
+    app.kubernetes.io/name: AgentProvisionagent-api
     app.kubernetes.io/instance: test-release
 ---
-# Source: thefullstackagent/charts/postgresql/templates/secrets.yaml
+# Source: AgentProvisionagent/charts/postgresql/templates/secrets.yaml
 apiVersion: v1
 kind: Secret
 metadata:
@@ -130,7 +130,7 @@ data:
   password: "YS1zZWN1cmUtZGV2YWdlbnQtcGFzc3dvcmQ="
   # We don't auto-generate LDAP password when it's not provided as we do for other passwords
 ---
-# Source: thefullstackagent/charts/redis/templates/secret.yaml
+# Source: AgentProvisionagent/charts/redis/templates/secret.yaml
 apiVersion: v1
 kind: Secret
 metadata:
@@ -146,19 +146,19 @@ type: Opaque
 data:
   redis-password: "YS1zZWN1cmUtcmVkaXMtcGFzc3dvcmQ="
 ---
-# Source: thefullstackagent/templates/secret.yaml
+# Source: AgentProvisionagent/templates/secret.yaml
 apiVersion: v1
 kind: Secret
 metadata:
-  name: test-release-thefullstackagent-api-secrets
+  name: test-release-AgentProvisionagent-api-secrets
   labels:
-    helm.sh/chart: thefullstackagent-0.1.0
+    helm.sh/chart: AgentProvisionagent-0.1.0
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/instance: test-release
     app.kubernetes.io/version: "1.0.0"
-    app.kubernetes.io/part-of: thefullstackagent  
-    app.kubernetes.io/name: thefullstackagent-api
-    app.kubernetes.io/instance: test-release 
+    app.kubernetes.io/part-of: AgentProvisionagent
+    app.kubernetes.io/name: AgentProvisionagent-api
+    app.kubernetes.io/instance: test-release
 type: Opaque
 data:
   JWT_SECRET: "YS12ZXJ5LXNlY3VyZS1qd3Qtc2VjcmV0LWZvci1sb2NhbC1kZXY="
@@ -166,7 +166,7 @@ data:
   # Add other sensitive env vars here that should be in secrets
   # Add more secrets as needed
 ---
-# Source: thefullstackagent/charts/redis/templates/configmap.yaml
+# Source: AgentProvisionagent/charts/redis/templates/configmap.yaml
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -199,7 +199,7 @@ data:
     rename-command FLUSHALL ""
     # End of replica configuration
 ---
-# Source: thefullstackagent/charts/redis/templates/health-configmap.yaml
+# Source: AgentProvisionagent/charts/redis/templates/health-configmap.yaml
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -307,7 +307,7 @@ data:
     "$script_dir/ping_liveness_master.sh" $1 || exit_status=$?
     exit $exit_status
 ---
-# Source: thefullstackagent/charts/redis/templates/scripts-configmap.yaml
+# Source: AgentProvisionagent/charts/redis/templates/scripts-configmap.yaml
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -337,19 +337,19 @@ data:
     ARGS+=("--include" "/opt/bitnami/redis/etc/master.conf")
     exec redis-server "${ARGS[@]}"
 ---
-# Source: thefullstackagent/charts/devagent-ui/templates/service.yaml
+# Source: AgentProvisionagent/charts/AgentProvision-ui/templates/service.yaml
 apiVersion: v1
 kind: Service
 metadata:
-  name: test-release-devagent-ui-ui
+  name: test-release-AgentProvision-ui-ui
   labels:
-    helm.sh/chart: devagent-ui-0.1.0
+    helm.sh/chart: AgentProvision-ui-0.1.0
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/instance: test-release
     app.kubernetes.io/version: "1.0.0"
-    app.kubernetes.io/part-of: devagent-ui  
-    app.kubernetes.io/name: devagent-ui-ui
-    app.kubernetes.io/instance: test-release 
+    app.kubernetes.io/part-of: AgentProvision-ui
+    app.kubernetes.io/name: AgentProvision-ui-ui
+    app.kubernetes.io/instance: test-release
 spec:
   type: ClusterIP
   ports:
@@ -358,10 +358,10 @@ spec:
       protocol: TCP
       name: http
   selector:
-    app.kubernetes.io/name: devagent-ui-ui
+    app.kubernetes.io/name: AgentProvision-ui-ui
     app.kubernetes.io/instance: test-release
 ---
-# Source: thefullstackagent/charts/postgresql/templates/primary/svc-headless.yaml
+# Source: AgentProvisionagent/charts/postgresql/templates/primary/svc-headless.yaml
 apiVersion: v1
 kind: Service
 metadata:
@@ -396,7 +396,7 @@ spec:
     app.kubernetes.io/name: postgresql
     app.kubernetes.io/component: primary
 ---
-# Source: thefullstackagent/charts/postgresql/templates/primary/svc.yaml
+# Source: AgentProvisionagent/charts/postgresql/templates/primary/svc.yaml
 apiVersion: v1
 kind: Service
 metadata:
@@ -422,7 +422,7 @@ spec:
     app.kubernetes.io/name: postgresql
     app.kubernetes.io/component: primary
 ---
-# Source: thefullstackagent/charts/redis/templates/headless-svc.yaml
+# Source: AgentProvisionagent/charts/redis/templates/headless-svc.yaml
 apiVersion: v1
 kind: Service
 metadata:
@@ -445,7 +445,7 @@ spec:
     app.kubernetes.io/instance: test-release
     app.kubernetes.io/name: redis
 ---
-# Source: thefullstackagent/charts/redis/templates/master/service.yaml
+# Source: AgentProvisionagent/charts/redis/templates/master/service.yaml
 apiVersion: v1
 kind: Service
 metadata:
@@ -472,19 +472,19 @@ spec:
     app.kubernetes.io/name: redis
     app.kubernetes.io/component: master
 ---
-# Source: thefullstackagent/templates/service.yaml
+# Source: AgentProvisionagent/templates/service.yaml
 apiVersion: v1
 kind: Service
 metadata:
-  name: test-release-thefullstackagent-api
+  name: test-release-AgentProvisionagent-api
   labels:
-    helm.sh/chart: thefullstackagent-0.1.0
+    helm.sh/chart: AgentProvisionagent-0.1.0
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/instance: test-release
     app.kubernetes.io/version: "1.0.0"
-    app.kubernetes.io/part-of: thefullstackagent  
-    app.kubernetes.io/name: thefullstackagent-api
-    app.kubernetes.io/instance: test-release 
+    app.kubernetes.io/part-of: AgentProvisionagent
+    app.kubernetes.io/name: AgentProvisionagent-api
+    app.kubernetes.io/instance: test-release
 spec:
   type: ClusterIP
   ports:
@@ -493,47 +493,47 @@ spec:
       protocol: TCP
       name: http
   selector:
-    app.kubernetes.io/name: thefullstackagent-api
+    app.kubernetes.io/name: AgentProvisionagent-api
     app.kubernetes.io/instance: test-release
 ---
-# Source: thefullstackagent/charts/devagent-ui/templates/deployment.yaml
+# Source: AgentProvisionagent/charts/AgentProvision-ui/templates/deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: test-release-devagent-ui-ui
+  name: test-release-AgentProvision-ui-ui
   labels:
-    helm.sh/chart: devagent-ui-0.1.0
+    helm.sh/chart: AgentProvision-ui-0.1.0
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/instance: test-release
     app.kubernetes.io/version: "1.0.0"
-    app.kubernetes.io/part-of: devagent-ui  
-    app.kubernetes.io/name: devagent-ui-ui
-    app.kubernetes.io/instance: test-release 
+    app.kubernetes.io/part-of: AgentProvision-ui
+    app.kubernetes.io/name: AgentProvision-ui-ui
+    app.kubernetes.io/instance: test-release
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app.kubernetes.io/name: devagent-ui-ui
+      app.kubernetes.io/name: AgentProvision-ui-ui
       app.kubernetes.io/instance: test-release
   template:
     metadata:
       labels:
-        helm.sh/chart: devagent-ui-0.1.0
+        helm.sh/chart: AgentProvision-ui-0.1.0
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/instance: test-release
         app.kubernetes.io/version: "1.0.0"
-        app.kubernetes.io/part-of: devagent-ui  
-        app.kubernetes.io/name: devagent-ui-ui
-        app.kubernetes.io/instance: test-release 
+        app.kubernetes.io/part-of: AgentProvision-ui
+        app.kubernetes.io/name: AgentProvision-ui-ui
+        app.kubernetes.io/instance: test-release
     spec:
-      serviceAccountName: test-release-devagent-ui-ui
+      serviceAccountName: test-release-AgentProvision-ui-ui
       securityContext:
         {}
       containers:
         - name: ui
           securityContext:
             {}
-          image: "devagent-ui:latest"
+          image: "AgentProvision-ui:latest"
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
@@ -554,48 +554,48 @@ spec:
           resources:
             {}
 ---
-# Source: thefullstackagent/templates/deployment.yaml
+# Source: AgentProvisionagent/templates/deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: test-release-thefullstackagent-api
+  name: test-release-AgentProvisionagent-api
   labels:
-    helm.sh/chart: thefullstackagent-0.1.0
+    helm.sh/chart: AgentProvisionagent-0.1.0
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/instance: test-release
     app.kubernetes.io/version: "1.0.0"
-    app.kubernetes.io/part-of: thefullstackagent  
-    app.kubernetes.io/name: thefullstackagent-api
-    app.kubernetes.io/instance: test-release 
+    app.kubernetes.io/part-of: AgentProvisionagent
+    app.kubernetes.io/name: AgentProvisionagent-api
+    app.kubernetes.io/instance: test-release
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app.kubernetes.io/name: thefullstackagent-api
+      app.kubernetes.io/name: AgentProvisionagent-api
       app.kubernetes.io/instance: test-release
   template:
     metadata:
       labels:
-        helm.sh/chart: thefullstackagent-0.1.0
+        helm.sh/chart: AgentProvisionagent-0.1.0
         app.kubernetes.io/managed-by: Helm
         app.kubernetes.io/instance: test-release
         app.kubernetes.io/version: "1.0.0"
-        app.kubernetes.io/part-of: thefullstackagent  
-        app.kubernetes.io/name: thefullstackagent-api
-        app.kubernetes.io/instance: test-release 
+        app.kubernetes.io/part-of: AgentProvisionagent
+        app.kubernetes.io/name: AgentProvisionagent-api
+        app.kubernetes.io/instance: test-release
     spec:
-      serviceAccountName: test-release-thefullstackagent-api
+      serviceAccountName: test-release-AgentProvisionagent-api
       securityContext:
         null
       containers:
         - name: api
           securityContext:
             null
-          image: "southamerica-west1-docker.pkg.dev/YOUR_PROJECT_ID/devagent/devagent:latest"
+          image: "southamerica-west1-docker.pkg.dev/YOUR_PROJECT_ID/AgentProvision/AgentProvision:latest"
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
-              containerPort: 
+              containerPort:
               protocol: TCP
           env:
             - name: DATABASE_URL
@@ -636,7 +636,7 @@ spec:
               cpu: 100m
               memory: 256Mi
 ---
-# Source: thefullstackagent/charts/postgresql/templates/primary/statefulset.yaml
+# Source: AgentProvisionagent/charts/postgresql/templates/primary/statefulset.yaml
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -672,11 +672,11 @@ spec:
         app.kubernetes.io/component: primary
     spec:
       serviceAccountName: test-release-postgresql
-      
+
       automountServiceAccountToken: false
       affinity:
         podAffinity:
-          
+
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
             - podAffinityTerm:
@@ -688,7 +688,7 @@ spec:
                 topologyKey: kubernetes.io/hostname
               weight: 1
         nodeAffinity:
-          
+
       securityContext:
         fsGroup: 1001
         fsGroupChangePolicy: Always
@@ -723,7 +723,7 @@ spec:
               value: "/bitnami/postgresql/data"
             # Authentication
             - name: POSTGRES_USER
-              value: "devagent_user"
+              value: "AgentProvision_user"
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -735,7 +735,7 @@ spec:
                   name: test-release-postgresql
                   key: postgres-password
             - name: POSTGRES_DATABASE
-              value: "devagent_db"
+              value: "AgentProvision_db"
             # Replication
             # Initdb
             # Standby
@@ -772,7 +772,7 @@ spec:
               command:
                 - /bin/sh
                 - -c
-                - exec pg_isready -U "devagent_user" -d "dbname=devagent_db" -h 127.0.0.1 -p 5432
+                - exec pg_isready -U "AgentProvision_user" -d "dbname=AgentProvision_db" -h 127.0.0.1 -p 5432
           readinessProbe:
             failureThreshold: 6
             initialDelaySeconds: 5
@@ -785,7 +785,7 @@ spec:
                 - -c
                 - -e
                 - |
-                  exec pg_isready -U "devagent_user" -d "dbname=devagent_db" -h 127.0.0.1 -p 5432
+                  exec pg_isready -U "AgentProvision_user" -d "dbname=AgentProvision_db" -h 127.0.0.1 -p 5432
                   [ -f /opt/bitnami/postgresql/tmp/.initialized ] || [ -f /bitnami/postgresql/.initialized ]
           resources:
             limits:
@@ -829,7 +829,7 @@ spec:
           requests:
             storage: "8Gi"
 ---
-# Source: thefullstackagent/charts/redis/templates/master/application.yaml
+# Source: AgentProvisionagent/charts/redis/templates/master/application.yaml
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -867,7 +867,7 @@ spec:
         checksum/scripts: 560c33ff34d845009b51830c332aa05fa211444d1877d3526d3599be7543aaa5
         checksum/secret: 0c6323348c4b2ce241058b99c177784844d528d77c73e9d7e4736985e32f9bf9
     spec:
-      
+
       securityContext:
         fsGroup: 1001
         fsGroupChangePolicy: Always
@@ -877,7 +877,7 @@ spec:
       automountServiceAccountToken: false
       affinity:
         podAffinity:
-          
+
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
             - podAffinityTerm:
@@ -889,7 +889,7 @@ spec:
                 topologyKey: kubernetes.io/hostname
               weight: 1
         nodeAffinity:
-          
+
       enableServiceLinks: true
       terminationGracePeriodSeconds: 30
       containers:
@@ -1006,31 +1006,31 @@ spec:
           requests:
             storage: "8Gi"
 ---
-# Source: thefullstackagent/templates/ingress.yaml
+# Source: AgentProvisionagent/templates/ingress.yaml
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: test-release-thefullstackagent-api
+  name: test-release-AgentProvisionagent-api
   labels:
-    helm.sh/chart: thefullstackagent-0.1.0
+    helm.sh/chart: AgentProvisionagent-0.1.0
     app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/instance: test-release
     app.kubernetes.io/version: "1.0.0"
-    app.kubernetes.io/part-of: thefullstackagent  
-    app.kubernetes.io/name: thefullstackagent-api
-    app.kubernetes.io/instance: test-release 
+    app.kubernetes.io/part-of: AgentProvisionagent
+    app.kubernetes.io/name: AgentProvisionagent-api
+    app.kubernetes.io/instance: test-release
   annotations:
     kubernetes.io/ingress.class: nginx
 spec:
   ingressClassName: nginx
   rules:
-    - host: "devagent-api.local"
+    - host: "AgentProvision-api.local"
       http:
         paths:
           - path: /
             pathType: Prefix
             backend:
               service:
-                name: test-release-thefullstackagent-api
+                name: test-release-AgentProvisionagent-api
                 port:
                   name: http

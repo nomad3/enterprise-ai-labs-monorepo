@@ -11,7 +11,7 @@ from sqlalchemy import Enum as SQLEnum
 from sqlalchemy import ForeignKey, String, Text
 from sqlalchemy.orm import relationship
 
-from devagent.core.database import Base
+from AgentProvision.core.database import Base
 
 
 class TicketType(str, Enum):

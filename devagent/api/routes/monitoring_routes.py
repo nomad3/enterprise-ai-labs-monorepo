@@ -4,8 +4,8 @@ from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException
 
-from devagent.api.auth import get_current_user_dependency
-from devagent.core.models.monitoring_model import (Alert, CostMetrics,
+from AgentProvision.api.auth import get_current_user_dependency
+from AgentProvision.core.models.monitoring_model import (Alert, CostMetrics,
                                                    SystemMetrics)
 
 router = APIRouter(prefix="/api/monitoring", tags=["monitoring"])

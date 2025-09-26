@@ -5,9 +5,9 @@ if [ ! -f .env ]; then
     echo "Creating .env file..."
     cat > .env << EOL
 # Database configuration
-POSTGRES_USER=devagent
-POSTGRES_PASSWORD=devagent
-POSTGRES_DB=devagent
+POSTGRES_USER=AgentProvision
+POSTGRES_PASSWORD=AgentProvision
+POSTGRES_DB=AgentProvision
 POSTGRES_HOST=postgres
 POSTGRES_PORT=5432
 
@@ -45,4 +45,4 @@ docker-compose run --rm test
 echo "Setup complete! You can now access:"
 echo "- API documentation: http://localhost:8000/docs"
 echo "- Health check: http://localhost:8000/health"
-echo "- Metrics: http://localhost:8000/metrics" 
+echo "- Metrics: http://localhost:8000/metrics"

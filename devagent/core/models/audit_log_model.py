@@ -3,7 +3,7 @@ from datetime import datetime
 from sqlalchemy import JSON, Column, DateTime, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
 
-from devagent.core.base import Base
+from AgentProvision.core.base import Base
 
 
 class AuditLog(Base):

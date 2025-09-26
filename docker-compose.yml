@@ -1,16 +1,16 @@
 services:
-  devagent-ui:
+  AgentProvision-ui:
     build:
-      context: ./devagent-ui
+      context: ./AgentProvision-ui
       dockerfile: Dockerfile
     ports:
       - "3002:80"
     depends_on:
-      - devagent
+      - AgentProvision
 
-  devagent:
+  AgentProvision:
     build:
-      context: ./devagent
+      context: ./AgentProvision
       dockerfile: Dockerfile
     ports:
       - "8000:8000"
@@ -21,7 +21,7 @@ services:
       - DEBUG=True
       - LOG_LEVEL=INFO
       - ENVIRONMENT=development
-      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/devagent
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/AgentProvision
       - REDIS_URL=redis://redis:6379/0
       - PROMETHEUS_URL=http://prometheus:9090
       - GRAFANA_URL=http://grafana:3000
@@ -34,7 +34,7 @@ services:
         condition: service_started
       grafana:
         condition: service_started
-    command: uvicorn devagent.api.main:app --host 0.0.0.0 --port 8000 --reload
+    command: uvicorn AgentProvision.api.main:app --host 0.0.0.0 --port 8000 --reload
 
   postgres:
     image: postgres:15
@@ -43,7 +43,7 @@ services:
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=devagent
+      - POSTGRES_DB=AgentProvision
     ports:
       - "5432:5432"
     healthcheck:
@@ -68,7 +68,7 @@ services:
   pgadmin:
     image: dpage/pgadmin4
     environment:
-      - PGADMIN_DEFAULT_EMAIL=admin@devagent.com
+      - PGADMIN_DEFAULT_EMAIL=admin@AgentProvision.com
       - PGADMIN_DEFAULT_PASSWORD=admin
     ports:
       - "5050:80"
@@ -104,22 +104,22 @@ services:
 
   test:
     build:
-      context: ./devagent
+      context: ./AgentProvision
       dockerfile: Dockerfile
     volumes:
       - .:/app
     environment:
       - TESTING=True
-      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/devagent
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/AgentProvision
       - ALLOWED_ORIGINS_ENV=http://testserver # Use _ENV suffix
       - BACKEND_CORS_ORIGINS_ENV=http://testserver # Use _ENV suffix
     depends_on:
       - postgres
-    command: ["pytest", "-v", "--cov=devagent", "devagent/tests/"]
+    command: ["pytest", "-v", "--cov=AgentProvision", "AgentProvision/tests/"]
 
   lint:
     build:
-      context: ./devagent
+      context: ./AgentProvision
       dockerfile: Dockerfile
     volumes:
       - .:/app

@@ -19,7 +19,7 @@ from uuid import UUID, uuid4
 
 from pydantic import BaseModel, Field
 
-from devagent.core.config import get_settings
+from AgentProvision.core.config import get_settings
 
 logger = logging.getLogger(__name__)
 settings = get_settings()

@@ -9,12 +9,12 @@ on:
 env:
   GCP_PROJECT_ID: aremko-e51ae
   GCP_REGION: southamerica-west1
-  GKE_CLUSTER_NAME: devagent-gke
+  GKE_CLUSTER_NAME: AgentProvision-gke
   GCR_HOSTNAME: gcr.io
-  IMAGE_API: devagent-api
-  IMAGE_UI: devagent-ui
-  HELM_RELEASE_NAME: devagent
-  HELM_NAMESPACE: devagent
+  IMAGE_API: AgentProvision-api
+  IMAGE_UI: AgentProvision-ui
+  HELM_RELEASE_NAME: AgentProvision
+  HELM_NAMESPACE: AgentProvision
 
 permissions:
   contents: 'read'
@@ -43,12 +43,12 @@ jobs:
 
       - name: Build and push API image
         run: |
-          docker build --no-cache -t ${{ env.GCR_HOSTNAME }}/${{ env.GCP_PROJECT_ID }}/${{ env.IMAGE_API }}:${{ steps.get_sha.outputs.sha }} -f ./devagent/Dockerfile ./devagent
+          docker build --no-cache -t ${{ env.GCR_HOSTNAME }}/${{ env.GCP_PROJECT_ID }}/${{ env.IMAGE_API }}:${{ steps.get_sha.outputs.sha }} -f ./AgentProvision/Dockerfile ./AgentProvision
           docker push ${{ env.GCR_HOSTNAME }}/${{ env.GCP_PROJECT_ID }}/${{ env.IMAGE_API }}:${{ steps.get_sha.outputs.sha }}
 
       - name: Build and push UI image
         run: |
-          docker build --build-arg NEXT_PUBLIC_API_URL=https://agents.datamatic.app/api/v1 -t ${{ env.GCR_HOSTNAME }}/${{ env.GCP_PROJECT_ID }}/${{ env.IMAGE_UI }}:${{ steps.get_sha.outputs.sha }} -f ./devagent-ui/Dockerfile ./devagent-ui
+          docker build --build-arg NEXT_PUBLIC_API_URL=https://agents.datamatic.app/api/v1 -t ${{ env.GCR_HOSTNAME }}/${{ env.GCP_PROJECT_ID }}/${{ env.IMAGE_UI }}:${{ steps.get_sha.outputs.sha }} -f ./AgentProvision-ui/Dockerfile ./AgentProvision-ui
           docker push ${{ env.GCR_HOSTNAME }}/${{ env.GCP_PROJECT_ID }}/${{ env.IMAGE_UI }}:${{ steps.get_sha.outputs.sha }}
 
       - name: Set up GKE credentials
@@ -61,15 +61,15 @@ jobs:
       - name: Deploy to GKE
         run: |
           helm repo add bitnami https://charts.bitnami.com/bitnami
-          helm dependency update ./helm/thefullstackagent
-          
-          # Add deletion commands here
-          kubectl delete ingress thefullstackagent-api -n dev-agent --ignore-not-found
-          kubectl delete ingress thefullstackagent-ui -n dev-agent --ignore-not-found
+          helm dependency update ./helm/AgentProvisionagent
 
-          helm upgrade --install devagent ./helm/thefullstackagent \
+          # Add deletion commands here
+          kubectl delete ingress AgentProvisionagent-api -n dev-agent --ignore-not-found
+          kubectl delete ingress AgentProvisionagent-ui -n dev-agent --ignore-not-found
+
+          helm upgrade --install AgentProvision ./helm/AgentProvisionagent \
             --namespace dev-agent \
             --create-namespace \
-            --values ./helm/thefullstackagent/values-gcp.yaml \
-            --set devagentApi.image.tag=${{ steps.get_sha.outputs.sha }} \
-            --set devagentUi.image.tag=${{ steps.get_sha.outputs.sha }} 
+            --values ./helm/AgentProvisionagent/values-gcp.yaml \
+            --set AgentProvisionApi.image.tag=${{ steps.get_sha.outputs.sha }} \
+            --set AgentProvisionUi.image.tag=${{ steps.get_sha.outputs.sha }}

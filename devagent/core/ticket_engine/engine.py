@@ -9,7 +9,7 @@ from typing import Any, Dict, List, Optional, Tuple
 
 from dateutil import parser as date_parser
 
-from devagent.core.ticket_engine.models import (Requirement, Ticket,
+from AgentProvision.core.ticket_engine.models import (Requirement, Ticket,
                                                 TicketStatus, TicketType)
 
 

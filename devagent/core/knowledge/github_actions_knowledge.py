@@ -84,7 +84,7 @@ Building and pushing Docker images in GitHub Actions, especially for Google Cont
     - **Error: `gcr.io repo does not exist. Creating on push requires...`**: Indicates missing `repoAdmin` or `createOnPushWriter` permissions, or that the Artifact Registry API itself might not be enabled/used correctly if it's an AR-native repo.
     - **Module Path Issues in `CMD` (Python/Uvicorn):**
         - Ensure the `CMD` in your Dockerfile correctly references your application module considering the `WORKDIR` and how files are `COPY`ed.
-        - Example: If `WORKDIR /app` and you `COPY . /app/devagent`, then `CMD ["uvicorn", "devagent.api.main:app"]`. If `COPY . /app`, then `CMD ["uvicorn", "api.main:app"]`.
+        - Example: If `WORKDIR /app` and you `COPY . /app/AgentProvision`, then `CMD ["uvicorn", "AgentProvision.api.main:app"]`. If `COPY . /app`, then `CMD ["uvicorn", "api.main:app"]`.
 
 """
 
@@ -118,7 +118,7 @@ Deploying to Kubernetes (GKE) using Helm in GitHub Actions:
         - Crucial for setting image tags from `github.sha`:
           `--set image.tag=${{ github.sha }}`
           `--set subchart.image.tag=${{ github.sha }}`
-        - **Crucial:** Ensure the `--set` paths correctly match the structure in your `values.yaml` file (e.g., `devagentApi.image.repository` vs `devagent-ui.image.repository`). Case sensitivity and path correctness are vital.
+        - **Crucial:** Ensure the `--set` paths correctly match the structure in your `values.yaml` file (e.g., `AgentProvisionApi.image.repository` vs `AgentProvision-ui.image.repository`). Case sensitivity and path correctness are vital.
 
 4.  **Troubleshooting Pods (Post-Deployment):**
     - **`ImagePullBackOff`**:
@@ -151,7 +151,7 @@ GITHUB_ACTIONS_TROUBLESHOOTING_COMMON_ISSUES = [
     ),
     (
         "Helm `--set` not working as expected",
-        "Double-check the exact path in `values.yaml` (case-sensitive) for the item being overridden. E.g., `devagentApi.image.tag` vs `image.tag`.",
+        "Double-check the exact path in `values.yaml` (case-sensitive) for the item being overridden. E.g., `AgentProvisionApi.image.tag` vs `image.tag`.",
     ),
     (
         "Pod `ImagePullBackOff`",

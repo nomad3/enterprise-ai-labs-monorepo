@@ -12,21 +12,21 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/* \
     && pip install --upgrade pip setuptools wheel
 
-# The build context is the 'devagent' directory.
+# The build context is the 'AgentProvision' directory.
 # requirements.txt is now located within this build context.
 COPY requirements.txt /app/requirements.txt
 RUN pip install --no-cache-dir -r /app/requirements.txt
 
-# Copy the application code from the current build context (which is the 'devagent' directory)
-# into /app/devagent in the image.
+# Copy the application code from the current build context (which is the 'AgentProvision' directory)
+# into /app/AgentProvision in the image.
 # The source '.' refers to the root of the build context.
-COPY . /app/devagent
+COPY . /app/AgentProvision
 
 # Set PYTHONPATH to include /app.
-# The application code (e.g., api/main.py) will be at /app/devagent/api/main.py.
-# Python will find the 'devagent' package in /app/devagent.
+# The application code (e.g., api/main.py) will be at /app/AgentProvision/api/main.py.
+# Python will find the 'AgentProvision' package in /app/AgentProvision.
 ENV PYTHONPATH=/app
 
-# The CMD should refer to devagent.api.main:app
-CMD ["uvicorn", "devagent.api.main:app", "--host", "0.0.0.0", "--port", "8000"]
-# CMD ["tail", "-f", "/dev/null"] 
+# The CMD should refer to AgentProvision.api.main:app
+CMD ["uvicorn", "AgentProvision.api.main:app", "--host", "0.0.0.0", "--port", "8000"]
+# CMD ["tail", "-f", "/dev/null"]

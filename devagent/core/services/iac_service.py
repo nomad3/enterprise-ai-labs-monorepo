@@ -1,5 +1,5 @@
 """
-Infrastructure as Code Service for DevAgent
+Infrastructure as Code Service for AgentProvision
 Integrates Terraform, Kubernetes, and Helm capabilities
 """
 

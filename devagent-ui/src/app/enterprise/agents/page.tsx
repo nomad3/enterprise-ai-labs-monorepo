@@ -1,5 +1,4 @@
-import React from 'react';
-import { Rocket, Cpu, Activity, Settings, Plus, Play, Pause, Trash2, AlertCircle } from 'lucide-react';
+import { Activity, AlertCircle, Cpu, Pause, Play, Plus, Rocket, Settings, Trash2 } from 'lucide-react';
 
 export default function AgentManagement() {
   return (
@@ -91,7 +90,7 @@ export default function AgentManagement() {
             </thead>
             <tbody>
               <tr className="border-b border-border">
-                <td className="p-4 text-blue-100">DevAgent-01</td>
+                <td className="p-4 text-blue-100">AgentProvision-01</td>
                 <td className="p-4 text-blue-100">Full-Stack</td>
                 <td className="p-4">
                   <span className="px-3 py-1 bg-green-900 text-green-200 rounded-full text-sm">Running</span>
@@ -182,7 +181,7 @@ export default function AgentManagement() {
             <div className="space-y-3">
               <div className="flex items-center gap-3 p-3 bg-yellow-900/50 rounded-lg">
                 <AlertCircle className="w-5 h-5 text-yellow-300" />
-                <span className="text-yellow-200">High CPU usage on DevAgent-01</span>
+                <span className="text-yellow-200">High CPU usage on AgentProvision-01</span>
               </div>
               <div className="flex items-center gap-3 p-3 bg-blue-900/50 rounded-lg">
                 <AlertCircle className="w-5 h-5 text-blue-300" />
@@ -197,4 +196,4 @@ export default function AgentManagement() {
       </section>
     </div>
   );
-} 
+}

@@ -1,5 +1,5 @@
 """
-Helm Knowledge Base for DevAgent
+Helm Knowledge Base for AgentProvision
 Contains patterns, best practices, and templates for Helm chart creation and testing
 """
 

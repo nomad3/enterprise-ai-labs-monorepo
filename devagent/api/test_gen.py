@@ -1,8 +1,8 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 
-from devagent.core.test_framework.test_generator import TestGenerator
-from devagent.core.test_framework.test_runner import TestRunner
+from AgentProvision.core.test_framework.test_generator import TestGenerator
+from AgentProvision.core.test_framework.test_runner import TestRunner
 
 router = APIRouter(prefix="/test", tags=["test generation"])
 

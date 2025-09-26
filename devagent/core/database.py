@@ -13,11 +13,11 @@ from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 # from sqlalchemy.ext.declarative import declarative_base # Redundant import
 from sqlalchemy.orm import declarative_base, sessionmaker
 
-from devagent.core.base import Base
-from devagent.core.config import get_settings  # Added import for get_settings
-from devagent.core.models.agent_model import Agent
+from AgentProvision.core.base import Base
+from AgentProvision.core.config import get_settings  # Added import for get_settings
+from AgentProvision.core.models.agent_model import Agent
 # Import models to ensure tables are created
-from devagent.core.models.tenant_model import Tenant
+from AgentProvision.core.models.tenant_model import Tenant
 
 # Configure a logger for this module
 logger = logging.getLogger(__name__)

@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 
-from devagent.core.version_control.git_service import GitService
+from AgentProvision.core.version_control.git_service import GitService
 
 router = APIRouter(prefix="/git", tags=["version control"])
 

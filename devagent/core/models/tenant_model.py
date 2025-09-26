@@ -10,7 +10,7 @@ from pydantic import BaseModel, ConfigDict, Field
 from sqlalchemy import JSON, Boolean, Column, DateTime, Integer, String
 from sqlalchemy.orm import relationship
 
-from devagent.core.base import Base
+from AgentProvision.core.base import Base
 
 from .audit_log_model import AuditLog
 

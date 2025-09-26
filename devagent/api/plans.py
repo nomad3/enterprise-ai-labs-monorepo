@@ -10,11 +10,11 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
-from devagent.core.database import get_session
-from devagent.core.planning.engine import PlanningEngine, SolutionPlanner
-from devagent.core.planning.models import (SolutionPlan, SolutionPlanResponse,
+from AgentProvision.core.database import get_session
+from AgentProvision.core.planning.engine import PlanningEngine, SolutionPlanner
+from AgentProvision.core.planning.models import (SolutionPlan, SolutionPlanResponse,
                                            Task, TaskResponse)
-from devagent.core.ticket_engine.models import Requirement, Ticket
+from AgentProvision.core.ticket_engine.models import Requirement, Ticket
 
 router = APIRouter(prefix="/plans", tags=["plans"])
 planning_engine = PlanningEngine()

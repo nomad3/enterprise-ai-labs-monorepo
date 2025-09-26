@@ -9,32 +9,32 @@ on:
 env:
   PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
   GAR_LOCATION: southamerica-west1
-  REPOSITORY: devagent
-  CLUSTER_NAME: devagent-gke
+  REPOSITORY: AgentProvision
+  CLUSTER_NAME: AgentProvision-gke
   CLUSTER_LOCATION: southamerica-west1
-  IMAGE: southamerica-west1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/devagent/devagent:${{ github.sha }}
+  IMAGE: southamerica-west1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/AgentProvision/AgentProvision:${{ github.sha }}
 
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-    
+
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
         python-version: '3.11'
-        
+
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
         pip install pytest pytest-cov
-        
+
     - name: Run tests
       run: |
         pytest --cov=app tests/
-        
+
     - name: Upload coverage
       uses: codecov/codecov-action@v3
       with:
@@ -45,7 +45,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-    
+
     - name: Authenticate to Google Cloud
       uses: google-github-actions/auth@v2
       with:
@@ -66,7 +66,7 @@ jobs:
     if: github.ref == 'refs/heads/main'
     steps:
     - uses: actions/checkout@v3
-    
+
     - name: Authenticate to Google Cloud
       uses: google-github-actions/auth@v2
       with:
@@ -78,8 +78,8 @@ jobs:
         gcloud container clusters get-credentials $CLUSTER_NAME --region $CLUSTER_LOCATION --project $PROJECT_ID
     - name: Set image in deployment
       run: |
-        kubectl set image deployment/devagent devagent=$IMAGE -n devagent
+        kubectl set image deployment/AgentProvision AgentProvision=$IMAGE -n AgentProvision
     - name: Verify deployment
       run: |
-        kubectl rollout status deployment/devagent -n devagent
-        kubectl get pods -n devagent 
+        kubectl rollout status deployment/AgentProvision -n AgentProvision
+        kubectl get pods -n AgentProvision

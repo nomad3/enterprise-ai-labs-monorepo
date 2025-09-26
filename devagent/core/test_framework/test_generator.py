@@ -1,4 +1,4 @@
-from devagent.core.code_gen.gemini import GeminiClient
+from AgentProvision.core.code_gen.gemini import GeminiClient
 
 
 class TestGenerator:

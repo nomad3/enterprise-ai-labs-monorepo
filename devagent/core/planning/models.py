@@ -13,7 +13,7 @@ from sqlalchemy import Enum as SQLEnum
 from sqlalchemy import ForeignKey, Integer, String, Text
 from sqlalchemy.orm import relationship
 
-from devagent.core.database import Base
+from AgentProvision.core.database import Base
 
 
 class TaskPriority(str, Enum):

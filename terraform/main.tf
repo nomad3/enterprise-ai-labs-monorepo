@@ -14,13 +14,13 @@ provider "google" {
 
 # VPC Network
 resource "google_compute_network" "vpc_network" {
-  name = "devagent-vpc"
+  name = "AgentProvision-vpc"
   auto_create_subnetworks = true
 }
 
 # Firewall rule to allow HTTP and HTTPS traffic to the GKE cluster
 resource "google_compute_firewall" "allow_http_https" {
-  name    = "devagent-vpc-allow-http-https"
+  name    = "AgentProvision-vpc-allow-http-https"
   network = google_compute_network.vpc_network.name
   allow {
     protocol = "tcp"
@@ -82,7 +82,7 @@ resource "google_container_node_pool" "primary_nodes" {
 
 # Cloud SQL (Postgres)
 resource "google_sql_database_instance" "postgres" {
-  name             = "devagent-postgres"
+  name             = "AgentProvision-postgres"
   database_version = "POSTGRES_15"
   region           = var.gcp_region
   deletion_protection = false
@@ -92,7 +92,7 @@ resource "google_sql_database_instance" "postgres" {
   }
 }
 
-resource "google_sql_database" "devagent" {
+resource "google_sql_database" "AgentProvision" {
   name     = var.db_name
   instance = google_sql_database_instance.postgres.name
 }
@@ -105,7 +105,7 @@ resource "google_sql_user" "postgres" {
 
 # Memorystore (Redis)
 resource "google_redis_instance" "redis" {
-  name           = "devagent-redis"
+  name           = "AgentProvision-redis"
   tier           = "BASIC"
   memory_size_gb = 1
   region         = var.gcp_region
@@ -149,8 +149,8 @@ resource "google_project_iam_member" "gke_deploy_sa_cloudsql_client" {
 }
 
 # Global Static IP Address for Ingress
-resource "google_compute_global_address" "devagent_static_ip" {
-  name         = "devagent-static-ip"
+resource "google_compute_global_address" "AgentProvision_static_ip" {
+  name         = "AgentProvision-static-ip"
   project      = var.gcp_project
   address_type = "EXTERNAL"
 }
@@ -162,5 +162,5 @@ resource "google_dns_record_set" "agents_datamatic_app" {
   ttl          = 300
   managed_zone = var.dns_zone_name
   project      = var.gcp_project # Specify the project for the DNS zone
-  rrdatas      = [google_compute_global_address.devagent_static_ip.address]
-} 
+  rrdatas      = [google_compute_global_address.AgentProvision_static_ip.address]
+}

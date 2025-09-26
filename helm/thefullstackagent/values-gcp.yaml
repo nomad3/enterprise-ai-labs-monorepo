@@ -1,4 +1,4 @@
-# GCP specific values for thefullstackagent Helm chart
+# GCP specific values for AgentProvisionagent Helm chart
 
 # Disable PostgreSQL subchart (using Cloud SQL)
 postgresql:
@@ -90,22 +90,22 @@ agentforgeUi:
     annotations:
       iam.gke.io/gcp-service-account: "gke-deploy-sa@aremko-e51ae.iam.gserviceaccount.com"
 
-# devagent-ui can be configured similarly if it needs cloud-specific settings
-# devagent-ui:
+# AgentProvision-ui can be configured similarly if it needs cloud-specific settings
+# AgentProvision-ui:
 #   enabled: true # Assuming we still want to deploy the UI
 #   image:
-#     repository: gcr.io/aremko-e51ae/devagent-ui # Ensure this image exists
+#     repository: gcr.io/aremko-e51ae/AgentProvision-ui # Ensure this image exists
 #     tag: latest
 #   # ingress:
 #   #   hosts:
-#   #     - host: devagent.your-gcp-domain.com # Update with your actual domain
+#   #     - host: AgentProvision.your-gcp-domain.com # Update with your actual domain
 #   #       paths:
 #   #         - path: /
 #   #           pathType: ImplementationSpecific
 #   #   tls:
-#   #     - secretName: devagent-ui-tls-gcp
+#   #     - secretName: AgentProvision-ui-tls-gcp
 #   #       hosts:
-#   #         - devagent.your-gcp-domain.com
+#   #         - AgentProvision.your-gcp-domain.com
 
 redis:
   host: "10.93.221.219"

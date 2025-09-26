@@ -8,9 +8,9 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from devagent.core.database import get_session
-from devagent.core.ticket_engine.engine import TicketEngine
-from devagent.core.ticket_engine.models import Requirement, Ticket
+from AgentProvision.core.database import get_session
+from AgentProvision.core.ticket_engine.engine import TicketEngine
+from AgentProvision.core.ticket_engine.models import Requirement, Ticket
 
 router = APIRouter(prefix="/tickets", tags=["tickets"])
 ticket_engine = TicketEngine()

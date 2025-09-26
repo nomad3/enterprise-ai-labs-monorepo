@@ -1,5 +1,5 @@
 """
-Kubernetes Knowledge Base for DevAgent
+Kubernetes Knowledge Base for AgentProvision
 Contains troubleshooting guides, best practices, and common solutions
 """
 

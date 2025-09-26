@@ -13,9 +13,9 @@ from pydantic import BaseModel
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from devagent.core.config import get_settings
-from devagent.core.database import get_session
-from devagent.core.models.user_model import (LoginRequest, Token, TokenData,
+from AgentProvision.core.config import get_settings
+from AgentProvision.core.database import get_session
+from AgentProvision.core.models.user_model import (LoginRequest, Token, TokenData,
                                              User, UserCreate, UserResponse)
 
 router = APIRouter(tags=["authentication"])

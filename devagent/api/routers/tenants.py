@@ -4,11 +4,11 @@ from datetime import datetime, timedelta
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from devagent.api.auth import get_current_user_dependency
-from devagent.api.schemas.tenant import (RecentExecution, TenantOverview,
+from AgentProvision.api.auth import get_current_user_dependency
+from AgentProvision.api.schemas.tenant import (RecentExecution, TenantOverview,
                                          TenantRead, TenantStats)
-from devagent.core.database import get_session
-from devagent.core.models.user_model import User
+from AgentProvision.core.database import get_session
+from AgentProvision.core.models.user_model import User
 
 router = APIRouter(prefix="/tenants", tags=["tenants"])
 
@@ -22,7 +22,7 @@ async def get_tenant(
     # TODO: Add logic to check if user belongs to the tenant
     # For now, just fetching the tenant
     # This is a placeholder for a proper implementation
-    from devagent.core.models.tenant_model import Tenant
+    from AgentProvision.core.models.tenant_model import Tenant
 
     tenant = await db.get(Tenant, tenant_id)
     if not tenant:
@@ -36,7 +36,7 @@ async def get_tenant_overview(
     db: AsyncSession = Depends(get_session),
     current_user: User = Depends(get_current_user_dependency),
 ):
-    from devagent.core.models.tenant_model import Tenant
+    from AgentProvision.core.models.tenant_model import Tenant
 
     tenant = await db.get(Tenant, tenant_id)
     if not tenant:

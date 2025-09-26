@@ -1,5 +1,5 @@
 """
-Gemini Service for DevAgent
+Gemini Service for AgentProvision
 Handles code generation and analysis using Google's Gemini model
 """
 
@@ -145,22 +145,22 @@ class GeminiService:
 
         prompt = f"""
         Generate Terraform code based on the following requirements and best practices:
-        
+
         Requirements:
         {requirements}
-        
+
         Best Practices:
         {knowledge_base['best_practices']}
-        
+
         Available Providers:
         {knowledge_base['providers']}
-        
+
         Available Modules:
         {knowledge_base['modules']}
-        
+
         Use the following templates as a base:
         {knowledge_base['templates']}
-        
+
         Generate complete Terraform code that follows best practices and meets the requirements.
         """
 
@@ -175,19 +175,19 @@ class GeminiService:
 
         prompt = f"""
         Generate a Helm chart based on the following requirements and best practices:
-        
+
         Requirements:
         {requirements}
-        
+
         Chart Structure:
         {knowledge_base['structure']}
-        
+
         Best Practices:
         {knowledge_base['best_practices']}
-        
+
         Testing Guidelines:
         {knowledge_base['testing']}
-        
+
         Generate a complete Helm chart that follows best practices and meets the requirements.
         """
 
@@ -204,16 +204,16 @@ class GeminiService:
 
         prompt = f"""
         Analyze the following Kubernetes issue and provide troubleshooting steps:
-        
+
         Issue Description:
         {issue_description}
-        
+
         Troubleshooting Knowledge Base:
         {knowledge_base['troubleshooting']}
-        
+
         Best Practices:
         {knowledge_base['best_practices']}
-        
+
         Provide a detailed analysis and step-by-step troubleshooting guide.
         """
 

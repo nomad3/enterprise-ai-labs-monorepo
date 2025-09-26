@@ -37,7 +37,7 @@ variable "private_subnet_cidrs" {
 variable "cluster_name" {
   description = "Name of the EKS cluster"
   type        = string
-  default     = "devagent-cluster"
+  default     = "AgentProvision-cluster"
 }
 
 variable "cluster_version" {
@@ -49,7 +49,7 @@ variable "cluster_version" {
 variable "db_identifier" {
   description = "Identifier for RDS instance"
   type        = string
-  default     = "devagent-db"
+  default     = "AgentProvision-db"
 }
 
 variable "db_instance_class" {
@@ -61,7 +61,7 @@ variable "db_instance_class" {
 variable "db_name" {
   description = "Name of the database"
   type        = string
-  default     = "devagent"
+  default     = "AgentProvision"
 }
 
 variable "db_username" {
@@ -80,7 +80,7 @@ variable "db_password" {
 variable "redis_cluster_id" {
   description = "Identifier for Redis cluster"
   type        = string
-  default     = "devagent-redis"
+  default     = "AgentProvision-redis"
 }
 
 variable "redis_node_type" {
@@ -98,7 +98,7 @@ variable "redis_num_nodes" {
 variable "app_assets_bucket_name" {
   description = "Name of the S3 bucket for application assets"
   type        = string
-  default     = "devagent-assets"
+  default     = "AgentProvision-assets"
 }
 
 variable "domain_name" {
@@ -128,7 +128,7 @@ variable "gcp_region" {
 variable "gke_cluster_name" {
   description = "Name of the GKE cluster"
   type        = string
-  default     = "devagent-gke"
+  default     = "AgentProvision-gke"
 }
 
 variable "service_account_id" {
@@ -147,4 +147,4 @@ variable "dns_zone_name" {
   description = "The name of the Cloud DNS managed zone."
   type        = string
   default     = "datamatic" # Your managed zone name
-} 
+}

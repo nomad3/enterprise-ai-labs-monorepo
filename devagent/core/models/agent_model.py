@@ -11,7 +11,7 @@ from sqlalchemy import (JSON, Boolean, Column, DateTime, Enum, ForeignKey,
                         Integer, String)
 from sqlalchemy.orm import relationship
 
-from devagent.core.base import Base
+from AgentProvision.core.base import Base
 
 
 class AgentType(enum.Enum):

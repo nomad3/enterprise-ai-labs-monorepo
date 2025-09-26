@@ -13,11 +13,11 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy test files
 COPY test/integration /app/test/integration
-COPY devagent /app/devagent
+COPY AgentProvision /app/AgentProvision
 
 # Set environment variables
 ENV PYTHONPATH=/app
 ENV PYTHONUNBUFFERED=1
 
 # Run tests
-CMD ["pytest", "test/integration/test_e2e.py", "-v"] 
+CMD ["pytest", "test/integration/test_e2e.py", "-v"]

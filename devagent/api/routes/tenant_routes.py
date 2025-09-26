@@ -3,8 +3,8 @@ from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException
 
-from devagent.api.auth import get_current_user_dependency
-from devagent.core.models.tenant_model import (ResourceQuota, Tenant,
+from AgentProvision.api.auth import get_current_user_dependency
+from AgentProvision.core.models.tenant_model import (ResourceQuota, Tenant,
                                                TenantCreate, TenantResponse)
 
 router = APIRouter(prefix="/api/tenants", tags=["tenants"])

@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException
 
-from devagent.core.ci_cd.pipeline import PipelineService
+from AgentProvision.core.ci_cd.pipeline import PipelineService
 
 router = APIRouter(prefix="/pipeline", tags=["CI/CD"])
 

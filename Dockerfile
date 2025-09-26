@@ -27,8 +27,8 @@ RUN pip install --no-cache-dir black isort flake8 mypy pytest pytest-cov
 COPY . .
 
 # Create a non-root user
-RUN useradd -m -u 1000 devagent
-USER devagent
+RUN useradd -m -u 1000 AgentProvision
+USER AgentProvision
 
 # Command to run the application
-CMD ["uvicorn", "devagent.api.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"] 
+CMD ["uvicorn", "AgentProvision.api.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]

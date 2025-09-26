@@ -1,38 +1,38 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: devagent
-  namespace: devagent
+  name: AgentProvision
+  namespace: AgentProvision
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: devagent
+      app: AgentProvision
   template:
     metadata:
       labels:
-        app: devagent
+        app: AgentProvision
     spec:
       containers:
-      - name: devagent
-        image: devagent:latest
+      - name: AgentProvision
+        image: AgentProvision:latest
         ports:
         - containerPort: 8000
         env:
         - name: DATABASE_URL
           valueFrom:
             secretKeyRef:
-              name: devagent-secrets
+              name: AgentProvision-secrets
               key: database-url
         - name: REDIS_URL
           valueFrom:
             secretKeyRef:
-              name: devagent-secrets
+              name: AgentProvision-secrets
               key: redis-url
         - name: JWT_SECRET
           valueFrom:
             secretKeyRef:
-              name: devagent-secrets
+              name: AgentProvision-secrets
               key: jwt-secret
         resources:
           requests:
@@ -57,11 +57,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: devagent
-  namespace: devagent
+  name: AgentProvision
+  namespace: AgentProvision
 spec:
   selector:
-    app: devagent
+    app: AgentProvision
   ports:
   - port: 80
     targetPort: 8000
@@ -70,24 +70,24 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: devagent
-  namespace: devagent
+  name: AgentProvision
+  namespace: AgentProvision
   annotations:
     kubernetes.io/ingress.class: nginx
     cert-manager.io/cluster-issuer: letsencrypt-prod
 spec:
   tls:
   - hosts:
-    - devagent.example.com
-    secretName: devagent-tls
+    - AgentProvision.example.com
+    secretName: AgentProvision-tls
   rules:
-  - host: devagent.example.com
+  - host: AgentProvision.example.com
     http:
       paths:
       - path: /
         pathType: Prefix
         backend:
           service:
-            name: devagent
+            name: AgentProvision
             port:
-              number: 80 
+              number: 80

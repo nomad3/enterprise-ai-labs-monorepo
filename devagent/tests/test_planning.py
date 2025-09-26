@@ -7,10 +7,10 @@ from typing import Any, Dict, List
 
 import pytest
 
-from devagent.core.planning.engine import PlanningEngine
-from devagent.core.planning.models import (SolutionPlan, Task, TaskPriority,
+from AgentProvision.core.planning.engine import PlanningEngine
+from AgentProvision.core.planning.models import (SolutionPlan, Task, TaskPriority,
                                            TaskStatus)
-from devagent.core.ticket_engine.models import (Requirement, Ticket,
+from AgentProvision.core.ticket_engine.models import (Requirement, Ticket,
                                                 TicketStatus, TicketType)
 
 

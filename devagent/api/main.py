@@ -12,23 +12,23 @@ from opentelemetry.sdk.trace.export import BatchSpanProcessor
 from prometheus_client import start_http_server
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from devagent.api.auth import router as auth_router
-from devagent.api.ci_cd import router as ci_cd_router
-from devagent.api.code_gen import router as code_gen_router
-from devagent.api.communication import router as communication_router
-from devagent.api.devops import router as devops_router
-from devagent.api.files import router as files_router
-from devagent.api.plans import router as plans_router
-from devagent.api.routers.agent import router as agent_router
-from devagent.api.routers.tenants import router as tenants_router
-from devagent.api.routes.orchestration_routes import \
+from AgentProvision.api.auth import router as auth_router
+from AgentProvision.api.ci_cd import router as ci_cd_router
+from AgentProvision.api.code_gen import router as code_gen_router
+from AgentProvision.api.communication import router as communication_router
+from AgentProvision.api.devops import router as devops_router
+from AgentProvision.api.files import router as files_router
+from AgentProvision.api.plans import router as plans_router
+from AgentProvision.api.routers.agent import router as agent_router
+from AgentProvision.api.routers.tenants import router as tenants_router
+from AgentProvision.api.routes.orchestration_routes import \
     router as orchestration_router
-from devagent.api.test_gen import router as test_gen_router
-from devagent.api.tickets import router as tickets_router
-from devagent.api.version_control import router as version_control_router
-from devagent.core.config import get_settings
-from devagent.core.database import get_session, init_db
-from devagent.core.models.user_model import \
+from AgentProvision.api.test_gen import router as test_gen_router
+from AgentProvision.api.tickets import router as tickets_router
+from AgentProvision.api.version_control import router as version_control_router
+from AgentProvision.core.config import get_settings
+from AgentProvision.core.database import get_session, init_db
+from AgentProvision.core.models.user_model import \
     User  # noqa: F401 -> Ensures User table is created by init_db
 
 # Initialize OpenTelemetry
@@ -78,8 +78,8 @@ async def startup_event():
     await init_db()
 
     # Start core services
-    from devagent.core.services.agent_orchestrator import get_orchestrator
-    from devagent.core.services.integration_hub import get_integration_hub
+    from AgentProvision.core.services.agent_orchestrator import get_orchestrator
+    from AgentProvision.core.services.integration_hub import get_integration_hub
 
     orchestrator = await get_orchestrator()
     await orchestrator.start_orchestrator()

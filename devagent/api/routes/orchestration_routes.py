@@ -11,11 +11,11 @@ from pydantic import BaseModel, Field
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from devagent.api.auth import get_current_user_dependency
-from devagent.core.database import get_session
-from devagent.core.models.tenant_model import Tenant
-from devagent.core.models.user_model import User
-from devagent.core.services.agent_orchestrator import (AgentOrchestrator,
+from AgentProvision.api.auth import get_current_user_dependency
+from AgentProvision.core.database import get_session
+from AgentProvision.core.models.tenant_model import Tenant
+from AgentProvision.core.models.user_model import User
+from AgentProvision.core.services.agent_orchestrator import (AgentOrchestrator,
                                                        AgentTask, TaskPriority,
                                                        TaskStatus,
                                                        WorkflowDefinition,

@@ -7,10 +7,10 @@ from httpx import AsyncClient
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 
-from devagent.api.main import app  # Assuming your FastAPI app instance is here
-from devagent.api.schemas.tenant import TenantCreate, TenantRead
-from devagent.core.database import Base, get_session
-from devagent.core.models.tenant_model import Tenant
+from AgentProvision.api.main import app  # Assuming your FastAPI app instance is here
+from AgentProvision.api.schemas.tenant import TenantCreate, TenantRead
+from AgentProvision.core.database import Base, get_session
+from AgentProvision.core.models.tenant_model import Tenant
 
 # Configure a separate test database
 # Use environment variable for DB URL if available (for docker-compose), else fallback to SQLite

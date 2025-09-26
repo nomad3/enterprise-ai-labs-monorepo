@@ -1,4 +1,4 @@
-# Top-level values for thefullstackagent Helm chart
+# Top-level values for AgentProvisionagent Helm chart
 
 agentforgeApi:
   replicaCount: 1 # Adjusted from 3 for local testing initially
@@ -25,9 +25,9 @@ agentforgeApi:
           - path: /
             pathType: Prefix
     tls: []
-    #  - secretName: devagent-api-tls
+    #  - secretName: AgentProvision-api-tls
     #    hosts:
-    #      - devagent-api.local
+    #      - AgentProvision-api.local
 
   resources:
     requests:
@@ -80,7 +80,7 @@ agentforgeApi:
     targetCPUUtilizationPercentage: 80
     # targetMemoryUtilizationPercentage: 80
 
-# Configuration for the devagent-ui subchart
+# Configuration for the AgentProvision-ui subchart
 agentforgeUi:
   enabled: true # Assuming we want to deploy it by default
   replicaCount: 1
@@ -107,9 +107,9 @@ agentforgeUi:
           - path: /
             pathType: ImplementationSpecific
     tls: []
-    #  - secretName: devagent-ui-tls
+    #  - secretName: AgentProvision-ui-tls
     #    hosts:
-    #      - devagent.local
+    #      - AgentProvision.local
   livenessProbe:
     enabled: true
     path: /
@@ -136,9 +136,9 @@ postgresql:
     postgresql:
       auth:
         postgresPassword: "a-secure-postgres-password" # Admin password for postgres user
-        username: "devagent_user"
-        password: "a-secure-devagent-password" # Password for the application user
-        database: "devagent_db"
+        username: "AgentProvision_user"
+        password: "a-secure-AgentProvision-password" # Password for the application user
+        database: "AgentProvision_db"
       # service:
       #   ports:
       #     postgresql: 5432

@@ -7,8 +7,8 @@ from typing import Any, Dict
 
 import pytest
 
-from devagent.core.ticket_engine.engine import TicketEngine
-from devagent.core.ticket_engine.models import Ticket, TicketStatus, TicketType
+from AgentProvision.core.ticket_engine.engine import TicketEngine
+from AgentProvision.core.ticket_engine.models import Ticket, TicketStatus, TicketType
 
 
 @pytest.fixture
@@ -20,7 +20,7 @@ def sample_jira_ticket() -> Dict[str, Any]:
             "summary": "Implement user authentication",
             "description": """
             As a user, I want to authenticate using JWT tokens.
-            
+
             Requirements:
             - Implement JWT token generation
             - Add token validation middleware

@@ -3,11 +3,11 @@ from typing import List
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from devagent.api.schemas.agent import AgentCreate, AgentRead, AgentUpdate
-from devagent.api.services.agent_service import (create_agent, delete_agent,
+from AgentProvision.api.schemas.agent import AgentCreate, AgentRead, AgentUpdate
+from AgentProvision.api.services.agent_service import (create_agent, delete_agent,
                                                  get_agent, list_agents,
                                                  update_agent)
-from devagent.core.database import get_session
+from AgentProvision.core.database import get_session
 
 router = APIRouter(prefix="/agents", tags=["Agents"])
 

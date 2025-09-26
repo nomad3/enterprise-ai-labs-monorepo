@@ -392,8 +392,8 @@
   },
   "timepicker": {},
   "timezone": "",
-  "title": "DevAgent Dashboard",
-  "uid": "devagent",
+  "title": "AgentProvision Dashboard",
+  "uid": "AgentProvision",
   "version": 1,
   "weekStart": ""
-} 
+}

@@ -1,5 +1,5 @@
 groups:
-  - name: devagent
+  - name: AgentProvision
     rules:
       - alert: HighErrorRate
         expr: rate(http_requests_total{status=~"5.."}[5m]) / rate(http_requests_total[5m]) > 0.05
@@ -62,4 +62,4 @@ groups:
           severity: critical
         annotations:
           summary: Service is down
-          description: "Service {{ $labels.job }} has been down for more than 1 minute" 
+          description: "Service {{ $labels.job }} has been down for more than 1 minute"

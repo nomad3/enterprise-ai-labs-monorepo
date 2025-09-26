@@ -7,7 +7,7 @@
 - **Metrics Collection**: 15-second intervals
 - **Alert Rules**: Defined in `monitoring/prometheus/rules/alerts.yml`
 - **Targets**:
-  - Application metrics (devagent:8000)
+  - Application metrics (AgentProvision:8000)
   - Node metrics (node-exporter:9100)
   - Container metrics (cadvisor:8080)
   - Database metrics (postgres-exporter:9187)
@@ -53,13 +53,13 @@
   - Staging
   - Production
 - **Namespaces**:
-  - devagent
+  - AgentProvision
   - monitoring
   - logging
 
 ### Helm Charts
 - **Applications**:
-  - DevAgent
+  - AgentProvision
   - Monitoring Stack
   - Database
   - Cache
@@ -230,4 +230,4 @@
    - Distributed traces
    - Request flows
    - Dependency maps
-   - Performance profiles 
+   - Performance profiles

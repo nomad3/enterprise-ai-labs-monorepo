@@ -30,12 +30,12 @@ export interface InfrastructureSetup {
   status: string;
 }
 
-export interface DevAgentError {
+export interface AgentProvisionError {
   message: string;
   details?: string;
 }
 
-export const devAgentService = {
+export const AgentProvisionService = {
   async generateSolutionPlan(ticketId: string): Promise<SolutionPlan> {
     try {
       const response = await axios.post(`${API_BASE_URL}/plans/generate`, {
@@ -47,12 +47,12 @@ export const devAgentService = {
         throw {
           message: error.response?.data?.detail || 'Failed to generate solution plan',
           details: error.message
-        } as DevAgentError;
+        } as AgentProvisionError;
       }
       throw {
         message: 'An unexpected error occurred',
         details: error instanceof Error ? error.message : 'Unknown error'
-      } as DevAgentError;
+      } as AgentProvisionError;
     }
   },
 
@@ -67,12 +67,12 @@ export const devAgentService = {
         throw {
           message: error.response?.data?.detail || 'Failed to generate tests',
           details: error.message
-        } as DevAgentError;
+        } as AgentProvisionError;
       }
       throw {
         message: 'An unexpected error occurred',
         details: error instanceof Error ? error.message : 'Unknown error'
-      } as DevAgentError;
+      } as AgentProvisionError;
     }
   },
 
@@ -87,12 +87,12 @@ export const devAgentService = {
         throw {
           message: error.response?.data?.detail || 'Failed to setup infrastructure',
           details: error.message
-        } as DevAgentError;
+        } as AgentProvisionError;
       }
       throw {
         message: 'An unexpected error occurred',
         details: error instanceof Error ? error.message : 'Unknown error'
-      } as DevAgentError;
+      } as AgentProvisionError;
     }
   }
 };

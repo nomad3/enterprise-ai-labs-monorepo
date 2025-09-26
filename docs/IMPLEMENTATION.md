@@ -1,12 +1,12 @@
-# DevAgent Implementation Documentation
+# AgentProvision Implementation Documentation
 
 ## Overview
-DevAgent is a Full-Stack Developer & DevOps AI Agent that helps automate and streamline the software development process. The system is built using FastAPI, PostgreSQL, and Redis, with a focus on modularity, testability, and scalability.
+AgentProvision is a Full-Stack Developer & DevOps AI Agent that helps automate and streamline the software development process. The system is built using FastAPI, PostgreSQL, and Redis, with a focus on modularity, testability, and scalability.
 
 ## Core Components
 
 ### 1. Ticket Ingestion & Interpretation Engine
-- **Location**: `devagent/core/ticket_engine/`
+- **Location**: `AgentProvision/core/ticket_engine/`
 - **Purpose**: Processes and interprets tickets from various sources (e.g., Jira)
 - **Key Features**:
   - Ticket parsing and validation
@@ -16,7 +16,7 @@ DevAgent is a Full-Stack Developer & DevOps AI Agent that helps automate and str
 - **API Endpoints**: `/tickets/`
 
 ### 2. Solution Planning & Strategy Module
-- **Location**: `devagent/core/planning/`
+- **Location**: `AgentProvision/core/planning/`
 - **Purpose**: Creates and manages solution plans for tickets
 - **Key Features**:
   - Automatic task creation from requirements
@@ -146,9 +146,9 @@ GET /plans/
 2. **Environment Variables**:
    Create a `.env` file with:
    ```
-   POSTGRES_USER=devagent
-   POSTGRES_PASSWORD=devagent
-   POSTGRES_DB=devagent
+   POSTGRES_USER=AgentProvision
+   POSTGRES_PASSWORD=AgentProvision
+   POSTGRES_DB=AgentProvision
    POSTGRES_HOST=postgres
    POSTGRES_PORT=5432
    REDIS_HOST=redis
@@ -174,14 +174,14 @@ GET /plans/
 
 ## Testing
 
-The project follows Test-Driven Development (TDD) principles. Tests are located in the `devagent/tests/` directory:
+The project follows Test-Driven Development (TDD) principles. Tests are located in the `AgentProvision/tests/` directory:
 
 - `test_ticket_engine.py`: Tests for ticket processing
 - `test_planning.py`: Tests for solution planning
 
 Run tests with:
 ```bash
-pytest devagent/tests/
+pytest AgentProvision/tests/
 ```
 
 ## Monitoring
@@ -197,4 +197,4 @@ The application includes:
 2. Add CI/CD pipeline configuration
 3. Enhance monitoring and logging
 4. Add user authentication and authorization
-5. Implement caching with Redis 
+5. Implement caching with Redis

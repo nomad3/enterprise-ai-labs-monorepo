@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 
-from devagent.core.communication.notification import NotificationService
+from AgentProvision.core.communication.notification import NotificationService
 
 router = APIRouter(prefix="/notify", tags=["communication"])
 

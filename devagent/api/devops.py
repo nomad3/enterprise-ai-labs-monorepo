@@ -7,8 +7,8 @@ from typing import Dict, List, Optional
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 
-from devagent.core.config import get_settings
-from devagent.core.devops.service import DevOpsService
+from AgentProvision.core.config import get_settings
+from AgentProvision.core.devops.service import DevOpsService
 
 router = APIRouter(prefix="/devops", tags=["devops"])
 settings = get_settings()

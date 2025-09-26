@@ -1,7 +1,7 @@
 replicaCount: 1
 
 image:
-  repository: devagent
+  repository: AgentProvision
   tag: latest
   pullPolicy: IfNotPresent
 
@@ -15,7 +15,7 @@ ingress:
   annotations:
     kubernetes.io/ingress.class: nginx
   hosts:
-    - host: devagent.local
+    - host: AgentProvision.local
       paths:
         - path: /
           pathType: Prefix
@@ -29,7 +29,7 @@ resources:
     memory: 256Mi
 
 env:
-  DATABASE_URL: "postgresql://postgres:postgres@postgres:5432/devagent"
+  DATABASE_URL: "postgresql://postgres:postgres@postgres:5432/AgentProvision"
   REDIS_URL: "redis://redis:6379/0"
   JWT_SECRET: "dev-secret-key"
   PROMETHEUS_URL: "http://prometheus:9090"

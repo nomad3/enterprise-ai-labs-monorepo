@@ -4,8 +4,8 @@ from typing import List, Optional
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
-from devagent.api.schemas.agent import AgentCreate, AgentUpdate
-from devagent.core.models.agent_model import Agent
+from AgentProvision.api.schemas.agent import AgentCreate, AgentUpdate
+from AgentProvision.core.models.agent_model import Agent
 
 
 async def create_agent(db: AsyncSession, agent_in: AgentCreate) -> Agent:

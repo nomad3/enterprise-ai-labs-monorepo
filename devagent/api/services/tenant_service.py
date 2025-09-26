@@ -5,8 +5,8 @@ from sqlalchemy import and_
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
-from devagent.api.schemas.tenant import TenantCreate, TenantUpdate
-from devagent.core.models.tenant_model import Tenant
+from AgentProvision.api.schemas.tenant import TenantCreate, TenantUpdate
+from AgentProvision.core.models.tenant_model import Tenant
 
 
 async def create_tenant(db: AsyncSession, tenant_in: TenantCreate) -> Tenant:

@@ -26,9 +26,9 @@ import httpx
 from pydantic import BaseModel, Field, HttpUrl
 from sqlalchemy.orm import Session
 
-from devagent.core.config import get_settings
-from devagent.core.database import get_session
-from devagent.core.models.tenant_model import Tenant
+from AgentProvision.core.config import get_settings
+from AgentProvision.core.database import get_session
+from AgentProvision.core.models.tenant_model import Tenant
 
 logger = logging.getLogger(__name__)
 settings = get_settings()

@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 
-from devagent.core.code_gen.gemini import GeminiClient
+from AgentProvision.core.code_gen.gemini import GeminiClient
 
 router = APIRouter(prefix="/code", tags=["code generation"])
 

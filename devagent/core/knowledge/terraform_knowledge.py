@@ -1,5 +1,5 @@
 """
-Terraform Knowledge Base for DevAgent
+Terraform Knowledge Base for AgentProvision
 Contains patterns, best practices, and templates for Terraform code generation
 """
 
