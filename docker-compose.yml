@@ -4,12 +4,7 @@ services:
       context: ./devagent-ui
       dockerfile: Dockerfile
     ports:
-      - "3002:3000"
-    volumes:
-      - ./devagent-ui:/app
-      - /app/node_modules
-    environment:
-      - NEXT_PUBLIC_API_URL=http://localhost:8000
+      - "3002:80"
     depends_on:
       - devagent
 
@@ -30,8 +25,6 @@ services:
       - REDIS_URL=redis://redis:6379/0
       - PROMETHEUS_URL=http://prometheus:9090
       - GRAFANA_URL=http://grafana:3000
-    env_file:
-      - .env
     depends_on:
       postgres:
         condition: service_healthy
@@ -65,7 +58,8 @@ services:
       - "6379:6379"
     volumes:
       - redis_data:/data
-    command: redis-server --appendonly yes
+    command:
+      - redis-server --appendonly yes
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 5s
@@ -111,27 +105,28 @@ services:
 
   test:
     build:
-      context: .
+      context: ./devagent
       dockerfile: Dockerfile
     volumes:
       - .:/app
     environment:
       - TESTING=True
-      - DATABASE_URL=postgresql://devagent:devagent@postgres:5432/devagent_test
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/devagent
       - ALLOWED_ORIGINS_ENV=http://testserver # Use _ENV suffix
       - BACKEND_CORS_ORIGINS_ENV=http://testserver # Use _ENV suffix
     depends_on:
       - postgres
-    command: pytest -v --cov=devagent devagent/tests/
+    command:
+      - pytest -v --cov=devagent devagent/tests/
 
   lint:
     build:
-      context: .
+      context: ./devagent
       dockerfile: Dockerfile
     volumes:
       - .:/app
-    command: >
-      sh -c "black . && isort . && flake8 . && mypy ."
+    command:
+      - sh -c "black . && isort . && flake8 . && mypy ."
 
   node-exporter:
     image: prom/node-exporter:v1.6.1
