@@ -1,19 +1,27 @@
-services:
-  AgentProvision-ui:
-    build:
-      context: ./AgentProvision-ui
-      dockerfile: Dockerfile
-    ports:
-      - "3002:80"
-    depends_on:
-      - AgentProvision
+networks:
+  agentprovision-network:
+    driver: bridge
 
-  AgentProvision:
+services:
+  agentprovision-ui:
     build:
-      context: ./AgentProvision
+      context: ./agentprovision-ui
+      dockerfile: Dockerfile
+      args:
+        VITE_API_URL: http://localhost:8001
+    ports:
+      - "3000:80"
+    networks:
+      - agentprovision-network
+    depends_on:
+      - agentprovision
+
+  agentprovision:
+    build:
+      context: ./agentprovision
       dockerfile: Dockerfile
     ports:
-      - "8000:8000"
+      - "8001:8000"
     volumes:
       - .:/app
       - ./data:/app/data
@@ -25,6 +33,11 @@ services:
       - REDIS_URL=redis://redis:6379/0
       - PROMETHEUS_URL=http://prometheus:9090
       - GRAFANA_URL=http://grafana:3000
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY:-}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY:-}
+    networks:
+      - agentprovision-network
     depends_on:
       postgres:
         condition: service_healthy
@@ -34,7 +47,7 @@ services:
         condition: service_started
       grafana:
         condition: service_started
-    command: uvicorn AgentProvision.api.main:app --host 0.0.0.0 --port 8000 --reload
+    command: uvicorn agentprovision.api.main:app --host 0.0.0.0 --port 8000 --reload
 
   postgres:
     image: postgres:15
@@ -45,7 +58,9 @@ services:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=AgentProvision
     ports:
-      - "5432:5432"
+      - "5433:5432"
+    networks:
+      - agentprovision-network
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 5s
@@ -55,9 +70,11 @@ services:
   redis:
     image: redis:7
     ports:
-      - "6379:6379"
+      - "6380:6379"
     volumes:
       - redis_data:/data
+    networks:
+      - agentprovision-network
     command: ["redis-server", "--appendonly", "yes"]
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
@@ -72,6 +89,8 @@ services:
       - PGADMIN_DEFAULT_PASSWORD=admin
     ports:
       - "5050:80"
+    networks:
+      - agentprovision-network
     depends_on:
       - postgres
 
@@ -82,16 +101,16 @@ services:
     volumes:
       - ./monitoring/prometheus:/etc/prometheus
       - prometheus_data:/prometheus
-    command:
-      - '--config.file=/etc/prometheus/prometheus.yml'
-      - '--storage.tsdb.path=/prometheus'
-      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
-      - '--web.console.templates=/usr/share/prometheus/consoles'
+    networks:
+      - agentprovision-network
+    depends_on:
+      alertmanager:
+        condition: service_healthy
 
   grafana:
     image: grafana/grafana:10.0.0
     ports:
-      - "3001:3000"
+      - "3003:3000"
     environment:
       - GF_SECURITY_ADMIN_USER=admin
       - GF_SECURITY_ADMIN_PASSWORD=admin
@@ -99,12 +118,14 @@ services:
     volumes:
       - ./monitoring/grafana/provisioning:/etc/grafana/provisioning
       - grafana_data:/var/lib/grafana
+    networks:
+      - agentprovision-network
     depends_on:
       - prometheus
 
   test:
     build:
-      context: ./AgentProvision
+      context: ./agentprovision
       dockerfile: Dockerfile
     volumes:
       - .:/app
@@ -113,17 +134,21 @@ services:
       - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/AgentProvision
       - ALLOWED_ORIGINS_ENV=http://testserver # Use _ENV suffix
       - BACKEND_CORS_ORIGINS_ENV=http://testserver # Use _ENV suffix
+    networks:
+      - agentprovision-network
     depends_on:
       - postgres
-    command: ["pytest", "-v", "--cov=AgentProvision", "AgentProvision/tests/"]
+    command: ["pytest", "-v", "--cov=agentprovision", "agentprovision/tests/"]
 
   lint:
     build:
-      context: ./AgentProvision
+      context: ./agentprovision
       dockerfile: Dockerfile
     volumes:
       - .:/app
-    command: ["sh", "-c", "black . && isort . && flake8 . && mypy ."]
+    networks:
+      - agentprovision-network
+    command: ["sh", "-c", "autopep8 --in-place --recursive . && black . && isort . && flake8 . && mypy ."]
 
   node-exporter:
     image: prom/node-exporter:v1.6.1
@@ -133,10 +158,12 @@ services:
       - /proc:/host/proc:ro
       - /sys:/host/sys:ro
       - /:/rootfs:ro
+    networks:
+      - agentprovision-network
     command:
       - '--path.procfs=/host/proc'
       - '--path.sysfs=/host/sys'
-      - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
+      - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($|/)'
 
   cadvisor:
     image: gcr.io/cadvisor/cadvisor:v0.47.0
@@ -148,6 +175,8 @@ services:
       - /sys:/sys:ro
       - /var/lib/docker/:/var/lib/docker:ro
       - /dev/disk/:/dev/disk:ro
+    networks:
+      - agentprovision-network
 
   alertmanager:
     image: prom/alertmanager:v0.25.0
@@ -155,9 +184,13 @@ services:
       - "9093:9093"
     volumes:
       - ./monitoring/alertmanager:/etc/alertmanager
-    command:
-      - '--config.file=/etc/alertmanager/alertmanager.yml'
-      - '--storage.path=/alertmanager'
+    networks:
+      - agentprovision-network
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:9093/-/ready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
 volumes:
   postgres_data:

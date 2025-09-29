@@ -8,7 +8,7 @@ import pytest
 
 # Test data
 MOCK_USER = {
-    "email": "test@AgentProvision.com",
+    "email": "test@agentprovision.com",
     "password": "testpass123",
     "full_name": "Test User",
 }
@@ -67,7 +67,7 @@ MOCK_PIPELINE = {
         {"name": "lint", "command": "flake8 .", "timeout": 60},
         {
             "name": "build",
-            "command": "docker build -t AgentProvision:latest .",
+            "command": "docker build -t agentprovision:latest .",
             "timeout": 600,
         },
     ],
@@ -76,7 +76,7 @@ MOCK_PIPELINE = {
 
 @pytest.fixture
 async def client():
-    async with httpx.AsyncClient(base_url="http://AgentProvision:8000") as client:
+    async with httpx.AsyncClient(base_url="http://agentprovision:8000") as client:
         yield client
 
 

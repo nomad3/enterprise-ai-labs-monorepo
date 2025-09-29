@@ -1,9 +1,9 @@
-# AgentProvision: Enterprise AI Agent Management Platform
+# agentprovision: Enterprise AI Agent Management Platform
 ## Architectural Blueprint
 
 ### Executive Summary
 
-AgentProvision is a cloud-native, multi-tenant B2B SaaS platform designed to enable enterprises to deploy, manage, and orchestrate specialized AI agents across their organization. The platform provides enterprise-grade security, scalability, and governance while maintaining operational excellence and cost efficiency.
+agentprovision is a cloud-native, multi-tenant B2B SaaS platform designed to enable enterprises to deploy, manage, and orchestrate specialized AI agents across their organization. The platform provides enterprise-grade security, scalability, and governance while maintaining operational excellence and cost efficiency.
 
 ---
 
@@ -1360,11 +1360,11 @@ class DisasterRecoveryManager {
 ```yaml
 openapi: 3.0.3
 info:
-  title: AgentProvision API
+  title: agentprovision API
   description: Enterprise AI Agent Management Platform
   version: 1.0.0
   contact:
-    name: AgentProvision Support
+    name: agentprovision Support
     email: support@agentforge.com
     url: https://docs.agentforge.com
 
@@ -1443,7 +1443,7 @@ components:
 
 **TypeScript SDK**:
 ```typescript
-export class AgentProvisionSDK {
+export class agentprovisionSDK {
   private apiClient: ApiClient;
 
   constructor(config: SDKConfig) {
@@ -1603,7 +1603,7 @@ export class AgentTestFramework {
 
 **CLI Tool**:
 ```bash
-# AgentProvision CLI
+# agentprovision CLI
 npm install -g @agentforge/cli
 
 # Initialize new agent project
@@ -1632,8 +1632,8 @@ agentforge export --agent-id=agent-123 --format=yaml
 ```json
 {
   "name": "agentforge-vscode",
-  "displayName": "AgentProvision",
-  "description": "AgentProvision development tools for VS Code",
+  "displayName": "agentprovision",
+  "description": "agentprovision development tools for VS Code",
   "version": "1.0.0",
   "engines": {
     "vscode": "^1.60.0"
@@ -1644,23 +1644,23 @@ agentforge export --agent-id=agent-123 --format=yaml
       {
         "command": "agentforge.validateConfig",
         "title": "Validate Agent Configuration",
-        "category": "AgentProvision"
+        "category": "agentprovision"
       },
       {
         "command": "agentforge.deployAgent",
         "title": "Deploy Agent",
-        "category": "AgentProvision"
+        "category": "agentprovision"
       },
       {
         "command": "agentforge.viewLogs",
         "title": "View Agent Logs",
-        "category": "AgentProvision"
+        "category": "agentprovision"
       }
     ],
     "languages": [
       {
         "id": "agentforge-config",
-        "aliases": ["AgentProvision Config", "agentforge"],
+        "aliases": ["agentprovision Config", "agentforge"],
         "extensions": [".agent.json", ".agent.yaml"],
         "configuration": "./language-configuration.json"
       }

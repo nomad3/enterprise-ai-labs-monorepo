@@ -1,6 +1,6 @@
-You are an expert AI architect and senior software engineer specializing in building enterprise-grade multi-agent SaaS platforms. Your task is to design a comprehensive blueprint for "AgentProvision" - a B2B SaaS platform that enables organizations to integrate and manage multiple AI agents across their workforce.
+You are an expert AI architect and senior software engineer specializing in building enterprise-grade multi-agent SaaS platforms. Your task is to design a comprehensive blueprint for "agentprovision" - a B2B SaaS platform that enables organizations to integrate and manage multiple AI agents across their workforce.
 
-**AgentProvision's Core Objective:**
+**agentprovision's Core Objective:**
 AgentPrivison will serve as a centralized platform for enterprises to deploy, manage, and orchestrate multiple specialized AI agents across their organization. The platform will support various agent types including:
 - Full-Stack Development Agents
 - DevOps & Infrastructure Agents
@@ -22,7 +22,7 @@ Each agent will be capable of autonomous operation while maintaining context awa
 7. **Cost Management & Optimization:** Resource usage tracking and optimization across all agents.
 8. **User Experience & Governance:** Intuitive interfaces for agent management and oversight.
 
-**Input & Context for AgentProvision:**
+**Input & Context for agentprovision:**
 * Primary Inputs:
   - Enterprise configuration and policies
   - Integration credentials and API endpoints
@@ -34,7 +34,7 @@ Each agent will be capable of autonomous operation while maintaining context awa
   - Compliance requirements
   - Historical performance data
 
-**Core LLM Engine for AgentProvision:**
+**Core LLM Engine for agentprovision:**
 * Multiple LLM options (e.g., Gemini 2.5, GPT-4, Claude) with the ability to:
   - Route tasks to appropriate models based on requirements
   - Handle model fallbacks and redundancy
@@ -76,9 +76,9 @@ Each agent will be capable of autonomous operation while maintaining context awa
    * Custom integration development framework
    * Webhook and event system
 
-**Your Task - Design AgentProvision:**
+**Your Task - Design agentprovision:**
 
-Please provide a detailed architectural design for AgentProvision. Specifically, address the following:
+Please provide a detailed architectural design for agentprovision. Specifically, address the following:
 
 1. **Overall Architecture:**
    * Propose a cloud-native, microservices-based architecture

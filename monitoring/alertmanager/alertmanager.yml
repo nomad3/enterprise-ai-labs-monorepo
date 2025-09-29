@@ -12,7 +12,7 @@ receivers:
   - name: 'team-notifications'
     # The actual webhook URLs will be configured by the team
     webhook_configs:
-      - url: '{{ env "ALERT_WEBHOOK_URL" }}'
+      - url: 'http://localhost:8080'
         send_resolved: true
 
 templates:

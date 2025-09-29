@@ -1,12 +1,12 @@
-# AgentProvision Implementation Documentation
+# agentprovision Implementation Documentation
 
 ## Overview
-AgentProvision is a Full-Stack Developer & DevOps AI Agent that helps automate and streamline the software development process. The system is built using FastAPI, PostgreSQL, and Redis, with a focus on modularity, testability, and scalability.
+agentprovision is a Full-Stack Developer & DevOps AI Agent that helps automate and streamline the software development process. The system is built using FastAPI, PostgreSQL, and Redis, with a focus on modularity, testability, and scalability.
 
 ## Core Components
 
 ### 1. Ticket Ingestion & Interpretation Engine
-- **Location**: `AgentProvision/core/ticket_engine/`
+- **Location**: `agentprovision/core/ticket_engine/`
 - **Purpose**: Processes and interprets tickets from various sources (e.g., Jira)
 - **Key Features**:
   - Ticket parsing and validation
@@ -16,7 +16,7 @@ AgentProvision is a Full-Stack Developer & DevOps AI Agent that helps automate a
 - **API Endpoints**: `/tickets/`
 
 ### 2. Solution Planning & Strategy Module
-- **Location**: `AgentProvision/core/planning/`
+- **Location**: `agentprovision/core/planning/`
 - **Purpose**: Creates and manages solution plans for tickets
 - **Key Features**:
   - Automatic task creation from requirements
@@ -146,9 +146,9 @@ GET /plans/
 2. **Environment Variables**:
    Create a `.env` file with:
    ```
-   POSTGRES_USER=AgentProvision
-   POSTGRES_PASSWORD=AgentProvision
-   POSTGRES_DB=AgentProvision
+   POSTGRES_USER=agentprovision
+   POSTGRES_PASSWORD=agentprovision
+   POSTGRES_DB=agentprovision
    POSTGRES_HOST=postgres
    POSTGRES_PORT=5432
    REDIS_HOST=redis
@@ -174,14 +174,14 @@ GET /plans/
 
 ## Testing
 
-The project follows Test-Driven Development (TDD) principles. Tests are located in the `AgentProvision/tests/` directory:
+The project follows Test-Driven Development (TDD) principles. Tests are located in the `agentprovision/tests/` directory:
 
 - `test_ticket_engine.py`: Tests for ticket processing
 - `test_planning.py`: Tests for solution planning
 
 Run tests with:
 ```bash
-pytest AgentProvision/tests/
+pytest agentprovision/tests/
 ```
 
 ## Monitoring
