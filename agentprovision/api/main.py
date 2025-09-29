@@ -2,6 +2,8 @@
 Main FastAPI application entry point for agentprovision.
 """
 
+import logging
+
 from fastapi import Depends, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from opentelemetry import trace
@@ -42,6 +44,8 @@ from agentprovision.core.services.integration_hub import \
 # Initialize OpenTelemetry
 trace.set_tracer_provider(TracerProvider())
 tracer = trace.get_tracer(__name__)
+
+logger = logging.getLogger(__name__)
 
 # Initialize Prometheus metrics
 metric_reader = PrometheusMetricReader()

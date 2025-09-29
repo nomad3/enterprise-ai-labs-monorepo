@@ -17,7 +17,7 @@ from datetime import datetime, timedelta
 from typing import Any, Dict, List, Optional
 from uuid import UUID, uuid4
 
-import aioredis
+import redis.asyncio as aioredis
 from fastapi import HTTPException, Request, Response, status
 from pydantic import BaseModel, Field
 
